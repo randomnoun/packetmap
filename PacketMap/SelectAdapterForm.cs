@@ -56,5 +56,12 @@ namespace PacketMap {
             }
             deviceId = lstAdapters.SelectedIndex;
         }
+
+        private void lstAdapters_DoubleClick(object sender, EventArgs e) {
+            if (lstAdapters.SelectedIndex > 0) {
+                this.DialogResult = DialogResult.OK;
+                this.Close();
+            }
+        }
     }
 }

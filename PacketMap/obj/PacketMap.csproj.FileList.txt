@@ -1,6 +1,5 @@
 obj\Debug\ResolveAssemblyReference.cache
 obj\Debug\PacketMap.Properties.Resources.resources
-obj\Debug\PacketMap.MainForm.resources
 obj\Debug\PacketMap.csproj.GenerateResource.Cache
 bin\Debug\PacketMap.exe
 bin\Debug\PacketMap.pdb
@@ -8,7 +7,6 @@ obj\Debug\PacketMap.exe
 obj\Debug\PacketMap.pdb
 obj\Release\ResolveAssemblyReference.cache
 obj\Release\PacketMap.Properties.Resources.resources
-obj\Release\PacketMap.MainForm.resources
 obj\Release\PacketMap.csproj.GenerateResource.Cache
 bin\Release\PacketMap.exe
 bin\Release\PacketMap.pdb
@@ -21,3 +19,9 @@ obj\Release\PacketMap.SelectAdapterForm.resources
 bin\Release\ScalablePictureBox.dll
 bin\Release\Tamir.IPLib.SharpPcap.dll
 bin\Release\ScalablePictureBox.pdb
+bin\Debug\ScalablePictureBox.dll
+bin\Debug\Tamir.IPLib.SharpPcap.dll
+bin\Debug\ScalablePictureBox.pdb
+bin\Debug\Tamir.IPLib.SharpPcap.pdb
+obj\Release\PacketMap.MainForm.resources
+obj\Debug\PacketMap.MainForm.resources

@@ -17,9 +17,12 @@ using System.Windows.Forms;
 /// </summary>
 namespace QAlbum
 {
-	/// <summary>
+
+    /// <summary>
     /// A scrollable, zoomable and scalable picture box.
     /// It is data aware, and creates zoom rate context menu dynamicly.
+    /// 
+    /// Now supports overlays with callbacks.
     /// </summary>
 	public partial class ScalablePictureBox : System.Windows.Forms.UserControl
     {
@@ -56,7 +59,7 @@ namespace QAlbum
         /// <summary>
         /// Need dispose image when new image is set
         /// </summary>
-        private bool needDisposeImage = true;
+        private bool needDisposeImage = false;
 
         /// <summary>
         /// Scale percentage of picture box in zoom mode
@@ -126,24 +129,53 @@ namespace QAlbum
             set { this.needDisposeImage = value; }
         }
 
+
+        private Image _backingImage;
+
+        // for backwards-compatibility only
+        public Image Picture {
+            get { return _backingImage; }
+        }
+
 		/// <summary>
 		/// Image in picture box
 		/// </summary>
         [Bindable(true)]
-        public Image Picture
+        public Image BackingImage
 		{
-            get { return this.pictureBox.Image; }
+            get { return _backingImage; }
 			set
 			{
-                if (this.pictureBox.Image != null && this.NeedDisposeImage)
+                if (_backingImage != null && this.NeedDisposeImage)
                 {
-                    this.pictureBox.Image.Dispose();
+                    _backingImage.Dispose();
                 }
-                this.pictureBox.Image = value;
+                _backingImage = value;
+                this.pictureBox.Image = _backingImage;
                 ScalePictureBoxToFit();
                 RefreshContextMenuStrip();
             }
 		}
+
+        
+        OverlayGenerator overlayGenerator = null;
+        /// <summary>
+        /// Set overlay generator for this image. Will be called whenever image is resized
+        /// </summary>
+        /// <param name="overlayGenerator"></param>
+        public void SetOverlayGenerator(OverlayGenerator overlayGenerator) {
+            this.overlayGenerator = overlayGenerator;
+            this.pictureBox.Paint += new PaintEventHandler(pictureBox_Paint);
+        }
+
+        void pictureBox_Paint(object sender, PaintEventArgs e) {
+            overlayGenerator.PaintOverlay(e);
+        }
+
+        public void OverlayChanged() {
+            this.Invalidate();
+        }
+        
 
         /// <summary>
         /// Image size mode
@@ -162,7 +194,7 @@ namespace QAlbum
         /// <summary>
         /// Scale percentage for the picture box
         /// </summary>
-        private int ScalePercent
+        public int ScalePercent
         {
             get { return this.currentScalePercent; }
             set
@@ -224,6 +256,8 @@ namespace QAlbum
             SetCursor4PictureBox();
             this.pictureBox.Invalidate();
         }
+
+
 
         /// <summary>
         /// Set cursor for the picture box
@@ -442,5 +476,13 @@ namespace QAlbum
             // check last selected menu item
             CheckLastSelectedMenuItem();
         }
+
     }
+
+    
+    public interface OverlayGenerator {
+        void PaintOverlay(PaintEventArgs e);
+    }
+
+
 }

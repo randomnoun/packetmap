@@ -52,6 +52,7 @@ namespace PacketMap {
             this.lstAdapters.Name = "lstAdapters";
             this.lstAdapters.Size = new System.Drawing.Size(480, 95);
             this.lstAdapters.TabIndex = 1;
+            this.lstAdapters.DoubleClick += new System.EventHandler(this.lstAdapters_DoubleClick);
             this.lstAdapters.SelectedIndexChanged += new System.EventHandler(this.lstAdapters_SelectedIndexChanged);
             // 
             // btnOK

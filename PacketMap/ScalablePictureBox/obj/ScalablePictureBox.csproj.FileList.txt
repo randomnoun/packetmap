@@ -18,7 +18,7 @@ obj\Release\QAlbum.ZoomOut32.cur
 obj\Release\QAlbum.showActualSize.png
 obj\Release\QAlbum.showFitWidth.png
 obj\Release\QAlbum.showWhole.png
-obj\Release\QAlbum.ScalablePictureBox.resources
 obj\Release\ScalablePictureBox.csproj.GenerateResource.Cache
 obj\Release\ScalablePictureBox.dll
 obj\Release\ScalablePictureBox.pdb
+obj\Release\QAlbum.ScalablePictureBox.resources

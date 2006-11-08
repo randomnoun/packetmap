@@ -46,7 +46,6 @@ namespace QAlbum
             this.pictureBox = new System.Windows.Forms.PictureBox();
             this.pictureBoxContextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).BeginInit();
-            this.pictureBoxContextMenuStrip.SuspendLayout();
             this.SuspendLayout();
             // 
             // pictureBox
@@ -59,6 +58,14 @@ namespace QAlbum
             this.pictureBox.TabStop = false;
             this.pictureBox.LocationChanged += new System.EventHandler(this.pictureBox_LocationChanged);
             this.pictureBox.Click += new System.EventHandler(this.pictureBox_Click);
+            // this.pictureBox.MouseMove += new System.Windows.Forms.MouseEventHandler(this.pictureBox_MouseMove);
+            // this.MouseMove += this.pictureBox.MouseMove;
+
+            // 
+            // pictureBoxContextMenuStrip
+            // 
+            this.pictureBoxContextMenuStrip.Name = "pictureBoxContextMenuStrip";
+            this.pictureBoxContextMenuStrip.Size = new System.Drawing.Size(61, 4);
             // 
             // ScalablePictureBox
             // 
@@ -70,7 +77,6 @@ namespace QAlbum
             this.Size = new System.Drawing.Size(299, 199);
             this.Resize += new System.EventHandler(this.OnResize);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).EndInit();
-            this.pictureBoxContextMenuStrip.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
