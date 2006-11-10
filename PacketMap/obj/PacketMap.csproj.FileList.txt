@@ -25,3 +25,5 @@ bin\Debug\ScalablePictureBox.pdb
 bin\Debug\Tamir.IPLib.SharpPcap.pdb
 obj\Release\PacketMap.MainForm.resources
 obj\Debug\PacketMap.MainForm.resources
+obj\Debug\PacketMap.SplashForm.resources
+obj\Release\PacketMap.SplashForm.resources

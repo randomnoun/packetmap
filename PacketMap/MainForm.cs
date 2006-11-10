@@ -10,6 +10,8 @@ using System.Threading;
 using Tamir.IPLib.Packets;
 using System.Collections;
 using System.Drawing.Imaging;
+using System.Drawing.Drawing2D;
+using Microsoft.Win32;
 
 namespace PacketMap {
 
@@ -36,6 +38,8 @@ namespace PacketMap {
         Bitmap compositeBitmap;
 
         StreamWriter packetWriter;
+        long sideListMaxSend = 0;
+        long sideListMaxRecv = 0;
 
         PcapDevice device = null;
         uint deviceIp = 0;
@@ -47,6 +51,8 @@ namespace PacketMap {
         private ColumnHeader colSent;
         private ColumnHeader colRecv;
         private ImageList flagImageList;
+        private StatusStrip statusBar;
+        private ToolStripStatusLabel lblStatusBarLeft;
         static MainForm mainFormInstance = null;
 
 
@@ -60,7 +66,49 @@ namespace PacketMap {
             }
             mainFormInstance = this;
             // this.Paint += new PaintEventHandler(f1_paint);
+
+
+            // this.scrollablePictureBox1.Image = countries[countries.Count - 1].getImage();
+            Splasher.AddText("Loading country outline data...");
+            this.loadCountries("C:\\projects\\pcap\\country");
+            Thread.Sleep(500);
+            Splasher.SetProgress(25);
+
+            Splasher.AddText("Loading IP to country data...");
+            this.loadGeoIps("c:\\projects\\pcap\\GeoIPCountryWhois.csv");
+            this.loadCountryMap("c:\\projects\\pcap\\country\\matchedWithGif.csv");
+            Thread.Sleep(500);
+            Splasher.SetProgress(50);
+
+            Splasher.AddText("Loading country flag images...");
+            this.loadFlagImages("c:\\projects\\pcap\\flags");
+            baseCountry = countries[countries.Count - 1];
+            baseImage = baseCountry.getImage();
+            overlayBitmap = new Bitmap(baseImage.Size.Width, baseImage.Size.Height, PixelFormat.Format32bppArgb);
+            compositeBitmap = new Bitmap(baseImage.Size.Width, baseImage.Size.Height, PixelFormat.Format32bppArgb);
+            this.spbImage.BackingImage = baseImage;
+            this.spbImage.SetOverlayGenerator(this);
+            Thread.Sleep(500);
+            Splasher.SetProgress(75);
+
+            Splasher.AddText("Starting capture...");
+            // Attempt to open the key; create it if it doesn't exist
+            RegistryKey key = Registry.CurrentUser.OpenSubKey("Software\\Randomnoun\\Packetmap");
+            if (key == null) {
+                key = Registry.CurrentUser.CreateSubKey("Software\\Randomnoun\\Packetmap");
+            }
+            string deviceName = (string)key.GetValue("DeviceName", "");
+            if (!deviceName.Equals("")) {
+                device = SharpPcap.GetPcapDevice(deviceName);
+                deviceIp = Tamir.IPLib.Util.Convert.IpStringToInt32(device.PcapIpAddress);
+                AddStatusText("Selected adapter " + device.PcapDescription);
+            }
+            key.Close();
+            Splasher.Close();
+
+            lblStatusBarLeft.Text = "Mapping disabled";
         }
+
 
         public class GeoIpRange {
             uint startIp, endIp;
@@ -164,6 +212,7 @@ namespace PacketMap {
                     foreach (CountryGif country in countries) {
                         if (country.getName() == data[2]) {
                             countryMap.Add(data[0], country);
+                            country.setShortName(data[0]);
                             found = true;
                             break;
                         }
@@ -200,14 +249,12 @@ namespace PacketMap {
             sr.Close();
         }
 
-        /*private void f1_paint(object sender, PaintEventArgs e) {
-            Graphics g = e.Graphics;
-            CountryGif country = countries[countries.Count-1];
-            g.DrawImage(country.getImage(), new Point(0,0));
-             
-        }*/
-
         public static void Main(String[] args) {
+            Application.EnableVisualStyles();
+            Application.SetCompatibleTextRenderingDefault(false);
+
+            Splasher.Show(typeof(SplashForm));
+
             if (args.Length > 0 && args[0].Equals("--makeGifs")) {
                 // grab all countries, render and save them
                 CountryPoly earth = new CountryPoly();
@@ -239,15 +286,11 @@ namespace PacketMap {
 
             MainForm testForm = new MainForm();
             testForm.packetWriter = System.IO.File.AppendText("c:\\projects\\pcap\\packetDump.txt");
-
-            // testForm.loadCountry("C:\\projects\\pcap\\outline\\Australia\\Australia.txt");
-            // testForm.loadCountry("C:\\projects\\pcap\\outline\\NorthAmerica\\Canada.txt");
-
             Application.Run(testForm);
         }
 
         // creatively borrowed from http://blogs.msdn.com/brada/archive/2004/03/04/84069.aspx
-        public static IEnumerable<string>  GetFiles(string path, String glob) {
+        public static IEnumerable<string> GetFiles(string path, String glob) {
             foreach (string s in Directory.GetFiles(path, glob)) {
                 yield return s;
             }
@@ -279,7 +322,10 @@ namespace PacketMap {
             this.colRecv = new System.Windows.Forms.ColumnHeader();
             this.flagImageList = new System.Windows.Forms.ImageList(this.components);
             this.spbImage = new QAlbum.ScalablePictureBox();
+            this.statusBar = new System.Windows.Forms.StatusStrip();
+            this.lblStatusBarLeft = new System.Windows.Forms.ToolStripStatusLabel();
             this.menuStrip1.SuspendLayout();
+            this.statusBar.SuspendLayout();
             this.SuspendLayout();
             // 
             // menuStrip1
@@ -370,7 +416,7 @@ namespace PacketMap {
             this.txtStatus.Location = new System.Drawing.Point(152, 191);
             this.txtStatus.Name = "txtStatus";
             this.txtStatus.ReadOnly = true;
-            this.txtStatus.Size = new System.Drawing.Size(374, 80);
+            this.txtStatus.Size = new System.Drawing.Size(374, 67);
             this.txtStatus.TabIndex = 2;
             this.txtStatus.Text = "";
             // 
@@ -389,12 +435,18 @@ namespace PacketMap {
             this.colRecv});
             this.sideListView.GridLines = true;
             this.sideListView.Location = new System.Drawing.Point(12, 27);
-            this.sideListView.Name = "listView1";
-            this.sideListView.Size = new System.Drawing.Size(134, 244);
+            this.sideListView.Name = "sideListView";
+            this.sideListView.OwnerDraw = true;
+            this.sideListView.Size = new System.Drawing.Size(134, 231);
             this.sideListView.SmallImageList = this.flagImageList;
             this.sideListView.TabIndex = 3;
             this.sideListView.UseCompatibleStateImageBehavior = false;
             this.sideListView.View = System.Windows.Forms.View.Details;
+            this.sideListView.DrawItem += new System.Windows.Forms.DrawListViewItemEventHandler(this.sideListView_DrawItem);
+            this.sideListView.DrawSubItem += new System.Windows.Forms.DrawListViewSubItemEventHandler(this.sideListView_DrawSubItem);
+            this.sideListView.MouseUp += new System.Windows.Forms.MouseEventHandler(this.sideListView_MouseUp);
+            this.sideListView.MouseMove += new System.Windows.Forms.MouseEventHandler(this.sideListView_MouseMove);
+            this.sideListView.DrawColumnHeader += new System.Windows.Forms.DrawListViewColumnHeaderEventHandler(this.sideListView_DrawColumnHeader);
             // 
             // colCountry
             // 
@@ -656,20 +708,40 @@ namespace PacketMap {
                         | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.spbImage.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(5)))), ((int)(((byte)(100)))));
+            this.spbImage.BackingImage = null;
             this.spbImage.Location = new System.Drawing.Point(152, 28);
             this.spbImage.Name = "spbImage";
-            this.spbImage.BackingImage = null;
+            this.spbImage.NeedDisposeImage = false;
+            this.spbImage.ScalePercent = 1F;
             this.spbImage.Size = new System.Drawing.Size(374, 157);
             this.spbImage.TabIndex = 1;
             this.spbImage.MouseMove += new System.Windows.Forms.MouseEventHandler(this.spbImage_MouseMove);
             // 
+            // statusBar
+            // 
+            this.statusBar.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.lblStatusBarLeft});
+            this.statusBar.Location = new System.Drawing.Point(0, 261);
+            this.statusBar.Name = "statusBar";
+            this.statusBar.Size = new System.Drawing.Size(538, 22);
+            this.statusBar.TabIndex = 4;
+            this.statusBar.Text = "statusStrip1";
+            // 
+            // lblStatusBarLeft
+            // 
+            this.lblStatusBarLeft.Name = "lblStatusBarLeft";
+            this.lblStatusBarLeft.Size = new System.Drawing.Size(109, 17);
+            this.lblStatusBarLeft.Text = "toolStripStatusLabel1";
+            // 
             // MainForm
             // 
             this.ClientSize = new System.Drawing.Size(538, 283);
+            this.Controls.Add(this.statusBar);
             this.Controls.Add(this.sideListView);
             this.Controls.Add(this.txtStatus);
             this.Controls.Add(this.spbImage);
             this.Controls.Add(this.menuStrip1);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "MainForm";
             this.Text = "PacketMap";
@@ -677,6 +749,8 @@ namespace PacketMap {
             this.Shown += new System.EventHandler(this.MainForm_Shown);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
+            this.statusBar.ResumeLayout(false);
+            this.statusBar.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -703,18 +777,22 @@ namespace PacketMap {
                 TCPPacket tcp = (TCPPacket)packet;
                 Boolean incoming = true;
                 string direction;
+                string searchIps = "";
                 UInt32 searchIp = 0;
                 if (deviceIp == tcp.SourceAddressAsLong) {
                     direction = "local:" + tcp.SourcePort + " -> " + tcp.DestinationAddress + ":" + tcp.DestinationPort;
                     searchIp = (uint) tcp.DestinationAddressAsLong;
+                    searchIps = tcp.DestinationAddress;
                     incoming = false;
                 } else if (deviceIp == tcp.DestinationAddressAsLong) {
                     direction = tcp.SourceAddress + ":" + tcp.SourcePort + " -> local:" + tcp.DestinationPort;
                     searchIp = (uint) tcp.SourceAddressAsLong;
+                    searchIps = tcp.SourceAddress;
                     incoming = true;
                 } else {
                     direction = tcp.SourceAddress + ":" + tcp.SourcePort + " -> " + tcp.DestinationAddress + ":" + tcp.DestinationPort;
                     searchIp = 0;
+                    searchIps = "";
                 }
 
                 // parse data
@@ -817,9 +895,9 @@ namespace PacketMap {
                         if (countryGif != null) {
                             search = search + " [" + ((CountryGif) countryMap[ipRange.getCountry()]).getName() + "]";
                             if (incoming) {
-                                countryGif.received();
+                                countryGif.received(data.Length, searchIps);
                             } else {
-                                countryGif.sent();
+                                countryGif.sent(data.Length, searchIps);
                             }
                         }
                     } else {
@@ -832,23 +910,8 @@ namespace PacketMap {
         }
 
         private void MainForm_Shown(object sender, EventArgs e) {
-            // this.scrollablePictureBox1.Image = countries[countries.Count - 1].getImage();
-            AddStatusText("Loading country outline data...");
-            this.loadCountries("C:\\projects\\pcap\\country");
-            AddStatusText("Loading IP to country data...");
-            this.loadGeoIps("c:\\projects\\pcap\\GeoIPCountryWhois.csv");
-            this.loadCountryMap("c:\\projects\\pcap\\country\\matchedWithGif.csv");
-            AddStatusText("Loading country flag images...");
-            this.loadFlagImages("c:\\projects\\pcap\\flags");
-            baseCountry = countries[countries.Count - 1];
-            baseImage = baseCountry.getImage();
-            overlayBitmap = new Bitmap(baseImage.Size.Width, baseImage.Size.Height, PixelFormat.Format32bppArgb);
-            compositeBitmap = new Bitmap(baseImage.Size.Width, baseImage.Size.Height, PixelFormat.Format32bppArgb);
-
-            // this.spbImage.PictureBox.Image = baseImage;
-            this.spbImage.BackingImage = baseImage;
-            this.spbImage.SetOverlayGenerator(this);
-            AddStatusText("Initialising...");
+            // used to have initialisation stuff here; now in constructor
+            // (so that splash screen is shown first)
         }
 
         private void cmdSelectAdapter_Click(object sender, EventArgs e) {
@@ -857,6 +920,16 @@ namespace PacketMap {
                 device = SharpPcap.GetAllDevices()[frmSelectAdapterForm.getDeviceId()];
                 deviceIp = Tamir.IPLib.Util.Convert.IpStringToInt32(device.PcapIpAddress);
                 AddStatusText("Selected adapter " + device.PcapDescription);
+
+                // Attempt to write to registry
+                RegistryKey key = Registry.CurrentUser.OpenSubKey("Software\\Randomnoun\\Packetmap", true);
+                // If the return value is null, the key doesn't exist
+                if (key == null) {
+                    key = Registry.CurrentUser.CreateSubKey("Software\\Randomnoun\\Packetmap");
+                }
+                key.SetValue("DeviceName", device.PcapName);
+                key.Close();
+
             }
         }
 
@@ -888,6 +961,7 @@ namespace PacketMap {
             
 
             AddStatusText("Started mapping on " + device.PcapDescription + " ...");
+            lblStatusBarLeft.Text = "Mapping enabled";
             backgroundThread = new Thread(new ParameterizedThreadStart (capturePackets));
             backgroundThread.Start(this);
             animationTimer.Start();
@@ -934,6 +1008,7 @@ namespace PacketMap {
             device.PcapClose();
             animationTimer.Stop();  // TODO: should stop after all countries are gone, but hey
             AddStatusText("Mapping stopped.");
+            lblStatusBarLeft.Text = "Mapping disabled";
         }
 
         private void MainForm_FormClosed(object sender, FormClosedEventArgs e) {
@@ -946,14 +1021,17 @@ namespace PacketMap {
         string _refreshTime = "(not started)";
         private void animationTimer_Tick(object sender, EventArgs e) {
 
+            sideListView.BeginUpdate();
             sideListView.Items.Clear();
-
+            sideListMaxSend = 0;
+            sideListMaxRecv = 0;
             // see what overlays we need to put on the earth image
             DateTime now = DateTime.Now;
 
             Bitmap bitmap = new Bitmap(baseImage);
             Graphics objGraphics = Graphics.FromImage(bitmap);
             foreach (CountryGif country in countries) {
+                country.shift();
                 double recvHighlight = double.MaxValue;
                 double sendHighlight = double.MaxValue;
                 DateTime lastReceiveTime = country.getLastReceiveTime();
@@ -972,27 +1050,20 @@ namespace PacketMap {
                 } */
                 if (recvHighlight < 10 || sendHighlight < 10) {
                     ListViewItem lvi = new ListViewItem(new string[] {
-                        country.getName(), Convert.ToString(sendHighlight), Convert.ToString(recvHighlight) }, -1);
+                        country.getShortName(), country.getShortName(), country.getShortName()
+                        /*Convert.ToString(sendHighlight), Convert.ToString(recvHighlight)*/ }, -1);
                     lvi.ImageIndex = country.getFlagIndex();
                     sideListView.Items.Add(lvi);
+                    sideListMaxSend = Math.Max(sideListMaxSend, country.getMaxSendBytes());
+                    sideListMaxRecv = Math.Max(sideListMaxSend, country.getMaxRecvBytes());
             
                     // show country
                     LngLat min = country.getMinLngLat();
                     LngLat max = country.getMaxLngLat();
-                    /*Color col = Color.FromArgb(
-                        sendHighlight < 10 ? 255 - (int)(sendHighlight*10) : 0, 
-                        recvHighlight < 10 ? 255 - (int)(recvHighlight*10) : 0, 0); */
-
                     objGraphics.DrawImage(country.getImage(), 
                         (int)((min.getLng() - baseCountry.getMinLngLat().getLng()) * 8),
                         (int)((min.getLat() - baseCountry.getMinLngLat().getLat()) * 8));
 
-                    /* this.drawBorder(objGraphics, country, col, 
-                        (int) ((min.getLng()-baseCountry.getMinLngLat().getLng()) * 8), 
-                        (int) ((min.getLat()-baseCountry.getMinLngLat().getLat()) * 8),
-                        (int) ((max.getLng()-min.getLng()) * 8), 
-                        (int) ((max.getLat()-min.getLat()) * 8));
-                    */
                     /*
                     this.AddStatusText(String.Format("Drawing ({0},{1}) -> ({2},{3}) {4}", 
                         (int) ((min.getLng()-baseCountry.getMinLngLat().getLng()) * 8), 
@@ -1001,28 +1072,22 @@ namespace PacketMap {
                         (int) ((max.getLat()-min.getLat()) * 8), country.getName()));
                     */
                 }
+
             }
+            sideListView.EndUpdate();
 
             _refreshTime = "Refresh time: " + ((DateTime.Now - now).TotalMilliseconds) + "ms";
-            
-            /*objGraphics.DrawString("Refresh time: " + ((DateTime.Now - now).TotalMilliseconds) + "ms", font, brush, 
-                (float) (baseCountry.getMaxLngLat().getLng() - baseCountry.getMinLngLat().getLng())* 8 - 520,
-                (float) (baseCountry.getMaxLngLat().getLat() - baseCountry.getMinLngLat().getLat())* 8 - 70);
-             */
-
-            // spbImage.PictureBox.Image = bitmap;
             spbImage.BackingImage = bitmap;
-            
-            // this.AddStatusText("Total time: " + ((DateTime.Now - now).TotalMilliseconds) + "ms");
-
         }
 
         // really belongs in a separate class, but needs access to data contained here
         public void PaintOverlay(PaintEventArgs e) {
             Graphics g = e.Graphics;
-            /* Brush brush = new SolidBrush(Color.Red);
-            g.FillRectangle(brush, 20, 20, 50, 50);
-             */
+            _refreshTime = "clientSize: " + spbImage.ClientSize.Width + "x" + spbImage.ClientSize.Height + ", " +
+                "backingImage: " + spbImage.BackingImage.Width + "x" + spbImage.BackingImage.Height + ", " +
+                "pictureBox: " + spbImage.PictureBox.Width + "x" + spbImage.PictureBox.Height + ", " +
+                "intloc: " + spbImage.InternalLocation.X + "x" + spbImage.InternalLocation.Y + ", ";
+
             Font font = new Font("Arial", 8);
             Brush brush = new SolidBrush(Color.LightBlue);
             g.DrawString( _refreshTime, font, brush, 10, 10);
@@ -1043,19 +1108,25 @@ namespace PacketMap {
                 }
                 if (recvHighlight < 10 || sendHighlight < 10) {
                     // show country
-                    double zoom = ((double)spbImage.ScalePercent)/100;
+                    float zoom = ((float)spbImage.ScalePercent);
 
                     LngLat min = country.getMinLngLat();
                     LngLat max = country.getMaxLngLat();
                     Color col = Color.FromArgb(
                         sendHighlight < 10 ? 255 - (int)(sendHighlight * 10) : 0,
                         recvHighlight < 10 ? 255 - (int)(recvHighlight * 10) : 0, 0);
-                    Console.WriteLine("" + spbImage.PictureBox.Left + ", " + spbImage.PictureBox.Top);
-                    this.drawBorder(g, col,
-                        spbImage.PictureBox.Left + (int)((min.getLng() - baseCountry.getMinLngLat().getLng()) * 8 * zoom),
-                        spbImage.PictureBox.Top + (int)((min.getLat() - baseCountry.getMinLngLat().getLat()) * 8 * zoom),
+                    int x = spbImage.InternalLocation.X + (int)((min.getLng() - baseCountry.getMinLngLat().getLng()) * 8 * zoom);
+                    int y = spbImage.InternalLocation.Y + (int)((min.getLat() - baseCountry.getMinLngLat().getLat()) * 8 * zoom);
+                    this.drawBorder(g, col, x, y,
                         (int)((max.getLng() - min.getLng()) * 8 * zoom),
                         (int)((max.getLat() - min.getLat()) * 8 * zoom));
+                    List<CountryIp> countryIps = country.getCountryIps();
+                    // g.DrawString("" + countryIps.Count + " ips", font, Brushes.White, x - 50, y -10);
+                    for (int i = 0; i < countryIps.Count && i < 5; i++) {
+                        int width = (int) g.MeasureString(countryIps[i].getIp(), font).Width;
+                        g.DrawString(countryIps[i].getIp(), font, Brushes.White, x - width - 10, y + i * 10);
+                    }
+
                 }
             }
         }
@@ -1063,14 +1134,18 @@ namespace PacketMap {
 
         private void drawBorder(Graphics g, Color c, int x, int y, int width, int height) {
             Brush brush = new SolidBrush(c);
-            g.FillRectangle(brush, x - 10, y - 10, 5, 20);
-            g.FillRectangle(brush, x - 10, y - 10, 20, 5);  // overlap here
-            g.FillRectangle(brush, x - 10, y + height - 10, 5, 20);
-            g.FillRectangle(brush, x - 10, y + height + 5, 20, 5);
-            g.FillRectangle(brush, x + width - 10, y - 10, 20, 5);
-            g.FillRectangle(brush, x + width + 5, y - 10, 5, 20);
-            g.FillRectangle(brush, x + width + 5, y + height - 10, 5, 20);
-            g.FillRectangle(brush, x + width - 10, y + height + 5, 20, 5);
+            int margin = 8;
+            int thickness = 2;
+            int length = 15;
+
+            g.FillRectangle(brush, x - margin, y - margin, thickness, length);
+            g.FillRectangle(brush, x - margin, y - margin, length, thickness);  // overlap here
+            g.FillRectangle(brush, x - margin, y + height + margin - length, thickness, length);
+            g.FillRectangle(brush, x - margin, y + height + margin - thickness, length, thickness);
+            g.FillRectangle(brush, x + width + margin - length, y - margin, length, thickness);
+            g.FillRectangle(brush, x + width + margin - thickness, y - margin, thickness, length);
+            g.FillRectangle(brush, x + width + margin - thickness, y + height + margin - length, thickness, length);
+            g.FillRectangle(brush, x + width + margin - length, y + height + margin - thickness, length, thickness);
         }
 
         // never appears to fire
@@ -1078,204 +1153,152 @@ namespace PacketMap {
             AddStatusText("Mouse moved: " + e.X + ", " + e.Y);
         }
 
-   
-    }
 
-
-    public class LngLat {
-        double lng;
-        double lat;
-        public LngLat(double lng, double lat) {
-            this.lng = lng;
-            this.lat = lat;
-        }
-        public double getLng() { return lng; }
-        public double getLat() { return lat; }
-    }
-
-    public class CountryGif {
-        LngLat minLngLat;
-        LngLat maxLngLat;
-        Image image;
-        String name;
-        int flagIndex;  // index into flag imageList
-        // TODO: might be fun to set this to current date, and fade country out at start
-        DateTime lastReceiveTime = DateTime.Now;  // last time we received from this country
-        DateTime lastSendTime = DateTime.Now;     // last time we sent to this country
-        public CountryGif(String file, String name, LngLat minLngLat, LngLat maxLngLat) {
-            image = Image.FromFile(file);
-            this.name = name;
-            this.minLngLat = minLngLat;
-            this.maxLngLat = maxLngLat;
-        }
-        public void setFlagIndex(int flagIndex) { this.flagIndex = flagIndex; }
-        public LngLat getMinLngLat() { return minLngLat; }
-        public LngLat getMaxLngLat() { return maxLngLat; }
-        public Image getImage() { return image; }
-        public String getName() { return name; }
-        public void received() { lastReceiveTime = DateTime.Now; }
-        public void sent() { lastSendTime = DateTime.Now; }
-        public DateTime getLastReceiveTime() { return lastReceiveTime; }
-        public DateTime getLastSendTime() { return lastSendTime; }
-        public int getFlagIndex() { return flagIndex; }
-    }
-
-    public class CountryPoly {
-        List<List<LngLat>> polys;
-        Image image = null;
-
-        public CountryPoly() {
-            polys = new List<List<LngLat>>();
+        /** side list */
+        // Selects and focuses an item when it is clicked anywhere along 
+        // its width. The click must normally be on the parent item text.
+        private void sideListView_MouseUp(object sender, MouseEventArgs e) {
+            ListViewItem clickedItem = sideListView.GetItemAt(5, e.Y);
+            if (clickedItem != null) {
+                clickedItem.Selected = true;
+                clickedItem.Focused = true;
+            }
         }
 
-        public CountryPoly(String file) {
-            polys = new List<List<LngLat>>();
-            loadData(file);
-        }
-
-        public List<List<LngLat>> getPolys() {
-            return polys;
-        }
-
-        public Image getImage(Color foreColor, Color backColor) {
-            if (image != null) {
-                return image;
+        // Draws the backgrounds for entire ListView items.
+        private void sideListView_DrawItem(object sender,
+            DrawListViewItemEventArgs e) {
+            if ((e.State & ListViewItemStates.Selected) != 0) {
+                // Draw the background and focus rectangle for a selected item.
+                e.Graphics.FillRectangle(new SolidBrush(SystemColors.Highlight), e.Bounds);
+                e.DrawFocusRectangle();
+            } else {
+                // Draw the background for an unselected item.
+                /*
+                using (LinearGradientBrush brush =
+                    new LinearGradientBrush(e.Bounds, Color.Orange,
+                    Color.Maroon, LinearGradientMode.Horizontal)) {
+                    e.Graphics.FillRectangle(brush, e.Bounds);
+                }*/
+                e.Graphics.FillRectangle(new SolidBrush(Color.White), e.Bounds);
             }
 
-            LngLat minLngLat = getMinLngLat();
-            LngLat maxLngLat = getMaxLngLat();
-            double width = maxLngLat.getLng() - minLngLat.getLng();
-            double height = maxLngLat.getLat() - minLngLat.getLat();
-
-            // render to image Convert.ToInt32
-            // max is required for Africa/Tromelin Island
-            image = new Bitmap(Math.Max(Convert.ToInt32(width * 8), 1), Math.Max(Convert.ToInt32(height * 8), 1),PixelFormat.Format32bppArgb);
-            Graphics offScreenDC = Graphics.FromImage(image);
-            drawCountry(offScreenDC, foreColor, backColor);
-            offScreenDC.Dispose();
-            return image;
+            // Draw the item text for views other than the Details view.
+            if (sideListView.View != View.Details) {
+                e.DrawText();
+            }
         }
 
-        public void saveToFile(String file, Color foreColor, Color backColor) {
-            Image image = getImage(foreColor, backColor);
-            image.Save(file, System.Drawing.Imaging.ImageFormat.Png);
-        }
+        // Draws subitem text and applies content-based formatting.
+        private void sideListView_DrawSubItem(object sender,
+            DrawListViewSubItemEventArgs e) {
+            TextFormatFlags flags = TextFormatFlags.Left;
 
-        private void drawCountry(Graphics g, Color foreColor, Color backColor) {
-            g.FillRectangle(new SolidBrush(backColor), g.VisibleClipBounds);
-
-            // Method under System.Drawing.Graphics
-            //g.DrawString("Welcome C#", new Font("Verdana", 20),
-            //new SolidBrush(Color.Tomato), 40, 40);
-
-            LngLat minLngLat = getMinLngLat();
-            LngLat maxLngLat = getMaxLngLat();
-
-            minLngLat = new LngLat(Math.Round(minLngLat.getLng()), Math.Round(minLngLat.getLat()));
-            maxLngLat = new LngLat(Math.Round(maxLngLat.getLng()), Math.Round(maxLngLat.getLat()));
-
-            for (int j = 0; j < polys.Count; j++) {
-                List<LngLat> outline = polys[j];
-                Point[] pts = new Point[outline.Count - 1];
-                for (int i = 1; i < outline.Count; i++) {  // 0th lnglat is inside poly
-                    LngLat lngLat = outline[i];
-                    pts[i - 1] = new Point(Convert.ToInt32((lngLat.getLng() - minLngLat.getLng()) * 8),
-                          Convert.ToInt32((lngLat.getLat() - minLngLat.getLat()) * 8));
-                    // Console.WriteLine("pts[" + i + "]=" + pts[i].X + ", " + pts[i].Y); 
+            using (StringFormat sf = new StringFormat()) {
+                // Store the column text alignment, letting it default
+                // to Left if it has not been set to Center or Right.
+                switch (e.Header.TextAlign) {
+                    case HorizontalAlignment.Center:
+                        sf.Alignment = StringAlignment.Center;
+                        flags = TextFormatFlags.HorizontalCenter;
+                        break;
+                    case HorizontalAlignment.Right:
+                        sf.Alignment = StringAlignment.Far;
+                        flags = TextFormatFlags.Right;
+                        break;
                 }
-                // Console.WriteLine("count=" + outline.Count);
-                // g.DrawPolygon(new Pen(Color.LightGreen, 1), pts);
-                g.FillPolygon(new SolidBrush(foreColor), pts);
-            }
-        }
 
-        public LngLat getMinLngLat() {
-            double minLng = polys[0][0].getLng();
-            double minLat = polys[0][0].getLat();
-            for (int j = 0; j < polys.Count; j++) {
-                List<LngLat> outline = polys[j];
-                for (int i = 1; i < outline.Count; i++) {  // 0th lnglat is inside poly
-                    if (outline[i].getLng() < minLng) { minLng = outline[i].getLng(); }
-                    if (outline[i].getLat() < minLat) { minLat = outline[i].getLat(); }
+                // Draw the text and background for a subitem with a 
+                // negative value. 
+                /*
+                double subItemValue;
+                if (e.ColumnIndex > 0 && Double.TryParse(
+                    e.SubItem.Text, NumberStyles.Currency,
+                    NumberFormatInfo.CurrentInfo, out subItemValue) &&
+                    subItemValue < 0) {
+                    // Unless the item is selected, draw the standard 
+                    // background to make it stand out from the gradient.
+                    if ((e.ItemState & ListViewItemStates.Selected) == 0) {
+                        e.DrawBackground();
+                    }
+
+                    // Draw the subitem text in red to highlight it. 
+                    e.Graphics.DrawString(e.SubItem.Text,
+                        sideListView.Font, Brushes.Red, e.Bounds, sf);
+
+                    return;
                 }
-            }
-            return new LngLat(minLng, minLat);
-        }
+                 */
 
-        public LngLat getMaxLngLat() {
-            double maxLng = polys[0][0].getLng();
-            double maxLat = polys[0][0].getLat();
-            for (int j = 1; j < polys.Count; j++) {
-                List<LngLat> outline = polys[j];
-                for (int i = 1; i < outline.Count; i++) {  // 0th lnglat is inside poly
-                    if (outline[i].getLng() > maxLng) { maxLng = outline[i].getLng(); }
-                    if (outline[i].getLat() > maxLat) { maxLat = outline[i].getLat(); }
-                }
-            }
-            return new LngLat(maxLng, maxLat);
-        }
+                // Draw normal text for a subitem with a nonnegative 
+                // or nonnumerical value.
+                CountryGif countryGif = (CountryGif)countryMap[e.SubItem.Text];
 
-
-        public void loadData(String file) {
-
-            // polys = new List<List<LngLat>>();
-            // Open the file and read it back.
-            using (System.IO.StreamReader sr = System.IO.File.OpenText(file)) {
-                string s = "";
-                string country = sr.ReadLine();
-                long polyNum = long.Parse(sr.ReadLine());
-                List<LngLat> poly = new List<LngLat>();
-                polys.Add(poly);
-                Boolean eof = false;
-                while ((!eof) && (s = sr.ReadLine()) != null) {
-                    s = s.Trim();
-                    if (s.Equals("")) {
-                        // ignore
-                    } else if (s.StartsWith("END")) {
-                        // read next polynum, or 'END' for eof
-                        s = sr.ReadLine();
-                        if (s.StartsWith("END")) {
-                            eof = true;
-                            // finished, next read should be null
-                        } else {
-                            Match m = Regex.Match(s, "([0-9-.]*)");
-                            if (m.Success) {
-                                if (Convert.ToInt64(m.Groups[1].Value) != polyNum + 1) {
-                                    throw new ArgumentException("In file '" + file + "': Found poly number '" + m.Groups[1] + "'; expected '" + (polyNum + 1) + "'");
-                                } else {
-                                    polyNum = polyNum + 1;
-                                    poly = new List<LngLat>();
-                                    polys.Add(poly);
-                                }
-                            } else {
-                                throw new ArgumentException("In file '" + file + "': Invalid string '" + s + "'");
-                            }
+                if (countryGif == null) {
+                    // e.Graphics.FillRectangle(new SolidBrush(Color.Green), e.Bounds);
+                    e.DrawText(flags);
+                } else {
+                    if (e.ColumnIndex == 0) {
+                        int flagIndex = countryGif.getFlagIndex();
+                        if (flagIndex != -1) {
+                            e.Graphics.DrawImage(sideListView.SmallImageList.Images[flagIndex], e.Bounds.Left, e.Bounds.Top);
                         }
+                        e.Graphics.DrawString(countryGif.getName(), sideListView.Font, Brushes.Black, e.Bounds.Left+20, e.Bounds.Top);
+
+                    } else if (e.ColumnIndex == 1) {
+                        e.Graphics.DrawImage(countryGif.getSendImage(e.Bounds.Width, e.Bounds.Height, sideListMaxSend), e.Bounds.Left, e.Bounds.Top);
+                    } else if (e.ColumnIndex == 2) {
+                        e.Graphics.DrawImage(countryGif.getReceiveImage(e.Bounds.Width, e.Bounds.Height, sideListMaxRecv), e.Bounds.Left, e.Bounds.Top);
                     } else {
-                        Match m = Regex.Match(s, "\\s*([0-9-.]*)\\s*([0-9-.]*)");
-                        double lng, lat;
-                        if (m.Success) {
-                            lng = Convert.ToDouble(m.Groups[1].Value);
-                            lat = Convert.ToDouble(m.Groups[2].Value);
-                            poly.Add(new LngLat(lng, -lat));
-                        } else {
-                            throw new ArgumentException("In file '" + file + "': Invalid string '" + s + "'");
-                        }
+                        e.Graphics.FillRectangle(new SolidBrush(Color.Red), e.Bounds);
                     }
                 }
+                // e.DrawText(flags);
             }
         }
 
-    
-    
-    }
+        // Draws column headers.
+        private void sideListView_DrawColumnHeader(object sender,
+            DrawListViewColumnHeaderEventArgs e) {
+            using (StringFormat sf = new StringFormat()) {
+                // Store the column text alignment, letting it default
+                // to Left if it has not been set to Center or Right.
+                switch (e.Header.TextAlign) {
+                    case HorizontalAlignment.Center:
+                        sf.Alignment = StringAlignment.Center;
+                        break;
+                    case HorizontalAlignment.Right:
+                        sf.Alignment = StringAlignment.Far;
+                        break;
+                }
 
-    /*public class CountryOverlay : QAlbum.OverlayGenerator {
-        public CountryOverlay(QAlbum.ScalablePictureBox owner)
-            : base(owner) {
+                // Draw the standard header background.
+                e.DrawBackground();
+
+                // Draw the header text.
+                using (Font headerFont = new Font("Tahoma", 8, FontStyle.Regular)) {
+                    e.Graphics.DrawString(e.Header.Text, headerFont,
+                        Brushes.Black, e.Bounds, sf);
+                }
+            }
+            return;
         }
 
-    }*/
-
+        // Forces each row to repaint itself the first time the mouse moves over 
+        // it, compensating for an extra DrawItem event sent by the wrapped 
+        // Win32 control.
+        private void sideListView_MouseMove(object sender, MouseEventArgs e) {
+            ListViewItem item = sideListView.GetItemAt(e.X, e.Y);
+            if (item != null) {
+                if (item.Tag == null) {
+                    sideListView.Invalidate(item.Bounds);
+                    item.Tag = "tagged";
+                    // Console.WriteLine("now tagged");
+                } else {
+                    // Console.WriteLine("was already " + item.Tag);
+                }
+            }
+        }
+    }
 
 }

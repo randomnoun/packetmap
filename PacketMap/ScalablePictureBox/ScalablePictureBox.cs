@@ -39,7 +39,7 @@ namespace QAlbum
         /// <summary>
         /// Maximum scale percent(100%)
         /// </summary>
-        const int MAX_SCALE_PERCENT = 100;
+        const float MAX_SCALE_PERCENT = 1;
 
         /// <summary>
         /// Zoom in cursor
@@ -64,7 +64,7 @@ namespace QAlbum
         /// <summary>
         /// Scale percentage of picture box in zoom mode
         /// </summary>
-        private int currentScalePercent = MAX_SCALE_PERCENT;
+        private float currentScalePercent = MAX_SCALE_PERCENT;
 
         /// <summary>
         /// Last selected menu item name
@@ -85,6 +85,14 @@ namespace QAlbum
         /// Show actual image
         /// </summary>
         Image showActualSizeImage;
+
+        /// <summary>
+        /// Offset of picturebox image within component
+        /// </summary>
+        private Point internalLocation;
+        public Point InternalLocation {
+            get { return internalLocation; }
+        }
 
         /// <summary>
         /// Constructor
@@ -130,12 +138,7 @@ namespace QAlbum
         }
 
 
-        private Image _backingImage;
-
-        // for backwards-compatibility only
-        public Image Picture {
-            get { return _backingImage; }
-        }
+        private Image backingImage;
 
 		/// <summary>
 		/// Image in picture box
@@ -143,15 +146,15 @@ namespace QAlbum
         [Bindable(true)]
         public Image BackingImage
 		{
-            get { return _backingImage; }
+            get { return backingImage; }
 			set
 			{
-                if (_backingImage != null && this.NeedDisposeImage)
+                if (backingImage != null && this.NeedDisposeImage)
                 {
-                    _backingImage.Dispose();
+                    backingImage.Dispose();
                 }
-                _backingImage = value;
-                this.pictureBox.Image = _backingImage;
+                backingImage = value;
+                this.pictureBox.Image = backingImage;
                 ScalePictureBoxToFit();
                 RefreshContextMenuStrip();
             }
@@ -194,7 +197,7 @@ namespace QAlbum
         /// <summary>
         /// Scale percentage for the picture box
         /// </summary>
-        public int ScalePercent
+        public float ScalePercent
         {
             get { return this.currentScalePercent; }
             set
@@ -209,42 +212,46 @@ namespace QAlbum
         /// </summary>
 		private void ScalePictureBoxToFit()
 		{
-            if (this.Picture == null)
+            if (this.BackingImage == null)
             {
                 this.pictureBox.Width = this.ClientSize.Width;
                 this.pictureBox.Height = this.ClientSize.Height;
                 this.pictureBox.Left = 0;
                 this.pictureBox.Top = 0;
+                this.internalLocation.X = 0;
+                this.internalLocation.Y = 0;
                 this.AutoScroll = false;
                 this.currentScalePercent = GetMinScalePercent();
                 this.pictureBoxSizeMode = PictureBoxSizeMode.Zoom;
             }
             else if (this.pictureBoxSizeMode == PictureBoxSizeMode.Zoom ||
-                    (this.Picture.Width <= this.ClientSize.Width && this.Picture.Height <= this.ClientSize.Height))
+                    (this.BackingImage.Width <= this.ClientSize.Width && this.BackingImage.Height <= this.ClientSize.Height))
             {
-                this.pictureBox.Width = Math.Min(this.ClientSize.Width, this.Picture.Width);
-                this.pictureBox.Height = Math.Min(this.ClientSize.Height, this.Picture.Height);
+                this.pictureBox.Width = Math.Min(this.ClientSize.Width, this.BackingImage.Width);
+                this.pictureBox.Height = Math.Min(this.ClientSize.Height, this.BackingImage.Height);
                 this.pictureBox.Top = (this.ClientSize.Height - this.pictureBox.Height) / 2;
                 this.pictureBox.Left = (this.ClientSize.Width - this.pictureBox.Width) / 2;
                 this.AutoScroll = false;
                 this.currentScalePercent = GetMinScalePercent();
                 this.pictureBoxSizeMode = PictureBoxSizeMode.Zoom;
+
+                float minScalePercent = Math.Min((float)this.ClientSize.Width / (float)this.BackingImage.Width,
+                                                 (float)this.ClientSize.Height / (float)this.BackingImage.Height);
+                this.internalLocation.X = (int)((this.ClientSize.Width - this.BackingImage.Width * minScalePercent) / 2);
+                this.internalLocation.Y = (int)((this.ClientSize.Height - this.BackingImage.Height * minScalePercent) / 2);
             }
             else
             {
-                this.pictureBox.Width = Math.Max(this.Picture.Width * this.currentScalePercent / 100, this.ClientSize.Width);
-                this.pictureBox.Height = Math.Max(this.Picture.Height * this.currentScalePercent / 100, this.ClientSize.Height);
+                this.pictureBox.Width = Math.Max((int) (this.BackingImage.Width * this.currentScalePercent), this.ClientSize.Width);
+                this.pictureBox.Height = Math.Max((int) (this.BackingImage.Height * this.currentScalePercent), this.ClientSize.Height);
 
                 // Centering picture box control
                 int top = (this.ClientSize.Height - this.pictureBox.Height) / 2;
                 int left = (this.ClientSize.Width - this.pictureBox.Width) / 2;
-
-                if (top < 0)
-                {
+                if (top < 0) {
                     top = this.AutoScrollPosition.Y;
                 }
-                if (left < 0)
-                {
+                if (left < 0) {
                     left = this.AutoScrollPosition.X;
                 }
                 this.pictureBox.Left = left;
@@ -267,7 +274,7 @@ namespace QAlbum
         /// </summary>
         private void SetCursor4PictureBox()
         {
-            if (this.Picture == null || this.ContextMenuStrip == null)
+            if (this.BackingImage == null || this.ContextMenuStrip == null)
             {
                 // returen default cursor
                 this.pictureBox.Cursor = Cursors.Default;
@@ -305,8 +312,8 @@ namespace QAlbum
         /// <param name="e"></param>
         private void pictureBox_Click(object sender, EventArgs e)
         {
-            if (this.Picture == null ||
-                (this.Picture.Width <= this.ClientSize.Width && this.Picture.Height <= this.ClientSize.Height))
+            if (this.BackingImage == null ||
+                (this.BackingImage.Width <= this.ClientSize.Width && this.BackingImage.Height <= this.ClientSize.Height))
             {
                 // do nothing if it is not needed to scale the picture
                 return;
@@ -345,31 +352,31 @@ namespace QAlbum
         /// Get minimum scale percent of current image
         /// </summary>
         /// <returns>minimum scale percent</returns>
-        private int GetMinScalePercent()
+        private float GetMinScalePercent()
         {
-            if ((this.Picture == null) ||
-                (this.Picture.Width <= this.ClientSize.Width) && (this.Picture.Height <= this.ClientSize.Height))
+            if ((this.BackingImage == null) ||
+                (this.BackingImage.Width <= this.ClientSize.Width) && (this.BackingImage.Height <= this.ClientSize.Height))
             {
                 return MAX_SCALE_PERCENT;
             }
 
-            float minScalePercent = Math.Min((float)this.ClientSize.Width / (float)this.Picture.Width,
-                                             (float)this.ClientSize.Height / (float)this.Picture.Height);
-            return (int)(minScalePercent * 100.0f);
+            float minScalePercent = Math.Min((float)this.ClientSize.Width / (float)this.BackingImage.Width,
+                                             (float)this.ClientSize.Height / (float)this.BackingImage.Height);
+            return minScalePercent;
         }
 
         /// <summary>
         /// Get fit width scale percent of current image
         /// </summary>
         /// <returns>fit width scale percent which is bigger than minimum scale percent</returns>
-        private int GetFitWidthScalePercent()
+        private float GetFitWidthScalePercent()
         {
-            if (this.Picture == null)
+            if (this.BackingImage == null)
             {
                 return MAX_SCALE_PERCENT;
             }
 
-            int fitWidthScalePercent = Math.Min(this.ClientSize.Width * 100 / this.Picture.Width, 100);
+            float fitWidthScalePercent = Math.Min(this.ClientSize.Width / this.BackingImage.Width, 1);
             return Math.Max(fitWidthScalePercent, GetMinScalePercent());
         }
 
@@ -378,7 +385,7 @@ namespace QAlbum
         /// </summary>
         private void RefreshContextMenuStrip()
         {
-            int minScalePercent = GetMinScalePercent();
+            float minScalePercent = GetMinScalePercent();
             if (minScalePercent == MAX_SCALE_PERCENT)
             {
                 // no need popup context menu
@@ -392,21 +399,21 @@ namespace QAlbum
                 // add show whole menu item
                 ToolStripMenuItem showWholeScaleMenuItem = CreateToolStripMenuItem(minScalePercent);
                 showWholeScaleMenuItem.Name = SHOW_WHOLE_MENU_ITEM_NAME;
-                showWholeScaleMenuItem.Text = "Show whole(" + minScalePercent + "%)";
+                showWholeScaleMenuItem.Text = "Show whole(" + (minScalePercent*100) + "%)";
                 showWholeScaleMenuItem.Image = this.showWholeImage;
                 showWholeScaleMenuItem.Checked = this.pictureBoxSizeMode == PictureBoxSizeMode.Zoom;
                 this.pictureBoxContextMenuStrip.Items.Add(showWholeScaleMenuItem);
 
                 // add scale to fit width menu item
-                int fitWidthScalePercent = GetFitWidthScalePercent();
+                float fitWidthScalePercent = GetFitWidthScalePercent();
                 ToolStripMenuItem fitWidthScaleMenuItem = CreateToolStripMenuItem(fitWidthScalePercent);
                 fitWidthScaleMenuItem.Name = FIT_WIDTH_MENU_ITEM_NAME;
-                fitWidthScaleMenuItem.Text = "Fit width(" + fitWidthScalePercent + "%)";
+                fitWidthScaleMenuItem.Text = "Fit width(" + (fitWidthScalePercent*100)+ "%)";
                 fitWidthScaleMenuItem.Image = this.fitWidthImage;
                 this.pictureBoxContextMenuStrip.Items.Add(fitWidthScaleMenuItem);
 
                 // add other scale menu items
-                for (int scale = minScalePercent / 10 * 10 + 10; scale <= MAX_SCALE_PERCENT; scale += 10)
+                for (int scale = ((int)minScalePercent * 100) / 10 * 10 + 10; scale <= MAX_SCALE_PERCENT*100; scale += 10)
                 {
                     ToolStripMenuItem menuItem = CreateToolStripMenuItem(scale);
                     if (scale == 100)
@@ -429,7 +436,7 @@ namespace QAlbum
         /// </summary>
         /// <param name="scalePercent">the percentage to scale picture</param>
         /// <returns>a tool strip menu item</returns>
-        private ToolStripMenuItem CreateToolStripMenuItem(int scalePercent)
+        private ToolStripMenuItem CreateToolStripMenuItem(float scalePercent)
         {
             ToolStripMenuItem toolStripMenuItem = new ToolStripMenuItem();
             toolStripMenuItem.Name = scalePercent.ToString();
@@ -459,12 +466,12 @@ namespace QAlbum
         private void toolStripMenuItem_Click(object sender, EventArgs e)
         {
             ToolStripMenuItem selectedMenuItem = sender as ToolStripMenuItem;
-            this.currentScalePercent = (int)selectedMenuItem.Tag;
+            this.currentScalePercent = (float)selectedMenuItem.Tag / 100;
             ImageSizeMode = selectedMenuItem.Name == SHOW_WHOLE_MENU_ITEM_NAME ? PictureBoxSizeMode.Zoom : PictureBoxSizeMode.Normal;
 
             // Adjust picture box size again for fit picture box width to the scalable control width
             // because the client size may be changed.
-            int currentFitWidthScalePercent = GetFitWidthScalePercent();
+            float currentFitWidthScalePercent = GetFitWidthScalePercent();
             if (selectedMenuItem.Name == FIT_WIDTH_MENU_ITEM_NAME && currentFitWidthScalePercent != this.currentScalePercent)
             {
                 this.currentScalePercent = GetFitWidthScalePercent();
