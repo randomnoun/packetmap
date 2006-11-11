@@ -81,7 +81,33 @@ Section "!Packetmap" SecMain
   File bin\debug\Packetmap.exe
   File bin\debug\ScalablePictureBox.dll
   File bin\debug\Tamir.IPLib.SharpPcap.dll
+
+  SetOutPath "$INSTDIR\data"
+  File data\countries.txt
+  File data\GeoIPCountryWhois.csv
+  File data\matchedWithGif.csv
   
+  SetOutPath "$INSTDIR\countryGif"
+  File countryGif\*.png
+  File countryGif\*.png
+  
+  ;SetOutPath "$INSTDIR\countryPoly\Africa"
+  ;File countryPoly\Africa\*.txt
+  ;SetOutPath "$INSTDIR\countryPoly\Asia"
+  ;File countryPoly\Asia\*.txt
+  ;SetOutPath "$INSTDIR\countryPoly\Australia"
+  ;File countryPoly\Australia\*.txt
+  ;SetOutPath "$INSTDIR\countryPoly\Europe"
+  ;File countryPoly\Europe\*.txt
+  ;SetOutPath "$INSTDIR\countryPoly\NorthAmerica"
+  ;File countryPoly\NorthAmerica\*.txt
+  ;SetOutPath "$INSTDIR\countryPoly\SouthAmerica"
+  ;File countryPoly\SouthAmerica\*.txt
+  
+  SetOutPath "$INSTDIR\flags"
+  File flags\*.gif
+  
+ 
 
   ;Store installation folder
   WriteRegStr HKCU "Software\Randomnoun\Packetmap" "InstallDir" $INSTDIR
@@ -133,8 +159,13 @@ Section "Uninstall"
   Delete $INSTDIR\Packetmap.exe
   Delete $INSTDIR\ScalablePictureBox.dll
   Delete $INSTDIR\Tamir.IPLib.SharpPcap.dll
+  Delete $INSTDIR\countryGifs\countries.txt
+  Delete $INSTDIR\countryGifs\countries.csv
+  Delete $INSTDIR\countryGifs\*.png
+  Delete $INSTDIR\countryGifs\*.png
 
   Delete "$INSTDIR\Uninstall.exe"
+
 
   RMDir "$INSTDIR"
 

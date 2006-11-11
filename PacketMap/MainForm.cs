@@ -55,8 +55,7 @@ namespace PacketMap {
         private ToolStripStatusLabel lblStatusBarLeft;
         static MainForm mainFormInstance = null;
 
-
-        public MainForm() {
+        public MainForm(string baseDir, string deviceName) {
             InitializeComponent();
             countries = new List<CountryGif>();
             geoIpRanges = new List<GeoIpRange>();
@@ -70,18 +69,18 @@ namespace PacketMap {
 
             // this.scrollablePictureBox1.Image = countries[countries.Count - 1].getImage();
             Splasher.AddText("Loading country outline data...");
-            this.loadCountries("C:\\projects\\pcap\\country");
+            this.loadCountries(baseDir);
             Thread.Sleep(500);
             Splasher.SetProgress(25);
 
             Splasher.AddText("Loading IP to country data...");
-            this.loadGeoIps("c:\\projects\\pcap\\GeoIPCountryWhois.csv");
-            this.loadCountryMap("c:\\projects\\pcap\\country\\matchedWithGif.csv");
+            this.loadGeoIps(baseDir + "\\data\\GeoIPCountryWhois.csv");
+            this.loadCountryMap(baseDir + "\\data\\matchedWithGif.csv");
             Thread.Sleep(500);
             Splasher.SetProgress(50);
 
             Splasher.AddText("Loading country flag images...");
-            this.loadFlagImages("c:\\projects\\pcap\\flags");
+            this.loadFlagImages(baseDir + "\\flags");
             baseCountry = countries[countries.Count - 1];
             baseImage = baseCountry.getImage();
             overlayBitmap = new Bitmap(baseImage.Size.Width, baseImage.Size.Height, PixelFormat.Format32bppArgb);
@@ -92,18 +91,11 @@ namespace PacketMap {
             Splasher.SetProgress(75);
 
             Splasher.AddText("Starting capture...");
-            // Attempt to open the key; create it if it doesn't exist
-            RegistryKey key = Registry.CurrentUser.OpenSubKey("Software\\Randomnoun\\Packetmap");
-            if (key == null) {
-                key = Registry.CurrentUser.CreateSubKey("Software\\Randomnoun\\Packetmap");
-            }
-            string deviceName = (string)key.GetValue("DeviceName", "");
             if (!deviceName.Equals("")) {
                 device = SharpPcap.GetPcapDevice(deviceName);
                 deviceIp = Tamir.IPLib.Util.Convert.IpStringToInt32(device.PcapIpAddress);
                 AddStatusText("Selected adapter " + device.PcapDescription);
             }
-            key.Close();
             Splasher.Close();
 
             lblStatusBarLeft.Text = "Mapping disabled";
@@ -229,7 +221,7 @@ namespace PacketMap {
 
         public void loadCountries(String directory) {
             // grab text file and read from there
-            System.IO.StreamReader sr = System.IO.File.OpenText(directory + "\\countries.txt");
+            System.IO.StreamReader sr = System.IO.File.OpenText(directory + "\\data\\countries.txt");
             String s;
             while ((s = sr.ReadLine()) != null) {
                 s = s.Trim();
@@ -237,7 +229,7 @@ namespace PacketMap {
                     Match m = Regex.Match(s, "^(.*)\\s+([0-9-.]+)\\s+([0-9-.]+)\\s+([0-9-.]+)\\s+([0-9-.]+)\\s*$");
                     if (m.Success) {
                         Console.WriteLine("Loading " + m.Groups[1].Value);
-                        countries.Add(new CountryGif(directory + "\\" + m.Groups[1].Value + ".png",
+                        countries.Add(new CountryGif(directory + "\\countryGif\\" + m.Groups[1].Value + ".png",
                             m.Groups[1].Value,
                             new LngLat(Convert.ToDouble(m.Groups[2].Value), Convert.ToDouble(m.Groups[3].Value)),
                             new LngLat(Convert.ToDouble(m.Groups[4].Value), Convert.ToDouble(m.Groups[5].Value))));
@@ -252,15 +244,30 @@ namespace PacketMap {
         public static void Main(String[] args) {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
+            RegistryKey key = Registry.CurrentUser.OpenSubKey("Software\\Randomnoun\\Packetmap");
+            if (key == null) {
+                key = Registry.CurrentUser.CreateSubKey("Software\\Randomnoun\\Packetmap");
+            }
+            string deviceName = (string)key.GetValue("DeviceName", "");
+            string installDir = (string)key.GetValue("InstallDir", "");
+            // Attempt to open the key; create it if it doesn't exist
+            key.Close();
 
+            if (installDir.Equals("")) {
+                MessageBox.Show("Registry key not found -- aborting", "Initialisation failure", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                return;
+            }
+
+
+            
             Splasher.Show(typeof(SplashForm));
 
             if (args.Length > 0 && args[0].Equals("--makeGifs")) {
                 // grab all countries, render and save them
                 CountryPoly earth = new CountryPoly();
                 // System.IO.StreamWriter sw = System.IO.File.AppendText("c:\\projects\\pcap\\country\\countries.txt");
-                System.IO.StreamWriter sw = System.IO.File.CreateText("c:\\projects\\pcap\\country\\countries.txt");
-                foreach (string file in GetFiles("C:\\projects\\pcap\\outline\\", "*.txt")) {
+                System.IO.StreamWriter sw = System.IO.File.CreateText(installDir + "\\countryGif\\countries.txt");
+                foreach (string file in GetFiles(installDir + "\\countryPoly", "*.txt")) {
                     if (new FileInfo(file).Length == 0) {
                         Console.WriteLine("Skipping " + file);
                     } else {
@@ -275,7 +282,7 @@ namespace PacketMap {
                             country.getMaxLngLat().getLng(), country.getMaxLngLat().getLat());
                     }
                 }
-                earth.saveToFile("c:\\projects\\pcap\\country\\earth.png", Color.FromArgb(62,94,67), Color.FromArgb(0,5,100));
+                earth.saveToFile(installDir + "\\countryGif\\earth.png", Color.FromArgb(62,94,67), Color.FromArgb(0,5,100));
                 sw.WriteLine("earth {0} {1} {2} {3}",
                     earth.getMinLngLat().getLng(), earth.getMinLngLat().getLat(),
                     earth.getMaxLngLat().getLng(), earth.getMaxLngLat().getLat());
@@ -284,8 +291,9 @@ namespace PacketMap {
 
 
 
-            MainForm testForm = new MainForm();
-            testForm.packetWriter = System.IO.File.AppendText("c:\\projects\\pcap\\packetDump.txt");
+            MainForm testForm = new MainForm(installDir, deviceName);
+            Directory.CreateDirectory(installDir + "\\out");
+            testForm.packetWriter = System.IO.File.AppendText(installDir + "\\out\\packetDump.txt");
             Application.Run(testForm);
         }
 
