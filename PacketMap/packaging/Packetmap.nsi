@@ -14,7 +14,7 @@
 
   ;Name and file
   Name "Packetmap"
-  OutFile "bin\debug\PacketmapSetup-v0.1.exe"
+  OutFile "..\bin\debug\PacketmapSetup-v0.1.exe"
 
   ;Default installation folder
   InstallDir "$PROGRAMFILES\Packetmap"
@@ -35,6 +35,9 @@
   !define MUI_ABORTWARNING
   !define DOTNET_VERSION "2.0.5"
   !define VERSION "0.1"
+
+
+!define MUI_PAGE_CUSTOMFUNCTION_SHOW myShowCallback
 
 ;--------------------------------
 ;Pages
@@ -98,34 +101,34 @@ Section "!Packetmap" SecMain
   !insertmacro CheckDotNET
 
   ;ADD YOUR OWN FILES HERE...
-  File bin\debug\Packetmap.exe
-  File bin\debug\ScalablePictureBox.dll
-  File bin\debug\Tamir.IPLib.SharpPcap.dll
+  File ..\bin\debug\Packetmap.exe
+  File ..\bin\debug\ScalablePictureBox.dll
+  File ..\bin\debug\Tamir.IPLib.SharpPcap.dll
 
   SetOutPath "$INSTDIR\data"
-  File data\countries.txt
-  File data\GeoIPCountryWhois.csv
-  File data\matchedWithGif.csv
+  File ..\data\countries.txt
+  File ..\data\GeoIPCountryWhois.csv
+  File ..\data\matchedWithGif.csv
   
   SetOutPath "$INSTDIR\countryGif"
-  File countryGif\*.png
-  File countryGif\*.png
+  File ..\countryGif\*.png
+  File ..\countryGif\*.png
   
   ;SetOutPath "$INSTDIR\countryPoly\Africa"
-  ;File countryPoly\Africa\*.txt
+  ;File ..\countryPoly\Africa\*.txt
   ;SetOutPath "$INSTDIR\countryPoly\Asia"
-  ;File countryPoly\Asia\*.txt
+  ;File ..\countryPoly\Asia\*.txt
   ;SetOutPath "$INSTDIR\countryPoly\Australia"
-  ;File countryPoly\Australia\*.txt
+  ;File ..\countryPoly\Australia\*.txt
   ;SetOutPath "$INSTDIR\countryPoly\Europe"
-  ;File countryPoly\Europe\*.txt
+  ;File ..\countryPoly\Europe\*.txt
   ;SetOutPath "$INSTDIR\countryPoly\NorthAmerica"
-  ;File countryPoly\NorthAmerica\*.txt
+  ;File ..\countryPoly\NorthAmerica\*.txt
   ;SetOutPath "$INSTDIR\countryPoly\SouthAmerica"
-  ;File countryPoly\SouthAmerica\*.txt
+  ;File ..\countryPoly\SouthAmerica\*.txt
   
   SetOutPath "$INSTDIR\flags"
-  File flags\*.gif
+  File ..\flags\*.gif
   
  
 
