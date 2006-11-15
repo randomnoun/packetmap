@@ -50,9 +50,10 @@ namespace PacketMap {
             // 
             this.rtbProgress.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(218)))), ((int)(((byte)(207)))), ((int)(((byte)(195)))));
             this.rtbProgress.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.rtbProgress.Location = new System.Drawing.Point(306, 183);
+            this.rtbProgress.Location = new System.Drawing.Point(306, 180);
             this.rtbProgress.Name = "rtbProgress";
-            this.rtbProgress.Size = new System.Drawing.Size(235, 64);
+            this.rtbProgress.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.None;
+            this.rtbProgress.Size = new System.Drawing.Size(238, 69);
             this.rtbProgress.TabIndex = 2;
             this.rtbProgress.Text = "";
             // 

@@ -12,6 +12,8 @@ using System.Collections;
 using System.Drawing.Imaging;
 using System.Drawing.Drawing2D;
 using Microsoft.Win32;
+using System.Net;
+using System.ComponentModel;
 
 namespace PacketMap {
 
@@ -43,6 +45,8 @@ namespace PacketMap {
 
         PcapDevice device = null;
         uint deviceIp = 0;
+        bool autoUpdate = false;
+
         Thread backgroundThread = null;
         private System.Windows.Forms.Timer animationTimer;
         private System.ComponentModel.IContainer components;
@@ -53,10 +57,16 @@ namespace PacketMap {
         private ImageList flagImageList;
         private StatusStrip statusBar;
         private ToolStripStatusLabel lblStatusBarLeft;
+        private ToolStripMenuItem cmdCheckUpdatesAtStartup;
+        private ToolStripMenuItem cmdCheckUpdatesNow;
+        private ToolStripSeparator toolStripSeparator3;
         static MainForm mainFormInstance = null;
 
-        public MainForm(string baseDir, string deviceName) {
+        public MainForm(string baseDir, string deviceName, bool autoUpdate) {
             InitializeComponent();
+            this.autoUpdate = autoUpdate;
+            cmdCheckUpdatesAtStartup.Checked = autoUpdate;
+
             countries = new List<CountryGif>();
             geoIpRanges = new List<GeoIpRange>();
             countryMap = new Hashtable();
@@ -64,20 +74,27 @@ namespace PacketMap {
                 throw new ArgumentException("Program already running!");
             }
             mainFormInstance = this;
-            // this.Paint += new PaintEventHandler(f1_paint);
 
-
-            // this.scrollablePictureBox1.Image = countries[countries.Count - 1].getImage();
+            // check for latest update
+            // prepare the web page we will be asking for
+            if (autoUpdate) {
+                Splasher.AddText("Checking for updates (go to Help menu to disable this check)...");
+                Splasher.SetProgress(20);
+                Thread.Sleep(100);
+                checkForUpdatesNow(true);
+            }
+            
             Splasher.AddText("Loading country outline data...");
             this.loadCountries(baseDir);
-            Thread.Sleep(500);
-            Splasher.SetProgress(25);
+            Thread.Sleep(100);
+            Splasher.SetProgress(40);
 
+            
             Splasher.AddText("Loading IP to country data...");
             this.loadGeoIps(baseDir + "\\data\\GeoIPCountryWhois.csv");
             this.loadCountryMap(baseDir + "\\data\\matchedWithGif.csv");
-            Thread.Sleep(500);
-            Splasher.SetProgress(50);
+            Thread.Sleep(100);
+            Splasher.SetProgress(60);
 
             Splasher.AddText("Loading country flag images...");
             this.loadFlagImages(baseDir + "\\flags");
@@ -87,15 +104,22 @@ namespace PacketMap {
             compositeBitmap = new Bitmap(baseImage.Size.Width, baseImage.Size.Height, PixelFormat.Format32bppArgb);
             this.spbImage.BackingImage = baseImage;
             this.spbImage.SetOverlayGenerator(this);
-            Thread.Sleep(500);
-            Splasher.SetProgress(75);
+            Thread.Sleep(100);
+            Splasher.SetProgress(80);
 
-            Splasher.AddText("Starting capture...");
+            Splasher.AddText("Selecting adaptor...");
             if (!deviceName.Equals("")) {
-                device = SharpPcap.GetPcapDevice(deviceName);
-                deviceIp = Tamir.IPLib.Util.Convert.IpStringToInt32(device.PcapIpAddress);
-                AddStatusText("Selected adapter " + device.PcapDescription);
+                try {
+                    device = SharpPcap.GetPcapDevice(deviceName);
+                    deviceIp = Tamir.IPLib.Util.Convert.IpStringToInt32(device.PcapIpAddress);
+                    AddStatusText("Selected adapter " + device.PcapDescription);
+                } catch (Exception) {
+                    AddStatusText("Could not find device '" + deviceName + "'... please reselect adaptor");
+                }
             }
+
+            Directory.CreateDirectory(baseDir + "\\out");
+            this.packetWriter = System.IO.File.AppendText(baseDir + "\\out\\packetDump.txt");
             Splasher.Close();
 
             lblStatusBarLeft.Text = "Mapping disabled";
@@ -241,74 +265,6 @@ namespace PacketMap {
             sr.Close();
         }
 
-        public static void Main(String[] args) {
-            Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
-            RegistryKey key = Registry.CurrentUser.OpenSubKey("Software\\Randomnoun\\Packetmap");
-            if (key == null) {
-                key = Registry.CurrentUser.CreateSubKey("Software\\Randomnoun\\Packetmap");
-            }
-            string deviceName = (string)key.GetValue("DeviceName", "");
-            string installDir = (string)key.GetValue("InstallDir", "");
-            // Attempt to open the key; create it if it doesn't exist
-            key.Close();
-
-            if (installDir.Equals("")) {
-                MessageBox.Show("Registry key not found -- aborting", "Initialisation failure", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                return;
-            }
-
-
-            
-            Splasher.Show(typeof(SplashForm));
-
-            if (args.Length > 0 && args[0].Equals("--makeGifs")) {
-                // grab all countries, render and save them
-                CountryPoly earth = new CountryPoly();
-                // System.IO.StreamWriter sw = System.IO.File.AppendText("c:\\projects\\pcap\\country\\countries.txt");
-                System.IO.StreamWriter sw = System.IO.File.CreateText(installDir + "\\countryGif\\countries.txt");
-                foreach (string file in GetFiles(installDir + "\\countryPoly", "*.txt")) {
-                    if (new FileInfo(file).Length == 0) {
-                        Console.WriteLine("Skipping " + file);
-                    } else {
-                        String txtFile = file.Substring(file.LastIndexOf("\\") + 1);
-                        String gifFile = "c:\\projects\\pcap\\country\\" + txtFile.Substring(0, txtFile.IndexOf(".")) + ".png";
-                        Console.WriteLine("Creating " + gifFile + "...");
-                        CountryPoly country = new CountryPoly(file);
-                        country.saveToFile(gifFile, Color.LightGreen, Color.Transparent);
-                        earth.loadData(file);
-                        sw.WriteLine("{0} {1} {2} {3} {4}", txtFile.Substring(0, txtFile.IndexOf(".")),
-                            country.getMinLngLat().getLng(), country.getMinLngLat().getLat(),
-                            country.getMaxLngLat().getLng(), country.getMaxLngLat().getLat());
-                    }
-                }
-                earth.saveToFile(installDir + "\\countryGif\\earth.png", Color.FromArgb(62,94,67), Color.FromArgb(0,5,100));
-                sw.WriteLine("earth {0} {1} {2} {3}",
-                    earth.getMinLngLat().getLng(), earth.getMinLngLat().getLat(),
-                    earth.getMaxLngLat().getLng(), earth.getMaxLngLat().getLat());
-                sw.Close();
-            }
-
-
-
-            MainForm testForm = new MainForm(installDir, deviceName);
-            Directory.CreateDirectory(installDir + "\\out");
-            testForm.packetWriter = System.IO.File.AppendText(installDir + "\\out\\packetDump.txt");
-            Application.Run(testForm);
-        }
-
-        // creatively borrowed from http://blogs.msdn.com/brada/archive/2004/03/04/84069.aspx
-        public static IEnumerable<string> GetFiles(string path, String glob) {
-            foreach (string s in Directory.GetFiles(path, glob)) {
-                yield return s;
-            }
-            foreach (string s in Directory.GetDirectories(path)) {
-                foreach (string s1 in GetFiles(s, glob)) {
-                    yield return s1;
-                }
-            }
-        }
-
         private void InitializeComponent() {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
@@ -332,6 +288,9 @@ namespace PacketMap {
             this.spbImage = new QAlbum.ScalablePictureBox();
             this.statusBar = new System.Windows.Forms.StatusStrip();
             this.lblStatusBarLeft = new System.Windows.Forms.ToolStripStatusLabel();
+            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
+            this.cmdCheckUpdatesAtStartup = new System.Windows.Forms.ToolStripMenuItem();
+            this.cmdCheckUpdatesNow = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.statusBar.SuspendLayout();
             this.SuspendLayout();
@@ -402,6 +361,9 @@ namespace PacketMap {
             // helpToolStripMenuItem
             // 
             this.helpToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.cmdCheckUpdatesAtStartup,
+            this.cmdCheckUpdatesNow,
+            this.toolStripSeparator3,
             this.cmdAboutBox});
             this.helpToolStripMenuItem.Name = "helpToolStripMenuItem";
             this.helpToolStripMenuItem.Size = new System.Drawing.Size(40, 20);
@@ -410,7 +372,7 @@ namespace PacketMap {
             // cmdAboutBox
             // 
             this.cmdAboutBox.Name = "cmdAboutBox";
-            this.cmdAboutBox.Size = new System.Drawing.Size(169, 22);
+            this.cmdAboutBox.Size = new System.Drawing.Size(224, 22);
             this.cmdAboutBox.Text = "About PacketMap";
             this.cmdAboutBox.Click += new System.EventHandler(this.cmdAboutBox_Click);
             // 
@@ -740,6 +702,25 @@ namespace PacketMap {
             this.lblStatusBarLeft.Name = "lblStatusBarLeft";
             this.lblStatusBarLeft.Size = new System.Drawing.Size(109, 17);
             this.lblStatusBarLeft.Text = "toolStripStatusLabel1";
+            // 
+            // toolStripSeparator3
+            // 
+            this.toolStripSeparator3.Name = "toolStripSeparator3";
+            this.toolStripSeparator3.Size = new System.Drawing.Size(221, 6);
+            // 
+            // cmdCheckUpdatesAtStartup
+            // 
+            this.cmdCheckUpdatesAtStartup.Name = "cmdCheckUpdatesAtStartup";
+            this.cmdCheckUpdatesAtStartup.Size = new System.Drawing.Size(224, 22);
+            this.cmdCheckUpdatesAtStartup.Text = "Check for updates at startup";
+            this.cmdCheckUpdatesAtStartup.Click += new System.EventHandler(this.cmdCheckUpdatesAtStartup_Click);
+            // 
+            // cmdCheckUpdatesNow
+            // 
+            this.cmdCheckUpdatesNow.Name = "cmdCheckUpdatesNow";
+            this.cmdCheckUpdatesNow.Size = new System.Drawing.Size(224, 22);
+            this.cmdCheckUpdatesNow.Text = "Check for updates now...";
+            this.cmdCheckUpdatesNow.Click += new System.EventHandler(this.cmdCheckUpdatesNow_Click);
             // 
             // MainForm
             // 
@@ -1307,6 +1288,80 @@ namespace PacketMap {
                 }
             }
         }
+
+        private void cmdCheckUpdatesAtStartup_Click(object sender, EventArgs e) {
+            autoUpdate = !autoUpdate;
+            cmdCheckUpdatesAtStartup.Checked = autoUpdate;
+            RegistryKey key = Registry.CurrentUser.OpenSubKey("Software\\Randomnoun\\Packetmap", true);
+            // If the return value is null, the key doesn't exist
+            if (key == null) {
+                key = Registry.CurrentUser.CreateSubKey("Software\\Randomnoun\\Packetmap");
+            }
+            key.SetValue("AutoUpdate", autoUpdate ? 1 : 0);
+            key.Close();
+            
+        }
+
+        private void cmdCheckUpdatesNow_Click(object sender, EventArgs e) {
+            checkForUpdatesNow(false);
+        }
+
+        private void checkForUpdatesNow(bool fromSplash) {
+            string text = "";
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create("http://packetmap.sourceforge.net/currentBuild.txt");
+            try {
+                HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+                if (response.StatusCode == HttpStatusCode.OK) {
+                    Stream stream = response.GetResponseStream();
+                    StreamReader reader = new StreamReader(stream, Encoding.ASCII);
+                    String responseHtml = reader.ReadToEnd();
+                    response.Close();
+                    string[] lines = responseHtml.Split(new char[] { '\n' });
+                    Hashtable responseMap = new Hashtable();
+                    for (int i = 0; i < lines.Length; i++) {
+                        if (lines[i].IndexOf("=") != -1) {
+                            responseMap[lines[i].Substring(0, lines[i].IndexOf("=")).Trim()] =
+                                lines[i].Substring(lines[i].IndexOf("=") + 1).Trim();
+                        }
+                    }
+                    if (responseMap.ContainsKey("Version") && responseMap.ContainsKey("DownloadUrl") && !responseMap["Version"].Equals(MainProgram.VERSION)) {
+                        if (MessageBox.Show(
+                          "You are currently running version " + MainProgram.VERSION + " of Packetmap. " +
+                          "There is a new version (" + responseMap["Version"] + ") of PacketMap available. " +
+                          "Would you like to download and install this new version ? ",
+                          "New version available", MessageBoxButtons.YesNo, MessageBoxIcon.Information) == DialogResult.Yes) {
+                            // go to window and exit
+                            bool success = false;
+                            try {
+                                System.Diagnostics.Process.Start((string)responseMap["DownloadUrl"]);
+                                success = true;
+                            } catch (Win32Exception noBrowser) {
+                                if (noBrowser.ErrorCode == -2147467259)
+                                    MessageBox.Show(noBrowser.Message);
+                            } catch (System.Exception other) {
+                                MessageBox.Show(other.Message);
+                            }
+                            if (success) {
+                                // only close app if page retrieval was a success
+                                Application.Exit();
+                            }
+                        }
+                    }
+                } else {
+                    
+                    text = "Response not received: " + response.StatusDescription + "(" + response.StatusCode + ")";
+                }
+            } catch (WebException wre) {
+                text = "Error: " + wre.Message + "(" + wre.Response + ")";
+            }
+            if (fromSplash) {
+                Console.WriteLine(text);
+            } else {
+                MessageBox.Show(text, "Update check response", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+        }
+
+
     }
 
 }

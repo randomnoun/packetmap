@@ -16,10 +16,12 @@ namespace PacketMap {
             //  - AssemblyInfo.cs
             this.Text = String.Format("About {0}", AssemblyTitle);
             this.labelProductName.Text = AssemblyProduct;
-            this.labelVersion.Text = String.Format("Version {0}", AssemblyVersion);
-            this.labelCopyright.Text = AssemblyCopyright;
-            this.labelCompanyName.Text = AssemblyCompany;
-            this.textBoxDescription.Text = AssemblyDescription;
+            this.labelVersion.Text = String.Format("Version {0}", MainProgram.VERSION);
+            
+            //this.labelCopyright.Text = AssemblyCopyright;
+            this.labelCompanyName.Text = "Greg Knox: http://www.randomnoun.com";
+            this.labelCompanyName2.Text = "Packetmap: http://packetmap.sourceforge.net";
+            this.textBoxDescription.Text = "Packetmap. An application that maps packets.";
         }
 
         #region Assembly Attribute Accessors

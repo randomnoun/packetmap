@@ -14,7 +14,7 @@
 
   ;Name and file
   Name "Packetmap"
-  OutFile "..\bin\debug\PacketmapSetup-v0.1.exe"
+  OutFile "..\bin\debug\PacketmapSetup-pre-alpha-v0.3.exe"
 
   ;Default installation folder
   InstallDir "$PROGRAMFILES\Packetmap"
