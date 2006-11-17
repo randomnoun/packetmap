@@ -43,7 +43,8 @@ namespace PacketMap {
         long sideListMaxSend = 0;
         long sideListMaxRecv = 0;
 
-        PcapDevice device = null;
+        /* PcapDevice device = null; */
+        NetworkDevice device = null;
         uint deviceIp = 0;
         bool autoUpdate = false;
 
@@ -110,9 +111,9 @@ namespace PacketMap {
             Splasher.AddText("Selecting adaptor...");
             if (!deviceName.Equals("")) {
                 try {
-                    device = SharpPcap.GetPcapDevice(deviceName);
-                    deviceIp = Tamir.IPLib.Util.Convert.IpStringToInt32(device.PcapIpAddress);
-                    AddStatusText("Selected adapter " + device.PcapDescription);
+                    device = (NetworkDevice) SharpPcap.GetPcapDevice(deviceName);
+                    deviceIp = Tamir.IPLib.Util.Convert.IpStringToInt32(device.IpAddress);
+                    AddStatusText("Selected adapter " + device.PcapDescription + " [" + device.IpAddress + "]"); 
                 } catch (Exception) {
                     AddStatusText("Could not find device '" + deviceName + "'... please reselect adaptor");
                 }
@@ -906,7 +907,7 @@ namespace PacketMap {
         private void cmdSelectAdapter_Click(object sender, EventArgs e) {
             SelectAdapterForm frmSelectAdapterForm = new SelectAdapterForm();
             if (frmSelectAdapterForm.ShowDialog()==DialogResult.OK) {
-                device = SharpPcap.GetAllDevices()[frmSelectAdapterForm.getDeviceId()];
+                device = (NetworkDevice) SharpPcap.GetAllDevices()[frmSelectAdapterForm.getDeviceId()];
                 deviceIp = Tamir.IPLib.Util.Convert.IpStringToInt32(device.PcapIpAddress);
                 AddStatusText("Selected adapter " + device.PcapDescription);
 
@@ -1009,7 +1010,6 @@ namespace PacketMap {
 
         string _refreshTime = "(not started)";
         private void animationTimer_Tick(object sender, EventArgs e) {
-
             sideListView.BeginUpdate();
             sideListView.Items.Clear();
             sideListMaxSend = 0;
@@ -1061,7 +1061,6 @@ namespace PacketMap {
                         (int) ((max.getLat()-min.getLat()) * 8), country.getName()));
                     */
                 }
-
             }
             sideListView.EndUpdate();
 
@@ -1111,10 +1110,28 @@ namespace PacketMap {
                         (int)((max.getLat() - min.getLat()) * 8 * zoom));
                     List<CountryIp> countryIps = country.getCountryIps();
                     // g.DrawString("" + countryIps.Count + " ips", font, Brushes.White, x - 50, y -10);
-                    for (int i = 0; i < countryIps.Count && i < 5; i++) {
+
+                    int ipCount = Math.Min(countryIps.Count, 5);
+                    int h = 10 * ipCount + 18;
+                    Bitmap b = new Bitmap(85, h, PixelFormat.Format32bppArgb);
+                    Graphics g2 = Graphics.FromImage(b);
+                    g2.FillRectangle(new SolidBrush(Color.FromArgb(80, 255, 249, 199)), 0,0,85,h);
+
+                    g2.FillRectangle(new SolidBrush(Color.FromArgb(100, 255, 249, 199)), 0,0,85,12);
+                    g2.FillRectangle(new SolidBrush(Color.FromArgb(100, 255, 249, 199)), 0,h-2,85, 2);
+                    g2.DrawLine(new Pen(Color.FromArgb(100, 255, 249, 199)), 0, 0, 0, h);
+                    g2.DrawLine(new Pen(Color.FromArgb(100, 255, 249, 199)), 85, 0, 85, h);
+
+                    g2.DrawString(country.getName(), font, Brushes.Yellow, 2, -1);
+                    for (int i = 0; i < ipCount; i++) {
                         int width = (int) g.MeasureString(countryIps[i].getIp(), font).Width;
-                        g.DrawString(countryIps[i].getIp(), font, Brushes.White, x - width - 10, y + i * 10);
+                        g2.DrawString(countryIps[i].getIp(), font, Brushes.White, 2, 13 + i * 10);
                     }
+                    g2.Dispose();
+
+                    // x-width-10
+                    g.DrawImage(b, x - 85 - 10, y);
+                    b.Dispose();
 
                 }
             }
