@@ -32,13 +32,21 @@ namespace PacketMap {
         String name;
         int flagIndex;  // index into flag imageList
         private string shortName;
-        
+
+        // pixel positions
+        public int positionIdx;    // index into positions array
+        public List<Point> positions = new List<Point>(); // possible positions
+        public Image overlay;
+
         // dynamic data
         DateTime lastReceiveTime = DateTime.Now;  // last time we received from this country
         DateTime lastSendTime = DateTime.Now;     // last time we sent to this country
+
         
         long[] recvHistBytes = new long[MAX_HISTORY];  // updated per animation tick
         long[] sendHistBytes = new long[MAX_HISTORY];  // updated per animation tick (?)
+        public double recvHighlight, sendHighlight;
+
         List<CountryIp> countryIps = new List<CountryIp>(MAX_IPS);
         
         public long getMaxRecvBytes() {

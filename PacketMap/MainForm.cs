@@ -61,6 +61,8 @@ namespace PacketMap {
         private ToolStripMenuItem cmdCheckUpdatesAtStartup;
         private ToolStripMenuItem cmdCheckUpdatesNow;
         private ToolStripSeparator toolStripSeparator3;
+        private ToolStripMenuItem toolsToolStripMenuItem;
+        private ToolStripMenuItem cmdDnsLookup;
         static MainForm mainFormInstance = null;
 
         public MainForm(string baseDir, string deviceName, bool autoUpdate) {
@@ -278,6 +280,9 @@ namespace PacketMap {
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.cmdExit = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.cmdCheckUpdatesAtStartup = new System.Windows.Forms.ToolStripMenuItem();
+            this.cmdCheckUpdatesNow = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.cmdAboutBox = new System.Windows.Forms.ToolStripMenuItem();
             this.txtStatus = new System.Windows.Forms.RichTextBox();
             this.animationTimer = new System.Windows.Forms.Timer(this.components);
@@ -289,9 +294,8 @@ namespace PacketMap {
             this.spbImage = new QAlbum.ScalablePictureBox();
             this.statusBar = new System.Windows.Forms.StatusStrip();
             this.lblStatusBarLeft = new System.Windows.Forms.ToolStripStatusLabel();
-            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
-            this.cmdCheckUpdatesAtStartup = new System.Windows.Forms.ToolStripMenuItem();
-            this.cmdCheckUpdatesNow = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.cmdDnsLookup = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.statusBar.SuspendLayout();
             this.SuspendLayout();
@@ -300,6 +304,7 @@ namespace PacketMap {
             // 
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.fileToolStripMenuItem,
+            this.toolsToolStripMenuItem,
             this.helpToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
@@ -369,6 +374,25 @@ namespace PacketMap {
             this.helpToolStripMenuItem.Name = "helpToolStripMenuItem";
             this.helpToolStripMenuItem.Size = new System.Drawing.Size(40, 20);
             this.helpToolStripMenuItem.Text = "Help";
+            // 
+            // cmdCheckUpdatesAtStartup
+            // 
+            this.cmdCheckUpdatesAtStartup.Name = "cmdCheckUpdatesAtStartup";
+            this.cmdCheckUpdatesAtStartup.Size = new System.Drawing.Size(224, 22);
+            this.cmdCheckUpdatesAtStartup.Text = "Check for updates at startup";
+            this.cmdCheckUpdatesAtStartup.Click += new System.EventHandler(this.cmdCheckUpdatesAtStartup_Click);
+            // 
+            // cmdCheckUpdatesNow
+            // 
+            this.cmdCheckUpdatesNow.Name = "cmdCheckUpdatesNow";
+            this.cmdCheckUpdatesNow.Size = new System.Drawing.Size(224, 22);
+            this.cmdCheckUpdatesNow.Text = "Check for updates now...";
+            this.cmdCheckUpdatesNow.Click += new System.EventHandler(this.cmdCheckUpdatesNow_Click);
+            // 
+            // toolStripSeparator3
+            // 
+            this.toolStripSeparator3.Name = "toolStripSeparator3";
+            this.toolStripSeparator3.Size = new System.Drawing.Size(221, 6);
             // 
             // cmdAboutBox
             // 
@@ -704,24 +728,20 @@ namespace PacketMap {
             this.lblStatusBarLeft.Size = new System.Drawing.Size(109, 17);
             this.lblStatusBarLeft.Text = "toolStripStatusLabel1";
             // 
-            // toolStripSeparator3
+            // toolsToolStripMenuItem
             // 
-            this.toolStripSeparator3.Name = "toolStripSeparator3";
-            this.toolStripSeparator3.Size = new System.Drawing.Size(221, 6);
+            this.toolsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.cmdDnsLookup});
+            this.toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
+            this.toolsToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
+            this.toolsToolStripMenuItem.Text = "Tools";
             // 
-            // cmdCheckUpdatesAtStartup
+            // cmdDnsLookup
             // 
-            this.cmdCheckUpdatesAtStartup.Name = "cmdCheckUpdatesAtStartup";
-            this.cmdCheckUpdatesAtStartup.Size = new System.Drawing.Size(224, 22);
-            this.cmdCheckUpdatesAtStartup.Text = "Check for updates at startup";
-            this.cmdCheckUpdatesAtStartup.Click += new System.EventHandler(this.cmdCheckUpdatesAtStartup_Click);
-            // 
-            // cmdCheckUpdatesNow
-            // 
-            this.cmdCheckUpdatesNow.Name = "cmdCheckUpdatesNow";
-            this.cmdCheckUpdatesNow.Size = new System.Drawing.Size(224, 22);
-            this.cmdCheckUpdatesNow.Text = "Check for updates now...";
-            this.cmdCheckUpdatesNow.Click += new System.EventHandler(this.cmdCheckUpdatesNow_Click);
+            this.cmdDnsLookup.Name = "cmdDnsLookup";
+            this.cmdDnsLookup.Size = new System.Drawing.Size(154, 22);
+            this.cmdDnsLookup.Text = "DNS Lookup...";
+            this.cmdDnsLookup.Click += new System.EventHandler(this.cmdDnsLookup_Click);
             // 
             // MainForm
             // 
@@ -919,7 +939,6 @@ namespace PacketMap {
                 }
                 key.SetValue("DeviceName", device.PcapName);
                 key.Close();
-
             }
         }
 
@@ -1036,7 +1055,8 @@ namespace PacketMap {
                 /* - for debugging
                 if (country.getName().Equals("Australia")) {
                     this.AddStatusText("Australia highlight = " + recvHighlight + ", lastrec=" + lastReceiveTime + ", lastsend=" + lastSendTime);
-                } */
+                } 
+                */
                 if (recvHighlight < 10 || sendHighlight < 10) {
                     ListViewItem lvi = new ListViewItem(new string[] {
                         country.getShortName(), country.getShortName(), country.getShortName()
@@ -1068,6 +1088,21 @@ namespace PacketMap {
             spbImage.BackingImage = bitmap;
         }
 
+        private void addPosition(List<Point> lp, int w, int h, int x, int y) {
+            if (x >= 0 && y >= 0 && (x + w) <= spbImage.PictureBox.Width && (y + h) <= spbImage.PictureBox.Height) {
+                lp.Add(new Point(x, y));
+            }
+        }
+
+        private bool placeCountry(List<CountryGif> lg, int countryIdx, int positionIdx) {
+            // see if this position fits with those countries already placed, otherwise
+            // try shifting the offending one and try a new layout
+
+            // @TODO implement this !
+            lg[countryIdx].positionIdx = positionIdx;
+            return true;
+        }
+
         // really belongs in a separate class, but needs access to data contained here
         public void PaintOverlay(PaintEventArgs e) {
             Graphics g = e.Graphics;
@@ -1075,65 +1110,98 @@ namespace PacketMap {
                 "backingImage: " + spbImage.BackingImage.Width + "x" + spbImage.BackingImage.Height + ", " +
                 "pictureBox: " + spbImage.PictureBox.Width + "x" + spbImage.PictureBox.Height + ", " +
                 "intloc: " + spbImage.InternalLocation.X + "x" + spbImage.InternalLocation.Y + ", ";
+            float zoom = ((float)spbImage.ScalePercent);
 
             Font font = new Font("Arial", 8);
             Brush brush = new SolidBrush(Color.LightBlue);
             g.DrawString( _refreshTime, font, brush, 10, 10);
             DateTime now = DateTime.Now;
+            List<CountryGif> visible = new List<CountryGif>();
 
+            // work out positions
             foreach (CountryGif country in countries) {
-                double recvHighlight = double.MaxValue;
-                double sendHighlight = double.MaxValue;
+                country.positions.Clear();
+                country.recvHighlight = double.MaxValue;
+                country.sendHighlight = double.MaxValue;
                 DateTime lastReceiveTime = country.getLastReceiveTime();
                 DateTime lastSendTime = country.getLastSendTime();
                 if (lastReceiveTime != null) {
                     TimeSpan duration = now - lastReceiveTime;
-                    recvHighlight = (int)duration.TotalSeconds;
+                    country.recvHighlight = (int)duration.TotalSeconds;
                 }
                 if (lastSendTime != null) {
                     TimeSpan duration = now - lastSendTime;
-                    sendHighlight = (int)duration.TotalSeconds;
+                    country.sendHighlight = (int)duration.TotalSeconds;
                 }
-                if (recvHighlight < 10 || sendHighlight < 10) {
-                    // show country
-                    float zoom = ((float)spbImage.ScalePercent);
 
+                if (country.recvHighlight < 10 || country.sendHighlight < 10) {
+                    // work out positions
                     LngLat min = country.getMinLngLat();
                     LngLat max = country.getMaxLngLat();
-                    Color col = Color.FromArgb(
-                        sendHighlight < 10 ? 255 - (int)(sendHighlight * 10) : 0,
-                        recvHighlight < 10 ? 255 - (int)(recvHighlight * 10) : 0, 0);
                     int x = spbImage.InternalLocation.X + (int)((min.getLng() - baseCountry.getMinLngLat().getLng()) * 8 * zoom);
                     int y = spbImage.InternalLocation.Y + (int)((min.getLat() - baseCountry.getMinLngLat().getLat()) * 8 * zoom);
-                    this.drawBorder(g, col, x, y,
-                        (int)((max.getLng() - min.getLng()) * 8 * zoom),
-                        (int)((max.getLat() - min.getLat()) * 8 * zoom));
-                    List<CountryIp> countryIps = country.getCountryIps();
-                    // g.DrawString("" + countryIps.Count + " ips", font, Brushes.White, x - 50, y -10);
+                    int w = (int)((max.getLng() - min.getLng()) * 8 * zoom);
+                    int h = (int)((max.getLat() - min.getLat()) * 8 * zoom);
+                    int oh = 10 * Math.Min(country.getCountryIps().Count, 5) + 18;
 
-                    int ipCount = Math.Min(countryIps.Count, 5);
-                    int h = 10 * ipCount + 18;
-                    Bitmap b = new Bitmap(85, h, PixelFormat.Format32bppArgb);
-                    Graphics g2 = Graphics.FromImage(b);
-                    g2.FillRectangle(new SolidBrush(Color.FromArgb(80, 255, 249, 199)), 0,0,85,h);
-
-                    g2.FillRectangle(new SolidBrush(Color.FromArgb(100, 255, 249, 199)), 0,0,85,12);
-                    g2.FillRectangle(new SolidBrush(Color.FromArgb(100, 255, 249, 199)), 0,h-2,85, 2);
-                    g2.DrawLine(new Pen(Color.FromArgb(100, 255, 249, 199)), 0, 0, 0, h);
-                    g2.DrawLine(new Pen(Color.FromArgb(100, 255, 249, 199)), 85, 0, 85, h);
-
-                    g2.DrawString(country.getName(), font, Brushes.Yellow, 2, -1);
-                    for (int i = 0; i < ipCount; i++) {
-                        int width = (int) g.MeasureString(countryIps[i].getIp(), font).Width;
-                        g2.DrawString(countryIps[i].getIp(), font, Brushes.White, 2, 13 + i * 10);
+                    // ow,oh = 85, h
+                    country.positionIdx = 0;
+                    addPosition(country.positions, 85, h, x - 85 - 10, y);  // left
+                    addPosition(country.positions, 85, h, x, y - 10 - oh);  // top
+                    addPosition(country.positions, 85, h, x + w + 10, y);   // right
+                    addPosition(country.positions, 85, h, x, y + h + 10);   // bottom
+                    if (country.positions.Count > 0) {
+                        visible.Add(country);
                     }
-                    g2.Dispose();
 
-                    // x-width-10
-                    g.DrawImage(b, x - 85 - 10, y);
-                    b.Dispose();
-
+                } else {
+                    // not necessary
                 }
+            }
+
+            // choose positionIdxs - @TODO implement
+            // placeCountry(visible, 0, 0);
+
+            // draw overlays
+            foreach (CountryGif country in visible) {
+                // show country
+                LngLat min = country.getMinLngLat();
+                LngLat max = country.getMaxLngLat();
+                Color col = Color.FromArgb(
+                    country.sendHighlight < 10 ? 255 - (int)(country.sendHighlight * 10) : 0,
+                    country.recvHighlight < 10 ? 255 - (int)(country.recvHighlight * 10) : 0, 0);
+                int x = spbImage.InternalLocation.X + (int)((min.getLng() - baseCountry.getMinLngLat().getLng()) * 8 * zoom);
+                int y = spbImage.InternalLocation.Y + (int)((min.getLat() - baseCountry.getMinLngLat().getLat()) * 8 * zoom);
+                this.drawBorder(g, col, x, y,
+                    (int)((max.getLng() - min.getLng()) * 8 * zoom),
+                    (int)((max.getLat() - min.getLat()) * 8 * zoom));
+                List<CountryIp> countryIps = country.getCountryIps();
+                // g.DrawString("" + countryIps.Count + " ips", font, Brushes.White, x - 50, y -10);
+
+                int ipCount = Math.Min(countryIps.Count, 5);
+                int h = 10 * ipCount + 18;
+                Bitmap b = new Bitmap(85, h, PixelFormat.Format32bppArgb);
+                Graphics g2 = Graphics.FromImage(b);
+                g2.FillRectangle(new SolidBrush(Color.FromArgb(80, 255, 249, 199)), 0,0,85,h);
+                g2.FillRectangle(new SolidBrush(Color.FromArgb(100, 255, 249, 199)), 0,0,85,12);
+                g2.FillRectangle(new SolidBrush(Color.FromArgb(100, 255, 249, 199)), 0,h-2,85, 2);
+                g2.DrawLine(new Pen(Color.FromArgb(100, 255, 249, 199)), 0, 0, 0, h);
+                g2.DrawLine(new Pen(Color.FromArgb(100, 255, 249, 199)), 85, 0, 85, h);
+                int flagIndex = country.getFlagIndex();
+                if (flagIndex != -1) {
+                    g2.DrawImage(sideListView.SmallImageList.Images[flagIndex],  2, 2);
+                }
+                g2.DrawString(country.getName(), font, Brushes.Yellow, 20, -1);
+                for (int i = 0; i < ipCount; i++) {
+                    int width = (int) g.MeasureString(countryIps[i].getIp(), font).Width;
+                    g2.DrawString(countryIps[i].getIp(), font, Brushes.White, 2, 13 + i * 10);
+                }
+                g2.Dispose();
+
+                int bx = country.positions[0].X;
+                int by = country.positions[0].Y;
+                g.DrawImage(b, bx, by); // x - 85 - 10, y);
+                b.Dispose();
             }
         }
 
@@ -1375,6 +1443,20 @@ namespace PacketMap {
                 Console.WriteLine(text);
             } else {
                 MessageBox.Show(text, "Update check response", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+        }
+
+        private void cmdDnsLookup_Click(object sender, EventArgs e) {
+            DnsLookup dnsLookup = new DnsLookup();
+            if (dnsLookup.ShowDialog() == DialogResult.OK) {
+                // save DNS setting
+
+                RegistryKey key = Registry.CurrentUser.OpenSubKey("Software\\Randomnoun\\Packetmap", true);
+                if (key == null) {
+                    key = Registry.CurrentUser.CreateSubKey("Software\\Randomnoun\\Packetmap");
+                }
+                key.SetValue("DnsServer", dnsLookup.getDnsServer());
+                key.Close();
             }
         }
 

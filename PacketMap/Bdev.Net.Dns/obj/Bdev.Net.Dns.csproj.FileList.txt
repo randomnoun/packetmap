@@ -1,0 +1,8 @@
+bin\Release\Bdev.Net.Dns.dll
+obj\Release\ResolveAssemblyReference.cache
+obj\Release\Bdev.Net.Dns.dll
+bin\Debug\Bdev.Net.Dns.dll
+bin\Debug\Bdev.Net.Dns.pdb
+obj\Debug\ResolveAssemblyReference.cache
+obj\Debug\Bdev.Net.Dns.dll
+obj\Debug\Bdev.Net.Dns.pdb

@@ -46,11 +46,11 @@
     </Compile>
     <Compile Include="CountryGif.cs" />
     <Compile Include="CountryPoly.cs" />
-    <Compile Include="Form1.cs">
+    <Compile Include="DnsLookup.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <Compile Include="DnsLookup.Designer.cs">
+      <DependentUpon>DnsLookup.cs</DependentUpon>
     </Compile>
     <Compile Include="LngLat.cs" />
     <Compile Include="SplashForm.cs">
@@ -64,6 +64,10 @@
     <EmbeddedResource Include="AboutBox.resx">
       <SubType>Designer</SubType>
       <DependentUpon>AboutBox.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DnsLookup.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>DnsLookup.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="SplashForm.resx">
       <SubType>Designer</SubType>
@@ -113,6 +117,10 @@
     <Compile Include="Util.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="Bdev.Net.Dns\Bdev.Net.Dns.csproj">
+      <Project>{6D765924-73E9-49AE-8A97-DA24958A540C}</Project>
+      <Name>Bdev.Net.Dns</Name>
+    </ProjectReference>
     <ProjectReference Include="ScalablePictureBox\ScalablePictureBox.csproj">
       <Project>{185A6E79-A824-4696-808B-5A2E315DEF3B}</Project>
       <Name>ScalablePictureBox</Name>
