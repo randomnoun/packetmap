@@ -36,6 +36,7 @@ namespace PacketMap {
         
         CountryGif baseCountry;
         Image baseImage;
+        Image flagComposite;
         Bitmap overlayBitmap;
         Bitmap compositeBitmap;
 
@@ -100,13 +101,16 @@ namespace PacketMap {
             Splasher.SetProgress(60);
 
             Splasher.AddText("Loading country flag images...");
-            this.loadFlagImages(baseDir + "\\flags");
+            // \\data\\flagComposite.txt
+            this.loadFlagImages(baseDir);
+
             baseCountry = countries[countries.Count - 1];
             baseImage = baseCountry.getImage();
             overlayBitmap = new Bitmap(baseImage.Size.Width, baseImage.Size.Height, PixelFormat.Format32bppArgb);
             compositeBitmap = new Bitmap(baseImage.Size.Width, baseImage.Size.Height, PixelFormat.Format32bppArgb);
             this.spbImage.BackingImage = baseImage;
             this.spbImage.SetOverlayGenerator(this);
+            
             Thread.Sleep(100);
             Splasher.SetProgress(80);
 
@@ -157,8 +161,6 @@ namespace PacketMap {
             }
         }
 
-
-
         public void loadGeoIps(String file) {
             // grab text file and read from there
             Console.WriteLine("Reading geoip data...");
@@ -188,14 +190,57 @@ namespace PacketMap {
 
 
         public void loadFlagImages(String directory) {
-            foreach (String countryCode in countryMap.Keys) {
-                int index = flagImageList.Images.IndexOfKey(countryCode.ToLower() + ".gif");
-                CountryGif countryGif = (CountryGif)countryMap[countryCode];
-                countryGif.setFlagIndex(index);
-                if (index == -1) {
-                    AddStatusText("Could not find image for country code '" + countryCode + "'");
+            Console.WriteLine("*** Loading flag images");
+            StreamReader sr = new StreamReader(directory + "\\data\\flagComposite.txt");
+            this.flagComposite = Image.FromFile(directory + "\\data\\flagComposite.png");
+            
+            string countryCode;
+            int w, h, flagCount, maxW, maxH;
+            sr.ReadLine();  // text header line
+            String summary = sr.ReadLine();  // flagCount, maxW, maxH
+            Match m = Regex.Match(summary, "^([0-9]+) ([0-9]+) ([0-9]+)$");
+            if (m.Success) {
+                flagCount = Convert.ToInt32(m.Groups[1].Value);
+                maxW = Convert.ToInt32(m.Groups[2].Value);
+                maxH = Convert.ToInt32(m.Groups[3].Value);
+            } else {
+                // throw exception
+                Console.WriteLine("Invalid flag summary: '" + summary + "'");
+                return;
+            }
+            int flagsPerRow = 20;
+            // Bitmap b = new Bitmap(maxW * flagsPerRow, maxH * (flagCount / flagsPerRow) + maxH, PixelFormat.Format24bppRgb);
+            // g.DrawImage(miniFlag, (flagCount % flagsPerRow) * maxW, (flagCount / flagsPerRow) * maxH);
+
+            for (int i = 0; i < flagCount; i++) {
+                string line = sr.ReadLine();
+                m = Regex.Match(line, "^([-a-z]+) ([0-9]+) ([0-9]+)$");
+                if (m.Success) {
+                    countryCode = m.Groups[1].Value.ToUpper();
+                    w = Convert.ToInt32(m.Groups[2].Value);
+                    h = Convert.ToInt32(m.Groups[3].Value);
+                    CountryGif countryGif = (CountryGif)countryMap[countryCode];
+                    if (countryGif != null) {
+                        countryGif.setFlagDetails(i, (i % flagsPerRow) * maxW, (i / flagsPerRow) * maxH, w, h);
+                    } else {
+                        Console.WriteLine("Missing country for flag id '" + countryCode + "'");
+                    }
+                } else {
+                    Console.WriteLine("Unparsed flagComposite line: " + line);
                 }
             }
+
+            // display warnings
+            foreach (string code in countryMap.Keys) {
+                // int index = flagImageList.Images.IndexOfKey(countryCode.ToLower() + ".gif");
+                CountryGif countryGif = (CountryGif)countryMap[code];
+                if (countryGif.getFlagIndex() == -1) {
+                    Console.WriteLine("Could not find image for country code '" + code + "'");
+                } else {
+                    Console.WriteLine("Country '" + code + "' = flagIndex " + countryGif.getFlagIndex());
+                }
+            }
+            
             
             //foreach (Image img in flagImageList.Images) {
             //    IndexOfKey
@@ -1189,7 +1234,9 @@ namespace PacketMap {
                 g2.DrawLine(new Pen(Color.FromArgb(100, 255, 249, 199)), 85, 0, 85, h);
                 int flagIndex = country.getFlagIndex();
                 if (flagIndex != -1) {
-                    g2.DrawImage(sideListView.SmallImageList.Images[flagIndex],  2, 2);
+                    g2.DrawImage(flagComposite, 2, 2, 
+                      new Rectangle(country.flagX, country.flagY, country.flagWidth, country.flagHeight), GraphicsUnit.Pixel);
+                    // g2.DrawImage(sideListView.SmallImageList.Images[flagIndex],  2, 2);
                 }
                 g2.DrawString(country.getName(), font, Brushes.Yellow, 20, -1);
                 for (int i = 0; i < ipCount; i++) {
@@ -1315,7 +1362,9 @@ namespace PacketMap {
                     if (e.ColumnIndex == 0) {
                         int flagIndex = countryGif.getFlagIndex();
                         if (flagIndex != -1) {
-                            e.Graphics.DrawImage(sideListView.SmallImageList.Images[flagIndex], e.Bounds.Left, e.Bounds.Top);
+                            // e.Graphics.DrawImage(sideListView.SmallImageList.Images[flagIndex], e.Bounds.Left, e.Bounds.Top);
+                            e.Graphics.DrawImage(flagComposite, e.Bounds.Left, e.Bounds.Top,
+                                new Rectangle(countryGif.flagX, countryGif.flagY, countryGif.flagWidth, countryGif.flagHeight), GraphicsUnit.Pixel);
                         }
                         e.Graphics.DrawString(countryGif.getName(), sideListView.Font, Brushes.Black, e.Bounds.Left+20, e.Bounds.Top);
 

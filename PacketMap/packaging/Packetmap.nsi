@@ -109,9 +109,10 @@ Section "!Packetmap" SecMain
   File ..\data\countries.txt
   File ..\data\GeoIPCountryWhois.csv
   File ..\data\matchedWithGif.csv
+  File ..\data\flagComposite.png
+  File ..\data\flagComposite.txt
   
   SetOutPath "$INSTDIR\countryGif"
-  File ..\countryGif\*.png
   File ..\countryGif\*.png
   
   ;SetOutPath "$INSTDIR\countryPoly\Africa"
@@ -127,10 +128,8 @@ Section "!Packetmap" SecMain
   ;SetOutPath "$INSTDIR\countryPoly\SouthAmerica"
   ;File ..\countryPoly\SouthAmerica\*.txt
   
-  SetOutPath "$INSTDIR\flags"
-  File ..\flags\*.gif
-  
- 
+  ;SetOutPath "$INSTDIR\flags"
+  ;File ..\flags\*.gif
 
   ;Store installation folder
   WriteRegStr HKCU "Software\Randomnoun\Packetmap" "InstallDir" $INSTDIR
@@ -198,10 +197,14 @@ Section "Uninstall"
   Delete $INSTDIR\Packetmap.exe
   Delete $INSTDIR\ScalablePictureBox.dll
   Delete $INSTDIR\Tamir.IPLib.SharpPcap.dll
-  Delete $INSTDIR\countryGifs\countries.txt
-  Delete $INSTDIR\countryGifs\countries.csv
-  Delete $INSTDIR\countryGifs\*.png
-  Delete $INSTDIR\countryGifs\*.png
+  Delete $INSTDIR\countryGif\*.png
+  RMDir  "$INSTDIR\countryGif"
+  Delete $INSTDIR\data\countries.txt
+  Delete $INSTDIR\data\GeoIPCountryWhois.csv
+  Delete $INSTDIR\data\matchedWithGif.csv
+  Delete $INSTDIR\data\flagComposite.png
+  Delete $INSTDIR\data\flagComposite.txt
+  RMDir  "$INSTDIR\data"
 
   Delete "$INSTDIR\Uninstall.exe"
 

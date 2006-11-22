@@ -65,7 +65,9 @@ namespace PacketMap
 
                 if (arg.Equals("--makeFlagGif")) {
                     // make flag composite image
-                    installDir = "c:\\projects\\packetmap\\PacketMap";
+                    // installDir = "c:\\projects\\packetmap\\PacketMap";
+                    
+                    // get maximum flag dimensions
                     int flagCount = 0;
                     int maxW = 0, maxH = 0;
                     foreach (string file in Util.GetFiles(installDir + "\\flags", "*.gif")) {
@@ -74,7 +76,11 @@ namespace PacketMap
                         maxH = Math.Max(maxH, miniFlag.Height);
                         flagCount++;
                     }
-                    Console.WriteLine("FlagCount = " + flagCount);
+
+                    System.IO.StreamWriter sw = System.IO.File.CreateText(installDir + "\\data\\flagComposite.txt");
+                    sw.WriteLine("Flag dimension data");
+                    sw.WriteLine("{0} {1} {2}", flagCount, maxW, maxH);
+                    
                     // each flag is 20px by 12px
                     int flagsPerRow = 20;
                     Bitmap b = new Bitmap(maxW * flagsPerRow, maxH * (flagCount / flagsPerRow) + maxH, PixelFormat.Format24bppRgb);
@@ -82,12 +88,16 @@ namespace PacketMap
                     g.FillRectangle(Brushes.White, 0, 0, maxW * flagsPerRow, maxH * (flagCount / flagsPerRow) + maxH);
                     flagCount = 0;
                     foreach (string file in Util.GetFiles(installDir + "\\flags", "*.gif")) {
-                        flagCount++;
                         Image miniFlag = Image.FromFile(file);
+                        string id = file.Substring(file.LastIndexOf("\\")+1);
+                        id = id.Substring(0, id.IndexOf("."));
                         g.DrawImage(miniFlag, (flagCount % flagsPerRow) * maxW, (flagCount / flagsPerRow) * maxH);
+                        sw.WriteLine("{0} {1} {2}", id, miniFlag.Width, miniFlag.Height);
+                        flagCount++;
                     }
                     g.Dispose();
                     b.Save(installDir + "\\data\\flagComposite.png", ImageFormat.Png);
+                    sw.Close();
                 }
             }
 
