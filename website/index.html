@@ -1,0 +1,113 @@
+<html>
+<head>
+<!-- sourceforge' css stylesheet for the download link -->
+<link rel="stylesheet" type="text/css" href="css/sfx.css" media="screen" title="SFx" />
+<title>
+PacketMap
+</title>
+<style>
+#body1 {
+  background: #ebe6e9;
+  background-image: url('images/pageBanner.png');
+  background-repeat: no-repeat;
+}
+#mainText {
+  padding-top: 150px;
+  padding-left:360px;
+  color: #845c42;
+  font: 10pt "Arial", sans-serif;
+  z-index: 10;
+}
+#sidemap {
+  float: right;
+  width: 0px;
+  /* expression only works in IE; using javascript for other browsers 
+  width: expression(Math.max(Math.min(document.body.offsetWidth  - 820, 380),0) + "px");
+  */
+  height: 1500px;
+  background-image: url('images/sidemap2.gif');
+}
+#leftbar {
+  position: absolute;
+  top: 330px;
+  left: 0px;
+  width: 340px; 
+}
+h1 {
+  font: 1.5em "Trebuchet MS", Verdana, sans-serif;
+  color: black;
+}
+.centaur {
+  font-family: centaur, verdana, sans-serif;
+  font-size: 12pt;
+}
+
+
+</style>
+<script>
+
+function resizeFunc() {
+  var el = document.getElementById("sidemap");
+  if (el!=null) {
+    el.style.width = Math.max(Math.min(document.body.offsetWidth  - 820, 380),0) + "px";
+  }
+  return 0;
+}
+</script>
+
+</head>
+<body id="body1" onload="resizeFunc()" onresize="resizeFunc()">
+<div id="sidemap">
+</div>
+
+<div id="mainText">
+<h1>What is it ?</h1>
+<p><span class="centaur">PACKETMAP</span> is a Windows application that generates
+a realtime animation of internet activity on a map of the earth.</p>
+
+<h1>Why is it ?</h1>
+<p>Good question.</p>
+
+<h1>Where is it?</h1>
+<p>Up on sourceforge. You can start at 
+<a href="http://sourceforge.net/projects/packetmap/">the project page</a>,
+but you probably just want to jump straight in and 
+<a href="http://sourceforge.net/project/showfiles.php?group_id=181902">download the thing</a>:
+</p>
+
+<p>
+<div id="frame">
+<div class="tbardwn">
+  <b class="ttop"><b class="t1">&nbsp;</b><b class="t2">&nbsp;</b></b> 
+  <div class="tbox">
+    <h3><a href="http://sourceforge.net/project/showfiles.php?group_id=181902">Download Packetmap<small>&nbsp;</small></a>
+    </h3>
+  </div>  
+  <b class="tbtm"><b class="t2 tbg">&nbsp;</b><b class="t1 tbg">&nbsp;</b></b> 
+</div>  
+</div>
+</p>
+
+<h1>What does it look like ?</h1>
+<p>Well, it's still a work-in-progress, so it's still pretty rusty. I'll throw
+some screenshots up here once I'm confident that it's shiny enough.
+
+</div>
+
+
+<div id="leftbar">
+
+<p>
+<span style="margin-left: 28px">
+<a href="http://sourceforge.net"><img src="http://sflogo.sourceforge.net/sflogo.php?group_id=181902&amp;type=1" width="88" height="31" border="0" alt="SourceForge.net Logo" /></a>
+</span>
+</p>
+
+</div>
+
+
+</body>
+
+
+
+</html>

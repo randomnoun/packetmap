@@ -1,0 +1,2 @@
+Version=pre-alpha-0.3a
+DownloadUrl=http://downloads.sourceforge.net/packetmap/PacketmapSetup-pre-alpha-v0.3a.exe?use_mirror=osdn
