@@ -14,7 +14,7 @@
 
   ;Name and file
   Name "Packetmap"
-  OutFile "..\bin\debug\PacketmapSetup-pre-alpha-v0.3.exe"
+  OutFile "..\bin\debug\PacketmapSetup-pre-alpha-v0.3a.exe"
 
   ;Default installation folder
   InstallDir "$PROGRAMFILES\Packetmap"
@@ -197,14 +197,14 @@ Section "Uninstall"
   Delete $INSTDIR\Packetmap.exe
   Delete $INSTDIR\ScalablePictureBox.dll
   Delete $INSTDIR\Tamir.IPLib.SharpPcap.dll
-  Delete $INSTDIR\countryGifs\countries.txt
-  Delete $INSTDIR\countryGifs\countries.csv
-  Delete $INSTDIR\countryGifs\*.png
+  Delete $INSTDIR\countryGif\*.png
+  RMDir  "$INSTDIR\countryGif"
   Delete $INSTDIR\data\countries.txt
   Delete $INSTDIR\data\GeoIPCountryWhois.csv
   Delete $INSTDIR\data\matchedWithGif.csv
   Delete $INSTDIR\data\flagComposite.png
   Delete $INSTDIR\data\flagComposite.txt
+  RMDir  "$INSTDIR\data"
 
   Delete "$INSTDIR\Uninstall.exe"
 
