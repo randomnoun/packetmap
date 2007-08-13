@@ -126,7 +126,9 @@ namespace PacketMap {
             }
 
             Directory.CreateDirectory(baseDir + "\\out");
-            this.packetWriter = System.IO.File.AppendText(baseDir + "\\out\\packetDump.txt");
+            
+            // *** disabling packet writer
+            // this.packetWriter = System.IO.File.AppendText(baseDir + "\\out\\packetDump.txt");
             Splasher.Close();
 
             lblStatusBarLeft.Text = "Mapping disabled";
@@ -324,6 +326,8 @@ namespace PacketMap {
             this.cmdSelectAdapter = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.cmdExit = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.cmdDnsLookup = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.cmdCheckUpdatesAtStartup = new System.Windows.Forms.ToolStripMenuItem();
             this.cmdCheckUpdatesNow = new System.Windows.Forms.ToolStripMenuItem();
@@ -339,8 +343,6 @@ namespace PacketMap {
             this.spbImage = new QAlbum.ScalablePictureBox();
             this.statusBar = new System.Windows.Forms.StatusStrip();
             this.lblStatusBarLeft = new System.Windows.Forms.ToolStripStatusLabel();
-            this.toolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.cmdDnsLookup = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.statusBar.SuspendLayout();
             this.SuspendLayout();
@@ -408,6 +410,21 @@ namespace PacketMap {
             this.cmdExit.Size = new System.Drawing.Size(167, 22);
             this.cmdExit.Text = "Exit";
             this.cmdExit.Click += new System.EventHandler(this.cmdExit_Click);
+            // 
+            // toolsToolStripMenuItem
+            // 
+            this.toolsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.cmdDnsLookup});
+            this.toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
+            this.toolsToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
+            this.toolsToolStripMenuItem.Text = "Tools";
+            // 
+            // cmdDnsLookup
+            // 
+            this.cmdDnsLookup.Name = "cmdDnsLookup";
+            this.cmdDnsLookup.Size = new System.Drawing.Size(154, 22);
+            this.cmdDnsLookup.Text = "DNS Lookup...";
+            this.cmdDnsLookup.Click += new System.EventHandler(this.cmdDnsLookup_Click);
             // 
             // helpToolStripMenuItem
             // 
@@ -772,21 +789,6 @@ namespace PacketMap {
             this.lblStatusBarLeft.Name = "lblStatusBarLeft";
             this.lblStatusBarLeft.Size = new System.Drawing.Size(109, 17);
             this.lblStatusBarLeft.Text = "toolStripStatusLabel1";
-            // 
-            // toolsToolStripMenuItem
-            // 
-            this.toolsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.cmdDnsLookup});
-            this.toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
-            this.toolsToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
-            this.toolsToolStripMenuItem.Text = "Tools";
-            // 
-            // cmdDnsLookup
-            // 
-            this.cmdDnsLookup.Name = "cmdDnsLookup";
-            this.cmdDnsLookup.Size = new System.Drawing.Size(154, 22);
-            this.cmdDnsLookup.Text = "DNS Lookup...";
-            this.cmdDnsLookup.Click += new System.EventHandler(this.cmdDnsLookup_Click);
             // 
             // MainForm
             // 
@@ -1369,9 +1371,11 @@ namespace PacketMap {
                         e.Graphics.DrawString(countryGif.getName(), sideListView.Font, Brushes.Black, e.Bounds.Left+20, e.Bounds.Top);
 
                     } else if (e.ColumnIndex == 1) {
-                        e.Graphics.DrawImage(countryGif.getSendImage(e.Bounds.Width, e.Bounds.Height, sideListMaxSend), e.Bounds.Left, e.Bounds.Top);
+                        // @TODO fix this
+                        e.Graphics.DrawImage(countryGif.getSendImage(e.Bounds.Width, e.Bounds.Height /*, sideListMaxSend */), e.Bounds.Left, e.Bounds.Top);
                     } else if (e.ColumnIndex == 2) {
-                        e.Graphics.DrawImage(countryGif.getReceiveImage(e.Bounds.Width, e.Bounds.Height, sideListMaxRecv), e.Bounds.Left, e.Bounds.Top);
+                        // @TODO fix this
+                        e.Graphics.DrawImage(countryGif.getReceiveImage(e.Bounds.Width, e.Bounds.Height /*, sideListMaxRecv */), e.Bounds.Left, e.Bounds.Top);
                     } else {
                         e.Graphics.FillRectangle(new SolidBrush(Color.Red), e.Bounds);
                     }

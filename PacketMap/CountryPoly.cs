@@ -6,14 +6,26 @@ using System.Drawing.Imaging;
 using System.Text.RegularExpressions;
 
 namespace PacketMap {
+
     /// <summary>
-    
-    /// A definition of a country, define as a collection of vector polygons
+    /// A definition of a country, define as a collection of vector polygons. This
+    /// representation is only used when loading vector data and saving as rasters
+    /// (this seems to run a lot faster than painting polys directly. Although
+    /// I'm sure using DirectX would probably give a good response time). Perhaps
+    /// cutting down the number of points stored for each country would be a 
+    /// step in the right direction.
     /// </summary>
     public class CountryPoly {
+
+        /// <summary>
+        /// List of polygons (each poly represented as a List of LngLats)
+        /// </summary>
         List<List<LngLat>> polys;
         Image image = null;
 
+        /// <summary>
+        /// Create a new CountryPoly
+        /// </summary>
         public CountryPoly() {
             polys = new List<List<LngLat>>();
         }

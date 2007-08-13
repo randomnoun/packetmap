@@ -27,3 +27,8 @@ obj\Release\PacketMap.MainForm.resources
 obj\Debug\PacketMap.MainForm.resources
 obj\Debug\PacketMap.SplashForm.resources
 obj\Release\PacketMap.SplashForm.resources
+obj\Release\PacketMap.DnsLookup.resources
+bin\Release\Bdev.Net.Dns.dll
+bin\Debug\Bdev.Net.Dns.dll
+bin\Debug\Bdev.Net.Dns.pdb
+obj\Debug\PacketMap.DnsLookup.resources

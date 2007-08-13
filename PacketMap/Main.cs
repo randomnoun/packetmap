@@ -11,7 +11,7 @@ namespace PacketMap
 {
     public class MainProgram {
 
-        public static string VERSION = "pre-alpha-0.3";
+        public static string VERSION = "pre-alpha-0.3a";
 
         public static void Main(String[] args) {
             Application.EnableVisualStyles();

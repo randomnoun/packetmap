@@ -6,6 +6,11 @@ using System.Drawing.Imaging;
 
 namespace PacketMap {
 
+    /// <summary>
+    /// Class used to keep track of IP addresses within each country; the last 
+    /// few IPs are displayed on the map next to that country (eventually this
+    /// will show domains/URLs, but it's just dotted notation at the moment).
+    /// </summary>
     public class CountryIp {
         string ip;
         DateTime lastActivity;
@@ -22,15 +27,28 @@ namespace PacketMap {
     /// The definition of a country, defined as a raster image
     /// </summary>
     public class CountryGif {
-        public static int MAX_HISTORY = 40;   /* number of ticks of send/recv byte count data */
+
+        /// <summary>number of ticks of send/recv byte count data</summary>
+        public static int MAX_HISTORY = 40;
+
+        /// <summary>number of IPs to keep track of in each country</summary>
         public static int MAX_IPS = 10;
-        
-        // dimensions
+
+        /// <summary>location of the bottom-left corner of this country's bounding box</summary>
         LngLat minLngLat;
+
+        /// <summary>location of the top-right corner of this country's bounding box</summary>
         LngLat maxLngLat;
+
+        /// <summary>Raster image of the country, to be used on the global map</summary>
         Image image;
+
+        /// <summary>English name of the country</summary>
         String name;
-        int flagIndex;  // index into flag imageList
+
+        public int flagIndex = -1, flagX, flagY, flagWidth, flagHeight;  // index into flag imageList
+
+        /// <summary>ISO country code of this country</summary>
         private string shortName;
 
         // pixel positions
@@ -78,7 +96,14 @@ namespace PacketMap {
         }
         public void setShortName(string shortName) { this.shortName = shortName; }
         public string getShortName() { return shortName; }
-        public void setFlagIndex(int flagIndex) { this.flagIndex = flagIndex; }
+        // public void setFlagIndex(int flagIndex) { this.flagIndex = flagIndex; }
+        public void setFlagDetails(int flagIndex, int x, int y, int w, int h) {
+            this.flagIndex = flagIndex;
+            this.flagX = x;
+            this.flagY = y;
+            this.flagWidth = w;
+            this.flagHeight = h;
+        }
         public LngLat getMinLngLat() { return minLngLat; }
         public LngLat getMaxLngLat() { return maxLngLat; }
         public Image getImage() { return image; }
@@ -96,6 +121,14 @@ namespace PacketMap {
             refreshIp(ip);
             /*Console.WriteLine(shortName + " recv bytes now " + sendHistBytes[0]);*/ 
         }
+
+
+        /// <summary>
+        /// Update the countryIPs list, which keeps track of the last MAX_IPS IP addresses
+        /// in this country we are receiving/sending to. This method is called whenever activity
+        /// a packet is received/sent.
+        /// </summary>
+        /// <param name="ip">IP address, in quad-dotted notation</param>
         private void refreshIp(string ip) {
             CountryIp oldestIp = null, foundIp = null;
             foreach (CountryIp countryIp in countryIps) {
@@ -117,15 +150,35 @@ namespace PacketMap {
                 }
                 countryIps.Add(new CountryIp(ip, DateTime.Now));
             }
-
-
         }
 
+        /// <summary>
+        /// Returns the time a packet was received from this country
+        /// </summary>
+        /// <returns>the time a packet was received from this country</returns>
         public DateTime getLastReceiveTime() { return lastReceiveTime; }
+
+        /// <summary>
+        /// Returns the time a packet was last sent to this country
+        /// </summary>
+        /// <returns>the itme a packet was sent to this country</returns>
         public DateTime getLastSendTime() { return lastSendTime; }
+
+        /// <summary>
+        /// The index of this country in the MainForm.flagImageList collection
+        /// </summary>
+        /// <returns>the index of this country in the MainForm.flagImageList collection</returns>
         public int getFlagIndex() { return flagIndex; }
 
-        public Image getSendImage(int width, int height, long scale) {
+        /// <summary>
+        /// Retrieves the send histogram image used in the sideListView for 
+        /// this country. 
+        /// </summary>
+        /// 
+        /// <param name="width">width of image, in pixels</param>
+        /// <param name="height">height of image, in pixels</param>
+        /// <returns></returns>
+        public Image getSendImage(int width, int height) {
             Image image = new Bitmap(width, height, PixelFormat.Format32bppArgb);
             Graphics g = Graphics.FromImage(image);
             g.FillRectangle(new SolidBrush(Color.White), 0, 0, width, height);
@@ -141,7 +194,17 @@ namespace PacketMap {
             g.Dispose();
             return image;
         }
-        public Image getReceiveImage(int width, int height, long scale) {
+
+
+        /// <summary>
+        /// Retrieves the receive histogram image used in the sideListView for 
+        /// this country. 
+        /// </summary>
+        /// 
+        /// <param name="width">width of image, in pixels</param>
+        /// <param name="height">height of image, in pixels</param>
+        /// <returns></returns>
+        public Image getReceiveImage(int width, int height) {
             Image image = new Bitmap(width, height, PixelFormat.Format32bppArgb);
             Graphics g = Graphics.FromImage(image);
             g.FillRectangle(new SolidBrush(Color.White), 0, 0, width, height);
