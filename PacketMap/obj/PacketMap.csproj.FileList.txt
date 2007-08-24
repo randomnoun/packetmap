@@ -32,3 +32,6 @@ bin\Release\Bdev.Net.Dns.dll
 bin\Debug\Bdev.Net.Dns.dll
 bin\Debug\Bdev.Net.Dns.pdb
 obj\Debug\PacketMap.DnsLookup.resources
+bin\Debug\CSharpBULocalization.dll
+bin\Debug\CSharpBULocalization.pdb
+bin\Release\CSharpBULocalization.dll

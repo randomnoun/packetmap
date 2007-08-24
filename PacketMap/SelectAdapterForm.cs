@@ -11,11 +11,33 @@ using Tamir.IPLib;
 
 namespace PacketMap {
     public partial class SelectAdapterForm : Form {
+		
+		#region locals
+		static public string
+			label1Text = "Select network adapter that you wish to monitor:",
+			btnOKText = "OK",
+			btnCancelText = "Cancel",
+			lblAdapterInfo1Text = "IP Address:\nSubnet Mask:\nDefault Gateway:\nPrimary WINS:\nSecondary WINS:Loopback:\nMAC Address:\nDHCP Enabled:\nDHCP Server:\nDHCP Lease Obtained:\nDHCP Lease Expires:",
+			lblAdapterDataText = "-- select adapter --",
+			thisText = "Select network adapter";
+		void ApplyLocals()
+		{
+			label1.Text = label1Text;
+			btnOK.Text = btnOKText;
+			btnCancel.Text = btnCancelText;
+			lblAdapterInfo1.Text = lblAdapterInfo1Text;
+			lblAdapterData1.Text = lblAdapterDataText;
+			lblAdapterData2.Text = lblAdapterDataText;
+			this.Text = thisText;
+		}
+		
+		#endregion
         PcapDeviceList devices;
         int deviceId = -1;
 
         public SelectAdapterForm() {
             InitializeComponent();
+            ApplyLocals();
         }
 
         public int getDeviceId() {

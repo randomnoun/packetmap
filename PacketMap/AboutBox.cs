@@ -7,21 +7,49 @@ using System.Reflection;
 
 namespace PacketMap {
     partial class AboutBox : Form {
+        #region locals
+        public static string
+            textBoxDescriptionText = "Description",
+            okButtonText = "&OK",
+            thisText = "About PacketMap",
+            MAbout = "About ",
+            MVersion = "Version ",
+            MAboutApp = "Packetmap. An application that maps packets.",
+            MTranslCopyright = "Translator's copyright",
+            translatorcopyright = "<none>";
+
+
+        void ApplyLocals() {
+            textBoxDescription.Text = textBoxDescriptionText;
+            labelTranslator.Text = MTranslCopyright;
+            labelTranslator2.Text = translatorcopyright;
+            okButton.Text = okButtonText;
+            this.Text = thisText;
+
+            // TODO:
+            // please add 2 labels
+            // translatorlabel with text "Translator's copyright: ";
+            // tclabel with text "";
+            // and uncomment next lines
+            // tclabel.Text = translatorcopyright;
+            // translatorlabel.Text = MTranslCopyright;
+        }
+        #endregion
         public AboutBox() {
             InitializeComponent();
-
+            ApplyLocals();
             //  Initialize the AboutBox to display the product information from the assembly information.
             //  Change assembly information settings for your application through either:
             //  - Project->Properties->Application->Assembly Information
             //  - AssemblyInfo.cs
-            this.Text = String.Format("About {0}", AssemblyTitle);
+            this.Text = MAbout + AssemblyTitle;
             this.labelProductName.Text = AssemblyProduct;
-            this.labelVersion.Text = String.Format("Version {0}", MainProgram.VERSION);
-            
+            this.labelVersion.Text = MVersion + MainProgram.VERSION;
+
             //this.labelCopyright.Text = AssemblyCopyright;
             this.labelCompanyName.Text = "Greg Knox: http://www.randomnoun.com";
             this.labelCompanyName2.Text = "Packetmap: http://packetmap.sourceforge.net";
-            this.textBoxDescription.Text = "Packetmap. An application that maps packets.";
+            this.textBoxDescription.Text = MAboutApp;
         }
 
         #region Assembly Attribute Accessors
@@ -97,5 +125,10 @@ namespace PacketMap {
             }
         }
         #endregion
+
+        private void tableLayoutPanel_Paint(object sender, PaintEventArgs e) {
+
+        }
+
     }
 }

@@ -7,33 +7,37 @@ using System.IO;
 using System.Drawing;
 using System.Drawing.Imaging;
 
-namespace PacketMap
-{
+namespace PacketMap {
     public class MainProgram {
 
-        public static string VERSION = "pre-alpha-0.3a";
+        public static string VERSION = "pre-alpha-0.4";
+        public static string CurrentLanguage = "";
 
         public static void Main(String[] args) {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            RegistryKey key = Registry.CurrentUser.OpenSubKey("Software\\Randomnoun\\Packetmap");
+            RegistryKey key = Registry.CurrentUser.OpenSubKey(@"Software\Randomnoun\Packetmap");
             if (key == null) {
-                key = Registry.CurrentUser.CreateSubKey("Software\\Randomnoun\\Packetmap");
+                key = Registry.CurrentUser.CreateSubKey(@"Software\Randomnoun\Packetmap");
             }
-            string deviceName = (string) key.GetValue("DeviceName", "");
-            string installDir = (string) key.GetValue("InstallDir", "");
-            bool autoUpdate = Convert.ToInt32(key.GetValue("AutoUpdate", 1))==1;
+            string deviceName = (string)key.GetValue("DeviceName", "");
+            // install dir now
+            string installDir = (string)key.GetValue("InstallDir", "");
+
+            CurrentLanguage = (string)key.GetValue("Language", "");
+
+            bool autoUpdate = Convert.ToInt32(key.GetValue("AutoUpdate", 1)) == 1;
             // Attempt to open the key; create it if it doesn't exist
             key.Close();
 
             if (installDir.Equals("")) {
-                MessageBox.Show("Registry key not found -- aborting", "Initialisation failure", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                MessageBox.Show(@"Registry key 'HKCU\Software\Randomnoun\Packetmap' not found -- aborting", "Initialisation failure", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return;
             }
 
             Splasher.Show(typeof(SplashForm));
 
-            for (int i=0; i<args.Length; i++) {
+            for (int i = 0; i < args.Length; i++) {
                 string arg = args[i];
                 Console.WriteLine("Processing arg '" + arg + "'");
                 if (arg.Equals("--makeGifs")) {
@@ -66,7 +70,7 @@ namespace PacketMap
                 if (arg.Equals("--makeFlagGif")) {
                     // make flag composite image
                     // installDir = "c:\\projects\\packetmap\\PacketMap";
-                    
+
                     // get maximum flag dimensions
                     int flagCount = 0;
                     int maxW = 0, maxH = 0;
@@ -80,7 +84,7 @@ namespace PacketMap
                     System.IO.StreamWriter sw = System.IO.File.CreateText(installDir + "\\data\\flagComposite.txt");
                     sw.WriteLine("Flag dimension data");
                     sw.WriteLine("{0} {1} {2}", flagCount, maxW, maxH);
-                    
+
                     // each flag is 20px by 12px
                     int flagsPerRow = 20;
                     Bitmap b = new Bitmap(maxW * flagsPerRow, maxH * (flagCount / flagsPerRow) + maxH, PixelFormat.Format24bppRgb);
@@ -89,7 +93,7 @@ namespace PacketMap
                     flagCount = 0;
                     foreach (string file in Util.GetFiles(installDir + "\\flags", "*.gif")) {
                         Image miniFlag = Image.FromFile(file);
-                        string id = file.Substring(file.LastIndexOf("\\")+1);
+                        string id = file.Substring(file.LastIndexOf("\\") + 1);
                         id = id.Substring(0, id.IndexOf("."));
                         g.DrawImage(miniFlag, (flagCount % flagsPerRow) * maxW, (flagCount / flagsPerRow) * maxH);
                         sw.WriteLine("{0} {1} {2}", id, miniFlag.Width, miniFlag.Height);

@@ -11,8 +11,34 @@ using System.Text.RegularExpressions;
 
 namespace PacketMap {
     public partial class DnsLookup : Form {
+        #region locals
+        public static string
+            lblDnsServerText = "DNS Server:",
+            lblHostnameText = "IP/Hostname:",
+            cmdOKText = "Lookup",
+            cmdCancelText = "Cancel",
+            lblResultText = "Result:",
+            thisText = "DnsLookup",
+            // messages
+            MReverseIP = "Reverse IP",
+            MQueryingDNSRecordsForDomain = "Querying DNS records for domain: ",
+            MNoAnswer = "No answer\n",
+            MAuthoritativeanswer = "Authoritative answer\n",
+            MNotAuthoritativeanswer = "Non-authoritative answer\n";
+
+        void ApplyLocals() {
+            lblDnsServer.Text = lblDnsServerText;
+            lblHostname.Text = lblHostnameText;
+            cmdOK.Text = cmdOKText;
+            cmdCancel.Text = cmdCancelText;
+            lblResult.Text = lblResultText;
+            this.Text = thisText;
+        }
+        #endregion
+
         public DnsLookup() {
             InitializeComponent();
+            ApplyLocals();
         }
 
         public String getDnsServer() {
@@ -21,9 +47,9 @@ namespace PacketMap {
 
 
         private void DnsLookup_Load(object sender, EventArgs e) {
-            RegistryKey key = Registry.CurrentUser.OpenSubKey("Software\\Randomnoun\\Packetmap");
+            RegistryKey key = Registry.CurrentUser.OpenSubKey(@"Software\Randomnoun\Packetmap");
             if (key == null) {
-                key = Registry.CurrentUser.CreateSubKey("Software\\Randomnoun\\Packetmap");
+                key = Registry.CurrentUser.CreateSubKey(@"Software\Randomnoun\Packetmap");
             }
             string deviceName = (string)key.GetValue("DnsServer", "");
             key.Close();
@@ -40,11 +66,11 @@ namespace PacketMap {
             // if (Regex.Matches(txtHostname.Text, @"^([0-9]+)\.([0-9]+)\.([0-9]+)\.([0-9]+)$") 
             Match m = Regex.Match(domain, @"^([0-9]+)\.([0-9]+)\.([0-9]+)\.([0-9]+)$");
             if (m.Success) {
-                txtResult.AppendText("Reverse IP");
+                txtResult.AppendText(MReverseIP);
                 domain = m.Groups[4] + "." + m.Groups[3] + "." + m.Groups[2] + "." + m.Groups[1] + ".in-addr.arpa";
             }
-                     
-            txtResult.AppendText("Querying DNS records for domain: " + domain + "\n");
+
+            txtResult.AppendText(MQueryingDNSRecordsForDomain + domain + "\n");
             // query AName, MX, NS, SOA
             Query(dnsServer, domain, DnsType.ANAME);
             Query(dnsServer, domain, DnsType.MX);
@@ -65,7 +91,7 @@ namespace PacketMap {
 
                 // check we have a response
                 if (response == null) {
-                    txtResult.AppendText("No answer\n");
+                    txtResult.AppendText(MNoAnswer);
                     return;
 
                 }
@@ -74,9 +100,9 @@ namespace PacketMap {
 
                 // display whether this is an authoritative answer or not
                 if (response.AuthoritativeAnswer) {
-                    txtResult.AppendText("authoritative answer\n");
+                    txtResult.AppendText(MAuthoritativeanswer);
                 } else {
-                    txtResult.AppendText("Non-authoritative answer\n");
+                    txtResult.AppendText(MNotAuthoritativeanswer);
                 }
 
                 // Dump all the records - answers/name servers/additional records

@@ -91,6 +91,8 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <None Include="locals\default.Language" />
+    <None Include="locals\Russian.Language" />
     <None Include="Packetmap.nsi" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -117,6 +119,10 @@
     <Compile Include="Util.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\sf\bulocalization\CSharpBULocalization\CSharpBULocalization.csproj">
+      <Project>{F86CA6F9-823C-46CB-B352-CCECCDF662A9}</Project>
+      <Name>CSharpBULocalization</Name>
+    </ProjectReference>
     <ProjectReference Include="Bdev.Net.Dns\Bdev.Net.Dns.csproj">
       <Project>{6D765924-73E9-49AE-8A97-DA24958A540C}</Project>
       <Name>Bdev.Net.Dns</Name>
@@ -131,6 +137,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="locals\packetmap.xml" />
     <Content Include="PacketMap.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

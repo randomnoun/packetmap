@@ -14,7 +14,7 @@
 
   ;Name and file
   Name "Packetmap"
-  OutFile "..\bin\debug\PacketmapSetup-pre-alpha-v0.3a.exe"
+  OutFile "..\bin\debug\PacketmapSetup-pre-alpha-v0.4.exe"
 
   ;Default installation folder
   InstallDir "$PROGRAMFILES\Packetmap"
@@ -34,7 +34,7 @@
 
   !define MUI_ABORTWARNING
   !define DOTNET_VERSION "2.0.5"
-  !define VERSION "0.3a"
+  !define VERSION "0.4"
 
 
 !define MUI_PAGE_CUSTOMFUNCTION_SHOW myShowCallback
@@ -104,6 +104,12 @@ Section "!Packetmap" SecMain
   File ..\bin\debug\Packetmap.exe
   File ..\bin\debug\ScalablePictureBox.dll
   File ..\bin\debug\Tamir.IPLib.SharpPcap.dll
+  File ..\bin\debug\CSharpBULocalization.dll
+
+  SetOutPath "$INSTDIR\locals"
+  File ..\locals\default.Language
+  File ..\locals\packetmap.xml
+  File ..\locals\Russian.Language
 
   SetOutPath "$INSTDIR\data"
   File ..\data\countries.txt

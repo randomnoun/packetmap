@@ -30,6 +30,8 @@ namespace PacketMap {
             this.labelCopyright = new System.Windows.Forms.Label();
             this.labelCompanyName = new System.Windows.Forms.Label();
             this.labelCompanyName2 = new System.Windows.Forms.Label();
+            this.labelTranslator = new System.Windows.Forms.Label();
+            this.labelTranslator2 = new System.Windows.Forms.Label();
             this.textBoxDescription = new System.Windows.Forms.TextBox();
             this.okButton = new System.Windows.Forms.Button();
             this.tableLayoutPanel.SuspendLayout();
@@ -47,21 +49,28 @@ namespace PacketMap {
             this.tableLayoutPanel.Controls.Add(this.labelCopyright, 1, 2);
             this.tableLayoutPanel.Controls.Add(this.labelCompanyName, 1, 3);
             this.tableLayoutPanel.Controls.Add(this.labelCompanyName2, 1, 4);
-            this.tableLayoutPanel.Controls.Add(this.textBoxDescription, 1, 5);
-            this.tableLayoutPanel.Controls.Add(this.okButton, 1, 6);
+            this.tableLayoutPanel.Controls.Add(this.labelTranslator, 1, 5);
+            this.tableLayoutPanel.Controls.Add(this.labelTranslator2, 1, 6);
+            this.tableLayoutPanel.Controls.Add(this.textBoxDescription, 1, 7);
+            this.tableLayoutPanel.Controls.Add(this.okButton, 1, 8);
             this.tableLayoutPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel.Location = new System.Drawing.Point(9, 9);
             this.tableLayoutPanel.Name = "tableLayoutPanel";
-            this.tableLayoutPanel.RowCount = 6;
+            this.tableLayoutPanel.RowCount = 8;
             this.tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 10F));
             this.tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 10F));
             this.tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 10F));
             this.tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 10F));
             this.tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 10F));
-            this.tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 40F));
             this.tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 10F));
-            this.tableLayoutPanel.Size = new System.Drawing.Size(417, 265);
+            this.tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 10F));
+            this.tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
+            this.tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 10F));
+            this.tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel.Size = new System.Drawing.Size(417, 279);
             this.tableLayoutPanel.TabIndex = 0;
+            this.tableLayoutPanel.Paint += new System.Windows.Forms.PaintEventHandler(this.tableLayoutPanel_Paint);
             // 
             // logoPictureBox
             // 
@@ -69,8 +78,8 @@ namespace PacketMap {
             this.logoPictureBox.Image = ((System.Drawing.Image)(resources.GetObject("logoPictureBox.Image")));
             this.logoPictureBox.Location = new System.Drawing.Point(3, 3);
             this.logoPictureBox.Name = "logoPictureBox";
-            this.tableLayoutPanel.SetRowSpan(this.logoPictureBox, 6);
-            this.logoPictureBox.Size = new System.Drawing.Size(131, 230);
+            this.tableLayoutPanel.SetRowSpan(this.logoPictureBox, 8);
+            this.logoPictureBox.Size = new System.Drawing.Size(131, 238);
             this.logoPictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.logoPictureBox.TabIndex = 12;
             this.logoPictureBox.TabStop = false;
@@ -90,7 +99,7 @@ namespace PacketMap {
             // labelVersion
             // 
             this.labelVersion.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.labelVersion.Location = new System.Drawing.Point(143, 26);
+            this.labelVersion.Location = new System.Drawing.Point(143, 27);
             this.labelVersion.Margin = new System.Windows.Forms.Padding(6, 0, 3, 0);
             this.labelVersion.MaximumSize = new System.Drawing.Size(0, 17);
             this.labelVersion.Name = "labelVersion";
@@ -102,7 +111,7 @@ namespace PacketMap {
             // labelCopyright
             // 
             this.labelCopyright.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.labelCopyright.Location = new System.Drawing.Point(143, 52);
+            this.labelCopyright.Location = new System.Drawing.Point(143, 54);
             this.labelCopyright.Margin = new System.Windows.Forms.Padding(6, 0, 3, 0);
             this.labelCopyright.MaximumSize = new System.Drawing.Size(0, 17);
             this.labelCopyright.Name = "labelCopyright";
@@ -113,7 +122,7 @@ namespace PacketMap {
             // labelCompanyName
             // 
             this.labelCompanyName.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.labelCompanyName.Location = new System.Drawing.Point(143, 78);
+            this.labelCompanyName.Location = new System.Drawing.Point(143, 81);
             this.labelCompanyName.Margin = new System.Windows.Forms.Padding(6, 0, 3, 0);
             this.labelCompanyName.MaximumSize = new System.Drawing.Size(0, 17);
             this.labelCompanyName.Name = "labelCompanyName";
@@ -124,7 +133,7 @@ namespace PacketMap {
             // labelCompanyName2
             // 
             this.labelCompanyName2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.labelCompanyName2.Location = new System.Drawing.Point(143, 104);
+            this.labelCompanyName2.Location = new System.Drawing.Point(143, 108);
             this.labelCompanyName2.Margin = new System.Windows.Forms.Padding(6, 0, 3, 0);
             this.labelCompanyName2.MaximumSize = new System.Drawing.Size(0, 17);
             this.labelCompanyName2.Name = "labelCompanyName2";
@@ -132,15 +141,37 @@ namespace PacketMap {
             this.labelCompanyName2.TabIndex = 22;
             this.labelCompanyName2.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
+            // labelTranslator
+            // 
+            this.labelTranslator.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.labelTranslator.Location = new System.Drawing.Point(143, 135);
+            this.labelTranslator.Margin = new System.Windows.Forms.Padding(6, 0, 3, 0);
+            this.labelTranslator.MaximumSize = new System.Drawing.Size(0, 20);
+            this.labelTranslator.Name = "labelTranslator";
+            this.labelTranslator.Size = new System.Drawing.Size(271, 20);
+            this.labelTranslator.TabIndex = 22;
+            this.labelTranslator.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // labelTranslator2
+            // 
+            this.labelTranslator2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.labelTranslator2.Location = new System.Drawing.Point(143, 162);
+            this.labelTranslator2.Margin = new System.Windows.Forms.Padding(6, 0, 3, 0);
+            this.labelTranslator2.MaximumSize = new System.Drawing.Size(0, 20);
+            this.labelTranslator2.Name = "labelTranslator2";
+            this.labelTranslator2.Size = new System.Drawing.Size(271, 20);
+            this.labelTranslator2.TabIndex = 23;
+            this.labelTranslator2.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
             // textBoxDescription
             // 
             this.textBoxDescription.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.textBoxDescription.Location = new System.Drawing.Point(143, 133);
+            this.textBoxDescription.Location = new System.Drawing.Point(143, 192);
             this.textBoxDescription.Margin = new System.Windows.Forms.Padding(6, 3, 3, 3);
             this.textBoxDescription.Multiline = true;
             this.textBoxDescription.Name = "textBoxDescription";
             this.textBoxDescription.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.textBoxDescription.Size = new System.Drawing.Size(271, 100);
+            this.textBoxDescription.Size = new System.Drawing.Size(271, 49);
             this.textBoxDescription.TabIndex = 23;
             this.textBoxDescription.TabStop = false;
             this.textBoxDescription.Text = "Description";
@@ -149,7 +180,7 @@ namespace PacketMap {
             // 
             this.okButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.okButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.okButton.Location = new System.Drawing.Point(339, 239);
+            this.okButton.Location = new System.Drawing.Point(339, 253);
             this.okButton.Name = "okButton";
             this.okButton.Size = new System.Drawing.Size(75, 23);
             this.okButton.TabIndex = 24;
@@ -157,10 +188,9 @@ namespace PacketMap {
             // 
             // AboutBox
             // 
-            this.AcceptButton = this.okButton;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(435, 283);
+            this.ClientSize = new System.Drawing.Size(435, 297);
             this.Controls.Add(this.tableLayoutPanel);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.MaximizeBox = false;
@@ -187,6 +217,8 @@ namespace PacketMap {
         private System.Windows.Forms.Label labelCopyright;
         private System.Windows.Forms.Label labelCompanyName;
         private System.Windows.Forms.Label labelCompanyName2;
+        private System.Windows.Forms.Label labelTranslator;
+        private System.Windows.Forms.Label labelTranslator2;
         private System.Windows.Forms.TextBox textBoxDescription;
         private System.Windows.Forms.Button okButton;
     }

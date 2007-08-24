@@ -14,10 +14,13 @@ using System.Drawing.Drawing2D;
 using Microsoft.Win32;
 using System.Net;
 using System.ComponentModel;
+using BUtil.Localization;
 
-namespace PacketMap {
+namespace PacketMap
+{
 
-    public class MainForm : Form,  QAlbum.OverlayGenerator {
+    public class MainForm : Form, QAlbum.OverlayGenerator
+    {
         private MenuStrip menuStrip1;
         private ToolStripMenuItem fileToolStripMenuItem;
         private ToolStripMenuItem cmdStartMapping;
@@ -33,14 +36,14 @@ namespace PacketMap {
         List<CountryGif> countries;
         List<GeoIpRange> geoIpRanges;
         Hashtable countryMap;  // shortcode("AU") -> countryGif
-        
+
         CountryGif baseCountry;
         Image baseImage;
         Image flagComposite;
         Bitmap overlayBitmap;
         Bitmap compositeBitmap;
 
-        StreamWriter packetWriter;
+        StreamWriter packetWriter = null;
         long sideListMaxSend = 0;
         long sideListMaxRecv = 0;
 
@@ -65,8 +68,168 @@ namespace PacketMap {
         private ToolStripMenuItem toolsToolStripMenuItem;
         private ToolStripMenuItem cmdDnsLookup;
         static MainForm mainFormInstance = null;
+        private ToolStripSeparator toolStripSeparator4;
+        private ToolStripMenuItem languageToolStripMenuItem;
 
-        public MainForm(string baseDir, string deviceName, bool autoUpdate) {
+        // Language option
+        #region localization
+        static string MNotStarted = "(not started)";
+        string
+            MErrProgramRunning = "Program already running!",
+            MUpdateCheck = "Checking for updates (go to Help menu to disable this check)...",
+            MLoadCountryOutLineData = "Loading country outline data...",
+            MLoadingIPtoCountryData = "Loading IP to country data...",
+            MLoadingCounntryFlagImages = "Loading country flag images...",
+            MSelectingAdapter = "Selecting adaptor...",
+            MSelectAdapter = "Selected adapter ",
+            MErrNoDevice = "Could not find device",
+            MReselectAdapter = "please reselect adaptor",
+            MMappingDisabled = "Mapping disabled",
+            MReadingGEOIPdata = "Reading geoip data...",
+            MLoadingFlagImages = "*** Loading flag images",
+            MErrInvalidFlagSumary = "Invalid flag summary: ",
+            MErrMissingCountryForFlagID = "Missing country for flag id",
+            MUnparsedflagCompLine = "Unparsed flagComposite line: ",
+            MErrNoImageForCountryCode = "Could not find image for country code ",
+            MCountry = "Country ",
+            MReadingCountryMapData = "Reading country map data...",
+            MErrMissingFromMap = "missing from map",
+            MHostIs = " * host = ",
+            MExceptionOccured = "Exception found: ",
+            MFoundInRange = "Found in range ",
+            MCountryIs = "country = ",
+            MNotFound = "Not found",
+            MSelectDeviceFirst = "Please select a device first",
+            MTerminatingThread = "Terminating thread...",
+            MStartedMappingOn = "Started mapping on ",
+            MMappingEnabled = "Mapping enabled",
+            MMappingStopped = "Mapping stopped.",
+            MRefreshTime = "Refresh time: ",
+            Mms = "ms",
+            MMouseMoved = "Mouse moved: ",
+            MYourProgramVersionIs = "You are currently running version of Packetmap is ",
+            MNewVersionAvailable1 = "There is a new version (",
+            MNewVersionAvailable2 = ") of PacketMap available. \n",
+            MWouldYouLikeToUpgrade = "Would you like to download and install this new version ? ",
+            MNewVersionAvailable = "New version available",
+            MerrResponseNotReceived = "Response not received: ",
+            MError = "Error: ",
+            MUpdateCheckResponse = "Update check response";
+
+        BULanguagesManager bulm = null;
+        string OnLoadLanguageSetting()
+        {
+            return MainProgram.CurrentLanguage;
+        }
+
+        void OnSaveLanguageSetting(string LangSetting)
+        {
+            RegistryKey key = Registry.CurrentUser.OpenSubKey(@"Software\Randomnoun\Packetmap", true);
+            key.SetValue("Language", LangSetting, RegistryValueKind.String);
+            key.Close();
+        }
+
+        void ApplyLocalization(BUtil.Localization.BUTranslation butranslation)
+        {
+            //MainForm
+            MErrProgramRunning = butranslation.GetTranslationByID(1);
+            MUpdateCheck = butranslation.GetTranslationByID(2);
+            MLoadCountryOutLineData = butranslation.GetTranslationByID(3);
+            MLoadingIPtoCountryData = butranslation.GetTranslationByID(4);
+            MLoadingCounntryFlagImages = butranslation.GetTranslationByID(5);
+            MSelectingAdapter = butranslation.GetTranslationByID(6);
+            MSelectAdapter = butranslation.GetTranslationByID(7);
+            MErrNoDevice = butranslation.GetTranslationByID(8);
+            MReselectAdapter = butranslation.GetTranslationByID(9);
+            MMappingDisabled = butranslation.GetTranslationByID(10);
+            MReadingGEOIPdata = butranslation.GetTranslationByID(11);
+            MLoadingFlagImages = butranslation.GetTranslationByID(12);
+            MErrInvalidFlagSumary = butranslation.GetTranslationByID(13);
+            MErrMissingCountryForFlagID = butranslation.GetTranslationByID(14);
+            MUnparsedflagCompLine = butranslation.GetTranslationByID(15);
+            MErrNoImageForCountryCode = butranslation.GetTranslationByID(16);
+            MCountry = butranslation.GetTranslationByID(17);
+            MReadingCountryMapData = butranslation.GetTranslationByID(18);
+            MErrMissingFromMap = butranslation.GetTranslationByID(19);
+
+            //GUI
+            fileToolStripMenuItem.Text = butranslation.GetTranslationByID(20);
+            cmdStartMapping.Text = butranslation.GetTranslationByID(21);
+            cmdStopMapping.Text = butranslation.GetTranslationByID(22);
+            cmdSelectAdapter.Text = butranslation.GetTranslationByID(23);
+            cmdExit.Text = butranslation.GetTranslationByID(24);
+            toolsToolStripMenuItem.Text = butranslation.GetTranslationByID(25);
+            cmdDnsLookup.Text = butranslation.GetTranslationByID(26);
+            cmdCheckUpdatesAtStartup.Text = butranslation.GetTranslationByID(27);
+            cmdCheckUpdatesNow.Text = butranslation.GetTranslationByID(28);
+            cmdAboutBox.Text = butranslation.GetTranslationByID(29);
+            colCountry.Text = butranslation.GetTranslationByID(30);
+            colSent.Text = butranslation.GetTranslationByID(31);
+            colRecv.Text = butranslation.GetTranslationByID(32);
+            languageToolStripMenuItem.Text = butranslation.GetTranslationByID(33);
+            helpToolStripMenuItem.Text = butranslation.GetTranslationByID(56);
+            //
+            MHostIs = butranslation.GetTranslationByID(34);
+            MExceptionOccured = butranslation.GetTranslationByID(35);
+            MFoundInRange = butranslation.GetTranslationByID(36);
+            MCountryIs = butranslation.GetTranslationByID(37);
+            MNotFound = butranslation.GetTranslationByID(38);
+            MSelectDeviceFirst = butranslation.GetTranslationByID(39);
+            MTerminatingThread = butranslation.GetTranslationByID(40);
+            MStartedMappingOn = butranslation.GetTranslationByID(41);
+            MMappingEnabled = butranslation.GetTranslationByID(42);
+            MMappingStopped = butranslation.GetTranslationByID(43);
+            MNotStarted = butranslation.GetTranslationByID(44);
+            MRefreshTime = butranslation.GetTranslationByID(45);
+            Mms = butranslation.GetTranslationByID(46);
+            MMouseMoved = butranslation.GetTranslationByID(47);
+            MYourProgramVersionIs = butranslation.GetTranslationByID(48);
+            MNewVersionAvailable1 = butranslation.GetTranslationByID(49);
+            MNewVersionAvailable2 = butranslation.GetTranslationByID(50);
+            MWouldYouLikeToUpgrade = butranslation.GetTranslationByID(51);
+            MNewVersionAvailable = butranslation.GetTranslationByID(52);
+            MerrResponseNotReceived = butranslation.GetTranslationByID(53);
+            MError = butranslation.GetTranslationByID(54);
+            MUpdateCheckResponse = butranslation.GetTranslationByID(55);
+
+
+            // SelectAdapterForm.
+            SelectAdapterForm.label1Text = butranslation.GetTranslationByID(57);
+            SelectAdapterForm.btnOKText = butranslation.GetTranslationByID(58);
+            SelectAdapterForm.btnCancelText = butranslation.GetTranslationByID(59);
+            SelectAdapterForm.lblAdapterInfo1Text = butranslation.GetTranslationByID(60);
+            SelectAdapterForm.lblAdapterDataText = butranslation.GetTranslationByID(61);
+            SelectAdapterForm.thisText = butranslation.GetTranslationByID(62);
+
+            // DNSLookup.
+            DnsLookup.lblDnsServerText = butranslation.GetTranslationByID(63);
+            DnsLookup.lblHostnameText = butranslation.GetTranslationByID(64);
+            DnsLookup.cmdOKText = butranslation.GetTranslationByID(65);
+            DnsLookup.cmdCancelText = butranslation.GetTranslationByID(66);
+            DnsLookup.lblResultText = butranslation.GetTranslationByID(67);
+            DnsLookup.thisText = butranslation.GetTranslationByID(68);
+            // messages
+            DnsLookup.MReverseIP = butranslation.GetTranslationByID(69);
+            DnsLookup.MQueryingDNSRecordsForDomain = butranslation.GetTranslationByID(70);
+            DnsLookup.MNoAnswer = butranslation.GetTranslationByID(71);
+            DnsLookup.MAuthoritativeanswer = butranslation.GetTranslationByID(72);
+            DnsLookup.MNotAuthoritativeanswer = butranslation.GetTranslationByID(73);
+
+            // AboutBox.
+            AboutBox.textBoxDescriptionText = butranslation.GetTranslationByID(74);
+            AboutBox.okButtonText = butranslation.GetTranslationByID(75);
+            AboutBox.thisText = butranslation.GetTranslationByID(76);
+            // messages
+            AboutBox.MAbout = butranslation.GetTranslationByID(77);
+            AboutBox.MVersion = butranslation.GetTranslationByID(78);
+            AboutBox.MAboutApp = butranslation.GetTranslationByID(79);
+            AboutBox.translatorcopyright = butranslation.AuthorCopyright;
+            AboutBox.MTranslCopyright = butranslation.GetTranslationByID(80);
+        }
+        #endregion
+
+        public MainForm(string baseDir, string deviceName, bool autoUpdate)
+        {
             InitializeComponent();
             this.autoUpdate = autoUpdate;
             cmdCheckUpdatesAtStartup.Checked = autoUpdate;
@@ -74,33 +237,72 @@ namespace PacketMap {
             countries = new List<CountryGif>();
             geoIpRanges = new List<GeoIpRange>();
             countryMap = new Hashtable();
-            if (mainFormInstance != null) {
-                throw new ArgumentException("Program already running!");
+
+            //Loading languages
+            string[] namespaces = new string[0];
+            try
+            {
+                bulm = new BULanguagesManager(namespaces, "packetmap",
+                Application.StartupPath + @"\locals\", ApplyLocalization);
+            }
+            catch (Exception exc)
+            {
+                MessageBox.Show(exc.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                bulm = null;
+            }
+
+            if (bulm != null)
+            {
+                try
+                {
+                    bulm.UseOwnConfigurationFile(OnSaveLanguageSetting, OnLoadLanguageSetting);
+                    bulm.LoadLanguageSettings();
+                    ApplyLocalization(bulm.LoadLocalization());
+                }
+                catch (Exception exc)
+                {
+                    MessageBox.Show(exc.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    // Changing interface
+                }
+                try
+                {
+                    bulm.GenerateMenuWithLanguages(ref languageToolStripMenuItem);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+
+            if (mainFormInstance != null)
+            {
+                throw new ArgumentException(MErrProgramRunning);
             }
             mainFormInstance = this;
 
             // check for latest update
             // prepare the web page we will be asking for
-            if (autoUpdate) {
-                Splasher.AddText("Checking for updates (go to Help menu to disable this check)...");
+            if (autoUpdate)
+            {
+                Splasher.AddText(MUpdateCheck);
                 Splasher.SetProgress(20);
                 Thread.Sleep(100);
                 checkForUpdatesNow(true);
             }
-            
-            Splasher.AddText("Loading country outline data...");
+
+            Splasher.AddText(MLoadCountryOutLineData);
             this.loadCountries(baseDir);
             Thread.Sleep(100);
             Splasher.SetProgress(40);
 
-            
-            Splasher.AddText("Loading IP to country data...");
-            this.loadGeoIps(baseDir + "\\data\\GeoIPCountryWhois.csv");
-            this.loadCountryMap(baseDir + "\\data\\matchedWithGif.csv");
+
+            Splasher.AddText(MLoadingIPtoCountryData);
+            this.loadGeoIps(baseDir + @"\data\GeoIPCountryWhois.csv");
+            this.loadCountryMap(baseDir + @"\data\matchedWithGif.csv");
             Thread.Sleep(100);
             Splasher.SetProgress(60);
 
-            Splasher.AddText("Loading country flag images...");
+            Splasher.AddText(MLoadingCounntryFlagImages);
             // \\data\\flagComposite.txt
             this.loadFlagImages(baseDir);
 
@@ -110,35 +312,41 @@ namespace PacketMap {
             compositeBitmap = new Bitmap(baseImage.Size.Width, baseImage.Size.Height, PixelFormat.Format32bppArgb);
             this.spbImage.BackingImage = baseImage;
             this.spbImage.SetOverlayGenerator(this);
-            
+
             Thread.Sleep(100);
             Splasher.SetProgress(80);
 
-            Splasher.AddText("Selecting adaptor...");
-            if (!deviceName.Equals("")) {
-                try {
-                    device = (NetworkDevice) SharpPcap.GetPcapDevice(deviceName);
+            Splasher.AddText(MSelectingAdapter);
+            if (!deviceName.Equals(""))
+            {
+                try
+                {
+                    device = (NetworkDevice)SharpPcap.GetPcapDevice(deviceName);
                     deviceIp = Tamir.IPLib.Util.Convert.IpStringToInt32(device.IpAddress);
-                    AddStatusText("Selected adapter " + device.PcapDescription + " [" + device.IpAddress + "]"); 
-                } catch (Exception) {
-                    AddStatusText("Could not find device '" + deviceName + "'... please reselect adaptor");
+                    AddStatusText(MSelectAdapter + device.PcapDescription + " [" + device.IpAddress + "]");
+                }
+                catch (Exception)
+                {
+                    AddStatusText(MErrNoDevice + " '" + deviceName + "'... " + MReselectAdapter);
                 }
             }
 
-            Directory.CreateDirectory(baseDir + "\\out");
-            
+            Directory.CreateDirectory(baseDir + @"\out");
+
             // *** disabling packet writer
             // this.packetWriter = System.IO.File.AppendText(baseDir + "\\out\\packetDump.txt");
             Splasher.Close();
 
-            lblStatusBarLeft.Text = "Mapping disabled";
+            lblStatusBarLeft.Text = MMappingDisabled;
         }
 
 
-        public class GeoIpRange {
+        public class GeoIpRange
+        {
             uint startIp, endIp;
             string countryCode;
-            public GeoIpRange(uint startIp, uint endIp, string countryCode) {
+            public GeoIpRange(uint startIp, uint endIp, string countryCode)
+            {
                 this.startIp = startIp;
                 this.endIp = endIp;
                 this.countryCode = countryCode;
@@ -148,8 +356,10 @@ namespace PacketMap {
             public string getCountry() { return countryCode; }
         }
 
-        public class GeoIpRangeComparer : IComparer<GeoIpRange> {
-            int IComparer<GeoIpRange>.Compare(GeoIpRange geoIp1, GeoIpRange geoIp2) {
+        public class GeoIpRangeComparer : IComparer<GeoIpRange>
+        {
+            int IComparer<GeoIpRange>.Compare(GeoIpRange geoIp1, GeoIpRange geoIp2)
+            {
                 uint ip = (geoIp2).getStartIp();
                 /*
                 Console.WriteLine("Searching for " + ip + " (" + 
@@ -163,13 +373,15 @@ namespace PacketMap {
             }
         }
 
-        public void loadGeoIps(String file) {
+        public void loadGeoIps(String file)
+        {
             // grab text file and read from there
-            Console.WriteLine("Reading geoip data...");
+            Console.WriteLine(MReadingGEOIPdata);
             System.IO.StreamReader sr = System.IO.File.OpenText(file);
             String s;
             int lines = 0;
-            while ((s = sr.ReadLine()) != null) {
+            while ((s = sr.ReadLine()) != null)
+            {
                 // in form "2.6.190.56","2.6.190.63","33996344","33996351","GB","United Kingdom"
                 string[] data = s.Split(new char[] { ',' });
                 // just get uin32 IPs, and short country code
@@ -179,9 +391,11 @@ namespace PacketMap {
                     data[4].Substring(1, data[4].Length - 2));
                 geoIpRanges.Add(geoIpRange);
                 lines++;
-                if (lines % 100 == 0) {
+                if (lines % 100 == 0)
+                {
                     Console.Write(".");
-                    if (lines % 7000 == 0) {
+                    if (lines % 7000 == 0)
+                    {
                         Console.Write("\n");
                     }
                 }
@@ -191,59 +405,74 @@ namespace PacketMap {
         }
 
 
-        public void loadFlagImages(String directory) {
-            Console.WriteLine("*** Loading flag images");
-            StreamReader sr = new StreamReader(directory + "\\data\\flagComposite.txt");
-            this.flagComposite = Image.FromFile(directory + "\\data\\flagComposite.png");
-            
+        public void loadFlagImages(String directory)
+        {
+            Console.WriteLine(MLoadingFlagImages);
+            StreamReader sr = new StreamReader(directory + @"\data\flagComposite.txt");
+            this.flagComposite = Image.FromFile(directory + @"\data\flagComposite.png");
+
             string countryCode;
             int w, h, flagCount, maxW, maxH;
             sr.ReadLine();  // text header line
             String summary = sr.ReadLine();  // flagCount, maxW, maxH
             Match m = Regex.Match(summary, "^([0-9]+) ([0-9]+) ([0-9]+)$");
-            if (m.Success) {
+            if (m.Success)
+            {
                 flagCount = Convert.ToInt32(m.Groups[1].Value);
                 maxW = Convert.ToInt32(m.Groups[2].Value);
                 maxH = Convert.ToInt32(m.Groups[3].Value);
-            } else {
+            }
+            else
+            {
                 // throw exception
-                Console.WriteLine("Invalid flag summary: '" + summary + "'");
+                Console.WriteLine(MErrInvalidFlagSumary + " '" + summary + "'");
                 return;
             }
             int flagsPerRow = 20;
             // Bitmap b = new Bitmap(maxW * flagsPerRow, maxH * (flagCount / flagsPerRow) + maxH, PixelFormat.Format24bppRgb);
             // g.DrawImage(miniFlag, (flagCount % flagsPerRow) * maxW, (flagCount / flagsPerRow) * maxH);
 
-            for (int i = 0; i < flagCount; i++) {
+            for (int i = 0; i < flagCount; i++)
+            {
                 string line = sr.ReadLine();
                 m = Regex.Match(line, "^([-a-z]+) ([0-9]+) ([0-9]+)$");
-                if (m.Success) {
+                if (m.Success)
+                {
                     countryCode = m.Groups[1].Value.ToUpper();
                     w = Convert.ToInt32(m.Groups[2].Value);
                     h = Convert.ToInt32(m.Groups[3].Value);
                     CountryGif countryGif = (CountryGif)countryMap[countryCode];
-                    if (countryGif != null) {
+                    if (countryGif != null)
+                    {
                         countryGif.setFlagDetails(i, (i % flagsPerRow) * maxW, (i / flagsPerRow) * maxH, w, h);
-                    } else {
-                        Console.WriteLine("Missing country for flag id '" + countryCode + "'");
                     }
-                } else {
-                    Console.WriteLine("Unparsed flagComposite line: " + line);
+                    else
+                    {
+                        Console.WriteLine(MErrMissingCountryForFlagID + " '" + countryCode + "'");
+                    }
+                }
+                else
+                {
+                    Console.WriteLine(MUnparsedflagCompLine + line);
                 }
             }
 
             // display warnings
-            foreach (string code in countryMap.Keys) {
+            foreach (string code in countryMap.Keys)
+            {
                 // int index = flagImageList.Images.IndexOfKey(countryCode.ToLower() + ".gif");
                 CountryGif countryGif = (CountryGif)countryMap[code];
-                if (countryGif.getFlagIndex() == -1) {
-                    Console.WriteLine("Could not find image for country code '" + code + "'");
-                } else {
-                    Console.WriteLine("Country '" + code + "' = flagIndex " + countryGif.getFlagIndex());
+                if (countryGif.getFlagIndex() == -1)
+                {
+                    Console.WriteLine(MErrNoImageForCountryCode + "'" + code + "'");
+                }
+                else
+                {
+                    Console.WriteLine(MCountry + "'" + code + "' = flagIndex " + countryGif.getFlagIndex());
                 }
             }
-            
-            
+
+
             //foreach (Image img in flagImageList.Images) {
             //    IndexOfKey
             //}
@@ -262,29 +491,35 @@ namespace PacketMap {
                 }
             }*/
         }
-        
-        public void loadCountryMap(String file) {
+
+        public void loadCountryMap(String file)
+        {
             // grab text file and read from there
-            Console.WriteLine("Reading country map data...");
+            Console.WriteLine(MReadingCountryMapData);
             System.IO.StreamReader sr = System.IO.File.OpenText(file);
             String s;
-            while ((s = sr.ReadLine()) != null) {
+            while ((s = sr.ReadLine()) != null)
+            {
                 // TK,Tokelau,
                 // AU,Australia,Australia
                 String[] data = s.Split(new char[] { ',' });
-                if (data.Length == 3) {
+                if (data.Length == 3)
+                {
                     // find country with this name
                     Boolean found = false;
-                    foreach (CountryGif country in countries) {
-                        if (country.getName() == data[2]) {
+                    foreach (CountryGif country in countries)
+                    {
+                        if (country.getName() == data[2])
+                        {
                             countryMap.Add(data[0], country);
                             country.setShortName(data[0]);
                             found = true;
                             break;
                         }
                     }
-                    if (!found) {
-                        Console.WriteLine("Country " + data[0] + " '" + data[1] + "' missing from map");
+                    if (!found)
+                    {
+                        Console.WriteLine(MCountry + data[0] + " '" + data[1] + "' " + MErrMissingFromMap);
                     }
                 }
             }
@@ -293,21 +528,42 @@ namespace PacketMap {
         }
 
 
-        public void loadCountries(String directory) {
+        public void loadCountries(String directory)
+        {
             // grab text file and read from there
-            System.IO.StreamReader sr = System.IO.File.OpenText(directory + "\\data\\countries.txt");
+            System.IO.StreamReader sr = System.IO.File.OpenText(directory + @"\data\countries.txt");
             String s;
-            while ((s = sr.ReadLine()) != null) {
+            string filename;
+            LngLat LngLat1, LngLat2;
+            double[] LngLatdata = new double[4];
+            while ((s = sr.ReadLine()) != null)
+            {
                 s = s.Trim();
-                if (!s.Equals("")) {
+                if (!s.Equals(""))
+                {
                     Match m = Regex.Match(s, "^(.*)\\s+([0-9-.]+)\\s+([0-9-.]+)\\s+([0-9-.]+)\\s+([0-9-.]+)\\s*$");
-                    if (m.Success) {
+                    if (m.Success)
+                    {
                         Console.WriteLine("Loading " + m.Groups[1].Value);
-                        countries.Add(new CountryGif(directory + "\\countryGif\\" + m.Groups[1].Value + ".png",
+
+                        filename = directory + @"\countryGif\" + m.Groups[1].Value + ".png";
+
+                        // bad bug fix
+                        // bug wnen we're trying to convert items like "2.52" to double exception occures
+                        // write variant is Convert.DoDouble("2,52") "," not "."
+                        for (int i = 0; i < 4; i++)
+                            LngLatdata[i] = Convert.ToDouble(m.Groups[i + 2].Value.Replace('.', ','));
+
+                        LngLat1 = new LngLat(Convert.ToDouble(LngLatdata[0]), Convert.ToDouble(LngLatdata[1]));
+                        LngLat2 = new LngLat(Convert.ToDouble(LngLatdata[2]), Convert.ToDouble(LngLatdata[3]));
+
+                        countries.Add(new CountryGif(filename,
                             m.Groups[1].Value,
-                            new LngLat(Convert.ToDouble(m.Groups[2].Value), Convert.ToDouble(m.Groups[3].Value)),
-                            new LngLat(Convert.ToDouble(m.Groups[4].Value), Convert.ToDouble(m.Groups[5].Value))));
-                    } else {
+                            LngLat1,
+                            LngLat2));
+                    }
+                    else
+                    {
                         throw new ArgumentException("In file 'countries.txt': Invalid string '" + s + "'");
                     }
                 }
@@ -315,7 +571,8 @@ namespace PacketMap {
             sr.Close();
         }
 
-        private void InitializeComponent() {
+        private void InitializeComponent()
+        {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
@@ -343,6 +600,8 @@ namespace PacketMap {
             this.spbImage = new QAlbum.ScalablePictureBox();
             this.statusBar = new System.Windows.Forms.StatusStrip();
             this.lblStatusBarLeft = new System.Windows.Forms.ToolStripStatusLabel();
+            this.languageToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
             this.menuStrip1.SuspendLayout();
             this.statusBar.SuspendLayout();
             this.SuspendLayout();
@@ -375,7 +634,7 @@ namespace PacketMap {
             // cmdStartMapping
             // 
             this.cmdStartMapping.Name = "cmdStartMapping";
-            this.cmdStartMapping.Size = new System.Drawing.Size(167, 22);
+            this.cmdStartMapping.Size = new System.Drawing.Size(156, 22);
             this.cmdStartMapping.Text = "Start mapping";
             this.cmdStartMapping.Click += new System.EventHandler(this.cmdStartMapping_Click);
             // 
@@ -383,31 +642,31 @@ namespace PacketMap {
             // 
             this.cmdStopMapping.Enabled = false;
             this.cmdStopMapping.Name = "cmdStopMapping";
-            this.cmdStopMapping.Size = new System.Drawing.Size(167, 22);
+            this.cmdStopMapping.Size = new System.Drawing.Size(156, 22);
             this.cmdStopMapping.Text = "Stop mapping";
             this.cmdStopMapping.Click += new System.EventHandler(this.cmdStopMapping_Click);
             // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(164, 6);
+            this.toolStripSeparator2.Size = new System.Drawing.Size(153, 6);
             // 
             // cmdSelectAdapter
             // 
             this.cmdSelectAdapter.Name = "cmdSelectAdapter";
-            this.cmdSelectAdapter.Size = new System.Drawing.Size(167, 22);
+            this.cmdSelectAdapter.Size = new System.Drawing.Size(156, 22);
             this.cmdSelectAdapter.Text = "Select adapter...";
             this.cmdSelectAdapter.Click += new System.EventHandler(this.cmdSelectAdapter_Click);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(164, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(153, 6);
             // 
             // cmdExit
             // 
             this.cmdExit.Name = "cmdExit";
-            this.cmdExit.Size = new System.Drawing.Size(167, 22);
+            this.cmdExit.Size = new System.Drawing.Size(156, 22);
             this.cmdExit.Text = "Exit";
             this.cmdExit.Click += new System.EventHandler(this.cmdExit_Click);
             // 
@@ -422,7 +681,7 @@ namespace PacketMap {
             // cmdDnsLookup
             // 
             this.cmdDnsLookup.Name = "cmdDnsLookup";
-            this.cmdDnsLookup.Size = new System.Drawing.Size(154, 22);
+            this.cmdDnsLookup.Size = new System.Drawing.Size(152, 22);
             this.cmdDnsLookup.Text = "DNS Lookup...";
             this.cmdDnsLookup.Click += new System.EventHandler(this.cmdDnsLookup_Click);
             // 
@@ -431,6 +690,8 @@ namespace PacketMap {
             this.helpToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.cmdCheckUpdatesAtStartup,
             this.cmdCheckUpdatesNow,
+            this.toolStripSeparator4,
+            this.languageToolStripMenuItem,
             this.toolStripSeparator3,
             this.cmdAboutBox});
             this.helpToolStripMenuItem.Name = "helpToolStripMenuItem";
@@ -440,26 +701,26 @@ namespace PacketMap {
             // cmdCheckUpdatesAtStartup
             // 
             this.cmdCheckUpdatesAtStartup.Name = "cmdCheckUpdatesAtStartup";
-            this.cmdCheckUpdatesAtStartup.Size = new System.Drawing.Size(224, 22);
+            this.cmdCheckUpdatesAtStartup.Size = new System.Drawing.Size(213, 22);
             this.cmdCheckUpdatesAtStartup.Text = "Check for updates at startup";
             this.cmdCheckUpdatesAtStartup.Click += new System.EventHandler(this.cmdCheckUpdatesAtStartup_Click);
             // 
             // cmdCheckUpdatesNow
             // 
             this.cmdCheckUpdatesNow.Name = "cmdCheckUpdatesNow";
-            this.cmdCheckUpdatesNow.Size = new System.Drawing.Size(224, 22);
+            this.cmdCheckUpdatesNow.Size = new System.Drawing.Size(213, 22);
             this.cmdCheckUpdatesNow.Text = "Check for updates now...";
             this.cmdCheckUpdatesNow.Click += new System.EventHandler(this.cmdCheckUpdatesNow_Click);
             // 
             // toolStripSeparator3
             // 
             this.toolStripSeparator3.Name = "toolStripSeparator3";
-            this.toolStripSeparator3.Size = new System.Drawing.Size(221, 6);
+            this.toolStripSeparator3.Size = new System.Drawing.Size(210, 6);
             // 
             // cmdAboutBox
             // 
             this.cmdAboutBox.Name = "cmdAboutBox";
-            this.cmdAboutBox.Size = new System.Drawing.Size(224, 22);
+            this.cmdAboutBox.Size = new System.Drawing.Size(213, 22);
             this.cmdAboutBox.Text = "About PacketMap";
             this.cmdAboutBox.Click += new System.EventHandler(this.cmdAboutBox_Click);
             // 
@@ -790,6 +1051,17 @@ namespace PacketMap {
             this.lblStatusBarLeft.Size = new System.Drawing.Size(109, 17);
             this.lblStatusBarLeft.Text = "toolStripStatusLabel1";
             // 
+            // languageToolStripMenuItem
+            // 
+            this.languageToolStripMenuItem.Name = "languageToolStripMenuItem";
+            this.languageToolStripMenuItem.Size = new System.Drawing.Size(213, 22);
+            this.languageToolStripMenuItem.Text = "Language";
+            // 
+            // toolStripSeparator4
+            // 
+            this.toolStripSeparator4.Name = "toolStripSeparator4";
+            this.toolStripSeparator4.Size = new System.Drawing.Size(210, 6);
+            // 
             // MainForm
             // 
             this.ClientSize = new System.Drawing.Size(538, 283);
@@ -804,6 +1076,7 @@ namespace PacketMap {
             this.Text = "PacketMap";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.MainForm_FormClosed);
             this.Shown += new System.EventHandler(this.MainForm_Shown);
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.statusBar.ResumeLayout(false);
@@ -822,13 +1095,16 @@ namespace PacketMap {
 
         public delegate void AddPacketDelegate(Packet packet);
 
-        private void AddStatusText(String text) {
+        private void AddStatusText(String text)
+        {
             this.txtStatus.AppendText(text + "\n");
         }
 
-        private void AddPacket(Packet packet) {
-            if (packet is TCPPacket) {
-                
+        private void AddPacket(Packet packet)
+        {
+            if (packet is TCPPacket)
+            {
+
                 DateTime time = packet.PcapHeader.Date;
                 int len = packet.PcapHeader.PacketLength;
                 TCPPacket tcp = (TCPPacket)packet;
@@ -836,17 +1112,22 @@ namespace PacketMap {
                 string direction;
                 string searchIps = "";
                 UInt32 searchIp = 0;
-                if (deviceIp == tcp.SourceAddressAsLong) {
+                if (deviceIp == tcp.SourceAddressAsLong)
+                {
                     direction = "local:" + tcp.SourcePort + " -> " + tcp.DestinationAddress + ":" + tcp.DestinationPort;
-                    searchIp = (uint) tcp.DestinationAddressAsLong;
+                    searchIp = (uint)tcp.DestinationAddressAsLong;
                     searchIps = tcp.DestinationAddress;
                     incoming = false;
-                } else if (deviceIp == tcp.DestinationAddressAsLong) {
+                }
+                else if (deviceIp == tcp.DestinationAddressAsLong)
+                {
                     direction = tcp.SourceAddress + ":" + tcp.SourcePort + " -> local:" + tcp.DestinationPort;
-                    searchIp = (uint) tcp.SourceAddressAsLong;
+                    searchIp = (uint)tcp.SourceAddressAsLong;
                     searchIps = tcp.SourceAddress;
                     incoming = true;
-                } else {
+                }
+                else
+                {
                     direction = tcp.SourceAddress + ":" + tcp.SourcePort + " -> " + tcp.DestinationAddress + ":" + tcp.DestinationPort;
                     searchIp = 0;
                     searchIps = "";
@@ -859,77 +1140,103 @@ namespace PacketMap {
                 bool eohttpheaders = false;
                 bool foundhost = false;
                 bool inhttprequest = false;
-                
-                if (packetWriter != null) {
-                    try {
 
-                        if (!incoming && tcp.DestinationPort == 80 && data.Length > 5) {
-                            if (data[0] == 'G' && data[1] == 'E' && data[2] == 'T' && data[3] == ' ') {
+                if (packetWriter != null)
+                {
+                    try
+                    {
+
+                        if (!incoming && tcp.DestinationPort == 80 && data.Length > 5)
+                        {
+                            if (data[0] == 'G' && data[1] == 'E' && data[2] == 'T' && data[3] == ' ')
+                            {
                                 // line is delimited by CR LF (\r\n)or a single LF (\n). Hopefully.
                                 // @TODO make more efficient using array iteration, not string
                                 s = System.Text.Encoding.ASCII.GetString(data);
                                 int pos = s.IndexOf('\n');
-                                if (pos > 1) {
+                                if (pos > 1)
+                                {
                                     if (s.Substring(pos - 1, 2).Equals("\r\n")) { l = s.Substring(0, pos - 1); } else { l = s.Substring(0, pos); }
                                     bufpos = pos + 1;
-                                    if (l.Length > 13 && l.EndsWith(" HTTP/1.1") || l.EndsWith(" HTTP/1.0")) {
+                                    if (l.Length > 13 && l.EndsWith(" HTTP/1.1") || l.EndsWith(" HTTP/1.0"))
+                                    {
                                         url = s.Substring(4, l.Length - 4 - 9);
                                         packetWriter.WriteLine(direction + ": URL: " + url);
                                     }
                                     inhttprequest = true;
                                 }
 
-                            } else if (data[0] == 'P' && data[1] == 'O' && data[2] == 'S' && data[3] == 'T' && data[4] == ' ') {
+                            }
+                            else if (data[0] == 'P' && data[1] == 'O' && data[2] == 'S' && data[3] == 'T' && data[4] == ' ')
+                            {
                                 s = System.Text.Encoding.ASCII.GetString(data);
                                 int pos = s.IndexOf('\n');
-                                if (pos > 1) {
+                                if (pos > 1)
+                                {
                                     if (s.Substring(pos - 1, 2).Equals("\r\n")) { l = s.Substring(0, pos - 1); } else { l = s.Substring(0, pos); }
                                     bufpos = pos + 1;
-                                    if (l.Length > 13 && l.EndsWith(" HTTP/1.1") || l.EndsWith(" HTTP/1.0")) {
+                                    if (l.Length > 13 && l.EndsWith(" HTTP/1.1") || l.EndsWith(" HTTP/1.0"))
+                                    {
                                         url = s.Substring(5, l.Length - 5 - 9);
                                         packetWriter.WriteLine(direction + ": URL: " + url);
                                     }
                                     inhttprequest = true;
                                 }
 
-                            } else {
+                            }
+                            else
+                            {
                                 // @TODO - other HTTP commands here
                             }
-                            if (inhttprequest) {
+                            if (inhttprequest)
+                            {
                                 // parse http headers
-                                while (!eohttpheaders && !foundhost && bufpos < s.Length - 5) {
+                                while (!eohttpheaders && !foundhost && bufpos < s.Length - 5)
+                                {
                                     int pos = s.IndexOf("\n", bufpos);
-                                    if (pos > bufpos) {
+                                    if (pos > bufpos)
+                                    {
                                         if (s.Substring(pos - 1, 2).Equals("\r\n")) { l = s.Substring(bufpos, pos - bufpos - 1); } else { l = s.Substring(bufpos, pos); }
                                         bufpos = pos + 1;
                                         int cpos = l.IndexOf(":");
-                                        if (l.Equals("")) {
+                                        if (l.Equals(""))
+                                        {
                                             eohttpheaders = true;
-                                        } else if (cpos != -1) {
+                                        }
+                                        else if (cpos != -1)
+                                        {
                                             string s1 = l.Substring(0, cpos);
                                             string s2 = l.Substring(cpos + 1);
-                                            if (s1.Equals("Host")) {
+                                            if (s1.Equals("Host"))
+                                            {
                                                 foundhost = true;
                                                 host = s2;
                                             }
-                                        } else {
+                                        }
+                                        else
+                                        {
 
                                             // illegal or truncated header; just abort
                                             eohttpheaders = true;
                                         }
-                                    } else {
+                                    }
+                                    else
+                                    {
                                         // no newline found; just finish
                                         eohttpheaders = true;
                                     }
                                 }
-                                if (foundhost) {
-                                    packetWriter.WriteLine(" * host = " + host);
+                                if (foundhost)
+                                {
+                                    packetWriter.WriteLine(MHostIs + host);
                                 }
                             }
                         }
 
-                    } catch (Exception e) {
-                        packetWriter.WriteLine("Exception found: " + e.Message);
+                    }
+                    catch (Exception e)
+                    {
+                        packetWriter.WriteLine(MExceptionOccured + e.Message);
                     }
                     // packetWriter.WriteLine(direction + ": " + System.Text.Encoding.ASCII.GetString(data));
                 }
@@ -941,24 +1248,32 @@ namespace PacketMap {
 
                 // find country
                 string search = "";
-                if (searchIp != 0) {
+                if (searchIp != 0)
+                {
                     // int index = geoIpRanges.BinarySearch();
                     int index = geoIpRanges.BinarySearch(new GeoIpRange(searchIp, searchIp, null), new GeoIpRangeComparer());
-                    if (index > 0) {
+                    if (index > 0)
+                    {
                         GeoIpRange ipRange = geoIpRanges[index];
-                        search = "Found in range " + Tamir.IPLib.Util.Convert.IpInt32ToString(ipRange.getStartIp()) + "-" +
-                            Tamir.IPLib.Util.Convert.IpInt32ToString(ipRange.getEndIp()) + "; country=" + ipRange.getCountry();
-                        CountryGif countryGif = (CountryGif) countryMap[ipRange.getCountry()];
-                        if (countryGif != null) {
-                            search = search + " [" + ((CountryGif) countryMap[ipRange.getCountry()]).getName() + "]";
-                            if (incoming) {
+                        search = MFoundInRange + Tamir.IPLib.Util.Convert.IpInt32ToString(ipRange.getStartIp()) + "-" +
+                            Tamir.IPLib.Util.Convert.IpInt32ToString(ipRange.getEndIp()) + "; " + MCountryIs + ipRange.getCountry();
+                        CountryGif countryGif = (CountryGif)countryMap[ipRange.getCountry()];
+                        if (countryGif != null)
+                        {
+                            search = search + " [" + ((CountryGif)countryMap[ipRange.getCountry()]).getName() + "]";
+                            if (incoming)
+                            {
                                 countryGif.received(data.Length, searchIps);
-                            } else {
+                            }
+                            else
+                            {
                                 countryGif.sent(data.Length, searchIps);
                             }
                         }
-                    } else {
-                        search = "Not found";
+                    }
+                    else
+                    {
+                        search = MNotFound;
                     }
                 }
 
@@ -966,42 +1281,50 @@ namespace PacketMap {
             }
         }
 
-        private void MainForm_Shown(object sender, EventArgs e) {
+        private void MainForm_Shown(object sender, EventArgs e)
+        {
             // used to have initialisation stuff here; now in constructor
             // (so that splash screen is shown first)
         }
 
-        private void cmdSelectAdapter_Click(object sender, EventArgs e) {
+        private void cmdSelectAdapter_Click(object sender, EventArgs e)
+        {
             SelectAdapterForm frmSelectAdapterForm = new SelectAdapterForm();
-            if (frmSelectAdapterForm.ShowDialog()==DialogResult.OK) {
-                device = (NetworkDevice) SharpPcap.GetAllDevices()[frmSelectAdapterForm.getDeviceId()];
+            if (frmSelectAdapterForm.ShowDialog() == DialogResult.OK)
+            {
+                device = (NetworkDevice)SharpPcap.GetAllDevices()[frmSelectAdapterForm.getDeviceId()];
                 deviceIp = Tamir.IPLib.Util.Convert.IpStringToInt32(device.PcapIpAddress);
-                AddStatusText("Selected adapter " + device.PcapDescription);
+                AddStatusText(MSelectAdapter + device.PcapDescription);
 
                 // Attempt to write to registry
-                RegistryKey key = Registry.CurrentUser.OpenSubKey("Software\\Randomnoun\\Packetmap", true);
+                RegistryKey key = Registry.CurrentUser.OpenSubKey(@"Software\Randomnoun\Packetmap", true);
                 // If the return value is null, the key doesn't exist
-                if (key == null) {
-                    key = Registry.CurrentUser.CreateSubKey("Software\\Randomnoun\\Packetmap");
+                if (key == null)
+                {
+                    key = Registry.CurrentUser.CreateSubKey(@"Software\Randomnoun\Packetmap");
                 }
                 key.SetValue("DeviceName", device.PcapName);
                 key.Close();
             }
         }
 
-        private void cmdExit_Click(object sender, EventArgs e) {
+        private void cmdExit_Click(object sender, EventArgs e)
+        {
             Application.Exit();
         }
 
-        private void cmdAboutBox_Click(object sender, EventArgs e) {
+        private void cmdAboutBox_Click(object sender, EventArgs e)
+        {
             AboutBox frmAboutbox = new AboutBox();
             frmAboutbox.ShowDialog();
         }
 
-        private void cmdStartMapping_Click(object sender, EventArgs e) {
-            if (device == null) {
+        private void cmdStartMapping_Click(object sender, EventArgs e)
+        {
+            if (device == null)
+            {
                 // @TODO make this a msgbox
-                AddStatusText("Please select a device first");
+                AddStatusText(MSelectDeviceFirst);
                 return;
             }
 
@@ -1009,21 +1332,23 @@ namespace PacketMap {
             cmdStopMapping.Enabled = true;
             cmdSelectAdapter.Enabled = false;
 
-            if (backgroundThread != null && backgroundThread.IsAlive) {
-                AddStatusText("Terminating thread...");
+            if (backgroundThread != null && backgroundThread.IsAlive)
+            {
+                AddStatusText(MTerminatingThread);
                 backgroundThread.Abort();
                 device.PcapClose();
             }
-            
 
-            AddStatusText("Started mapping on " + device.PcapDescription + " ...");
-            lblStatusBarLeft.Text = "Mapping enabled";
-            backgroundThread = new Thread(new ParameterizedThreadStart (capturePackets));
+
+            AddStatusText(MStartedMappingOn + device.PcapDescription + " ...");
+            lblStatusBarLeft.Text = MMappingEnabled;
+            backgroundThread = new Thread(new ParameterizedThreadStart(capturePackets));
             backgroundThread.Start(this);
             animationTimer.Start();
         }
 
-        static void capturePackets(Object mainForm) {
+        static void capturePackets(Object mainForm)
+        {
             PcapDevice device = ((MainForm)mainForm).device;
             //Register our handler function to the 'packet arrival' event
             device.PcapOnPacketArrival += new SharpPcap.PacketArrivalEvent(device_PcapOnPacketArrival);
@@ -1043,10 +1368,12 @@ namespace PacketMap {
         /// Prints the time, length, src ip, src port, dst ip and dst port
         /// for each TCP/IP packet received on the network
         /// </summary>
-        private static void device_PcapOnPacketArrival(object sender, Packet packet) {
+        private static void device_PcapOnPacketArrival(object sender, Packet packet)
+        {
             // sender in this instance is the PcapDevice object
 
-            if (packet is TCPPacket) {
+            if (packet is TCPPacket)
+            {
                 //mainFormInstance.addStatusText(text);
                 AddPacketDelegate del = new AddPacketDelegate(mainFormInstance.AddPacket);
                 object[] paramList = new object[] { packet };
@@ -1054,28 +1381,31 @@ namespace PacketMap {
             }
         }
 
-        private void cmdStopMapping_Click(object sender, EventArgs e) {
+        private void cmdStopMapping_Click(object sender, EventArgs e)
+        {
             cmdStartMapping.Enabled = true;
             cmdStopMapping.Enabled = false;
             cmdSelectAdapter.Enabled = true;
 
-            AddStatusText("Terminating thread...");
+            AddStatusText(MTerminatingThread);
             backgroundThread.Abort();
             device.PcapClose();
             animationTimer.Stop();  // TODO: should stop after all countries are gone, but hey
-            AddStatusText("Mapping stopped.");
-            lblStatusBarLeft.Text = "Mapping disabled";
+            AddStatusText(MMappingStopped);
+            lblStatusBarLeft.Text = MMappingDisabled;
         }
 
-        private void MainForm_FormClosed(object sender, FormClosedEventArgs e) {
+        private void MainForm_FormClosed(object sender, FormClosedEventArgs e)
+        {
             if (backgroundThread != null) { backgroundThread.Abort(); }
             if (device != null) { device.PcapClose(); }
             if (packetWriter != null) { packetWriter.Close(); }
             animationTimer.Stop();
         }
 
-        string _refreshTime = "(not started)";
-        private void animationTimer_Tick(object sender, EventArgs e) {
+        string _refreshTime = MNotStarted;
+        private void animationTimer_Tick(object sender, EventArgs e)
+        {
             sideListView.BeginUpdate();
             sideListView.Items.Clear();
             sideListMaxSend = 0;
@@ -1085,26 +1415,30 @@ namespace PacketMap {
 
             Bitmap bitmap = new Bitmap(baseImage);
             Graphics objGraphics = Graphics.FromImage(bitmap);
-            foreach (CountryGif country in countries) {
+            foreach (CountryGif country in countries)
+            {
                 country.shift();
                 double recvHighlight = double.MaxValue;
                 double sendHighlight = double.MaxValue;
                 DateTime lastReceiveTime = country.getLastReceiveTime();
                 DateTime lastSendTime = country.getLastSendTime();
-                if (lastReceiveTime != null) {
+                if (lastReceiveTime != null)
+                {
                     TimeSpan duration = now - lastReceiveTime;
-                    recvHighlight = (int) duration.TotalSeconds;
+                    recvHighlight = (int)duration.TotalSeconds;
                 }
-                if (lastSendTime != null) {
+                if (lastSendTime != null)
+                {
                     TimeSpan duration = now - lastSendTime;
-                    sendHighlight = (int) duration.TotalSeconds;
+                    sendHighlight = (int)duration.TotalSeconds;
                 }
                 /* - for debugging
                 if (country.getName().Equals("Australia")) {
                     this.AddStatusText("Australia highlight = " + recvHighlight + ", lastrec=" + lastReceiveTime + ", lastsend=" + lastSendTime);
                 } 
                 */
-                if (recvHighlight < 10 || sendHighlight < 10) {
+                if (recvHighlight < 10 || sendHighlight < 10)
+                {
                     ListViewItem lvi = new ListViewItem(new string[] {
                         country.getShortName(), country.getShortName(), country.getShortName()
                         /*Convert.ToString(sendHighlight), Convert.ToString(recvHighlight)*/ }, -1);
@@ -1112,11 +1446,11 @@ namespace PacketMap {
                     sideListView.Items.Add(lvi);
                     sideListMaxSend = Math.Max(sideListMaxSend, country.getMaxSendBytes());
                     sideListMaxRecv = Math.Max(sideListMaxSend, country.getMaxRecvBytes());
-            
+
                     // show country
                     LngLat min = country.getMinLngLat();
                     LngLat max = country.getMaxLngLat();
-                    objGraphics.DrawImage(country.getImage(), 
+                    objGraphics.DrawImage(country.getImage(),
                         (int)((min.getLng() - baseCountry.getMinLngLat().getLng()) * 8),
                         (int)((min.getLat() - baseCountry.getMinLngLat().getLat()) * 8));
 
@@ -1131,17 +1465,20 @@ namespace PacketMap {
             }
             sideListView.EndUpdate();
 
-            _refreshTime = "Refresh time: " + ((DateTime.Now - now).TotalMilliseconds) + "ms";
+            _refreshTime = MRefreshTime + ((DateTime.Now - now).TotalMilliseconds) + Mms;
             spbImage.BackingImage = bitmap;
         }
 
-        private void addPosition(List<Point> lp, int w, int h, int x, int y) {
-            if (x >= 0 && y >= 0 && (x + w) <= spbImage.PictureBox.Width && (y + h) <= spbImage.PictureBox.Height) {
+        private void addPosition(List<Point> lp, int w, int h, int x, int y)
+        {
+            if (x >= 0 && y >= 0 && (x + w) <= spbImage.PictureBox.Width && (y + h) <= spbImage.PictureBox.Height)
+            {
                 lp.Add(new Point(x, y));
             }
         }
 
-        private bool placeCountry(List<CountryGif> lg, int countryIdx, int positionIdx) {
+        private bool placeCountry(List<CountryGif> lg, int countryIdx, int positionIdx)
+        {
             // see if this position fits with those countries already placed, otherwise
             // try shifting the offending one and try a new layout
 
@@ -1151,7 +1488,8 @@ namespace PacketMap {
         }
 
         // really belongs in a separate class, but needs access to data contained here
-        public void PaintOverlay(PaintEventArgs e) {
+        public void PaintOverlay(PaintEventArgs e)
+        {
             Graphics g = e.Graphics;
             _refreshTime = "clientSize: " + spbImage.ClientSize.Width + "x" + spbImage.ClientSize.Height + ", " +
                 "backingImage: " + spbImage.BackingImage.Width + "x" + spbImage.BackingImage.Height + ", " +
@@ -1161,27 +1499,31 @@ namespace PacketMap {
 
             Font font = new Font("Arial", 8);
             Brush brush = new SolidBrush(Color.LightBlue);
-            g.DrawString( _refreshTime, font, brush, 10, 10);
+            g.DrawString(_refreshTime, font, brush, 10, 10);
             DateTime now = DateTime.Now;
             List<CountryGif> visible = new List<CountryGif>();
 
             // work out positions
-            foreach (CountryGif country in countries) {
+            foreach (CountryGif country in countries)
+            {
                 country.positions.Clear();
                 country.recvHighlight = double.MaxValue;
                 country.sendHighlight = double.MaxValue;
                 DateTime lastReceiveTime = country.getLastReceiveTime();
                 DateTime lastSendTime = country.getLastSendTime();
-                if (lastReceiveTime != null) {
+                if (lastReceiveTime != null)
+                {
                     TimeSpan duration = now - lastReceiveTime;
                     country.recvHighlight = (int)duration.TotalSeconds;
                 }
-                if (lastSendTime != null) {
+                if (lastSendTime != null)
+                {
                     TimeSpan duration = now - lastSendTime;
                     country.sendHighlight = (int)duration.TotalSeconds;
                 }
 
-                if (country.recvHighlight < 10 || country.sendHighlight < 10) {
+                if (country.recvHighlight < 10 || country.sendHighlight < 10)
+                {
                     // work out positions
                     LngLat min = country.getMinLngLat();
                     LngLat max = country.getMaxLngLat();
@@ -1197,11 +1539,14 @@ namespace PacketMap {
                     addPosition(country.positions, 85, h, x, y - 10 - oh);  // top
                     addPosition(country.positions, 85, h, x + w + 10, y);   // right
                     addPosition(country.positions, 85, h, x, y + h + 10);   // bottom
-                    if (country.positions.Count > 0) {
+                    if (country.positions.Count > 0)
+                    {
                         visible.Add(country);
                     }
 
-                } else {
+                }
+                else
+                {
                     // not necessary
                 }
             }
@@ -1210,7 +1555,8 @@ namespace PacketMap {
             // placeCountry(visible, 0, 0);
 
             // draw overlays
-            foreach (CountryGif country in visible) {
+            foreach (CountryGif country in visible)
+            {
                 // show country
                 LngLat min = country.getMinLngLat();
                 LngLat max = country.getMaxLngLat();
@@ -1229,20 +1575,22 @@ namespace PacketMap {
                 int h = 10 * ipCount + 18;
                 Bitmap b = new Bitmap(85, h, PixelFormat.Format32bppArgb);
                 Graphics g2 = Graphics.FromImage(b);
-                g2.FillRectangle(new SolidBrush(Color.FromArgb(80, 255, 249, 199)), 0,0,85,h);
-                g2.FillRectangle(new SolidBrush(Color.FromArgb(100, 255, 249, 199)), 0,0,85,12);
-                g2.FillRectangle(new SolidBrush(Color.FromArgb(100, 255, 249, 199)), 0,h-2,85, 2);
+                g2.FillRectangle(new SolidBrush(Color.FromArgb(80, 255, 249, 199)), 0, 0, 85, h);
+                g2.FillRectangle(new SolidBrush(Color.FromArgb(100, 255, 249, 199)), 0, 0, 85, 12);
+                g2.FillRectangle(new SolidBrush(Color.FromArgb(100, 255, 249, 199)), 0, h - 2, 85, 2);
                 g2.DrawLine(new Pen(Color.FromArgb(100, 255, 249, 199)), 0, 0, 0, h);
                 g2.DrawLine(new Pen(Color.FromArgb(100, 255, 249, 199)), 85, 0, 85, h);
                 int flagIndex = country.getFlagIndex();
-                if (flagIndex != -1) {
-                    g2.DrawImage(flagComposite, 2, 2, 
+                if (flagIndex != -1)
+                {
+                    g2.DrawImage(flagComposite, 2, 2,
                       new Rectangle(country.flagX, country.flagY, country.flagWidth, country.flagHeight), GraphicsUnit.Pixel);
                     // g2.DrawImage(sideListView.SmallImageList.Images[flagIndex],  2, 2);
                 }
                 g2.DrawString(country.getName(), font, Brushes.Yellow, 20, -1);
-                for (int i = 0; i < ipCount; i++) {
-                    int width = (int) g.MeasureString(countryIps[i].getIp(), font).Width;
+                for (int i = 0; i < ipCount; i++)
+                {
+                    int width = (int)g.MeasureString(countryIps[i].getIp(), font).Width;
                     g2.DrawString(countryIps[i].getIp(), font, Brushes.White, 2, 13 + i * 10);
                 }
                 g2.Dispose();
@@ -1255,7 +1603,8 @@ namespace PacketMap {
         }
 
 
-        private void drawBorder(Graphics g, Color c, int x, int y, int width, int height) {
+        private void drawBorder(Graphics g, Color c, int x, int y, int width, int height)
+        {
             Brush brush = new SolidBrush(c);
             int margin = 8;
             int thickness = 2;
@@ -1272,17 +1621,20 @@ namespace PacketMap {
         }
 
         // never appears to fire
-        private void spbImage_MouseMove(object sender, MouseEventArgs e) {
-            AddStatusText("Mouse moved: " + e.X + ", " + e.Y);
+        private void spbImage_MouseMove(object sender, MouseEventArgs e)
+        {
+            AddStatusText(MMouseMoved + e.X + ", " + e.Y);
         }
 
 
         /** side list */
         // Selects and focuses an item when it is clicked anywhere along 
         // its width. The click must normally be on the parent item text.
-        private void sideListView_MouseUp(object sender, MouseEventArgs e) {
+        private void sideListView_MouseUp(object sender, MouseEventArgs e)
+        {
             ListViewItem clickedItem = sideListView.GetItemAt(5, e.Y);
-            if (clickedItem != null) {
+            if (clickedItem != null)
+            {
                 clickedItem.Selected = true;
                 clickedItem.Focused = true;
             }
@@ -1290,12 +1642,16 @@ namespace PacketMap {
 
         // Draws the backgrounds for entire ListView items.
         private void sideListView_DrawItem(object sender,
-            DrawListViewItemEventArgs e) {
-            if ((e.State & ListViewItemStates.Selected) != 0) {
+            DrawListViewItemEventArgs e)
+        {
+            if ((e.State & ListViewItemStates.Selected) != 0)
+            {
                 // Draw the background and focus rectangle for a selected item.
                 e.Graphics.FillRectangle(new SolidBrush(SystemColors.Highlight), e.Bounds);
                 e.DrawFocusRectangle();
-            } else {
+            }
+            else
+            {
                 // Draw the background for an unselected item.
                 /*
                 using (LinearGradientBrush brush =
@@ -1307,20 +1663,24 @@ namespace PacketMap {
             }
 
             // Draw the item text for views other than the Details view.
-            if (sideListView.View != View.Details) {
+            if (sideListView.View != View.Details)
+            {
                 e.DrawText();
             }
         }
 
         // Draws subitem text and applies content-based formatting.
         private void sideListView_DrawSubItem(object sender,
-            DrawListViewSubItemEventArgs e) {
+            DrawListViewSubItemEventArgs e)
+        {
             TextFormatFlags flags = TextFormatFlags.Left;
 
-            using (StringFormat sf = new StringFormat()) {
+            using (StringFormat sf = new StringFormat())
+            {
                 // Store the column text alignment, letting it default
                 // to Left if it has not been set to Center or Right.
-                switch (e.Header.TextAlign) {
+                switch (e.Header.TextAlign)
+                {
                     case HorizontalAlignment.Center:
                         sf.Alignment = StringAlignment.Center;
                         flags = TextFormatFlags.HorizontalCenter;
@@ -1357,26 +1717,37 @@ namespace PacketMap {
                 // or nonnumerical value.
                 CountryGif countryGif = (CountryGif)countryMap[e.SubItem.Text];
 
-                if (countryGif == null) {
+                if (countryGif == null)
+                {
                     // e.Graphics.FillRectangle(new SolidBrush(Color.Green), e.Bounds);
                     e.DrawText(flags);
-                } else {
-                    if (e.ColumnIndex == 0) {
+                }
+                else
+                {
+                    if (e.ColumnIndex == 0)
+                    {
                         int flagIndex = countryGif.getFlagIndex();
-                        if (flagIndex != -1) {
+                        if (flagIndex != -1)
+                        {
                             // e.Graphics.DrawImage(sideListView.SmallImageList.Images[flagIndex], e.Bounds.Left, e.Bounds.Top);
                             e.Graphics.DrawImage(flagComposite, e.Bounds.Left, e.Bounds.Top,
                                 new Rectangle(countryGif.flagX, countryGif.flagY, countryGif.flagWidth, countryGif.flagHeight), GraphicsUnit.Pixel);
                         }
-                        e.Graphics.DrawString(countryGif.getName(), sideListView.Font, Brushes.Black, e.Bounds.Left+20, e.Bounds.Top);
+                        e.Graphics.DrawString(countryGif.getName(), sideListView.Font, Brushes.Black, e.Bounds.Left + 20, e.Bounds.Top);
 
-                    } else if (e.ColumnIndex == 1) {
+                    }
+                    else if (e.ColumnIndex == 1)
+                    {
                         // @TODO fix this
                         e.Graphics.DrawImage(countryGif.getSendImage(e.Bounds.Width, e.Bounds.Height /*, sideListMaxSend */), e.Bounds.Left, e.Bounds.Top);
-                    } else if (e.ColumnIndex == 2) {
+                    }
+                    else if (e.ColumnIndex == 2)
+                    {
                         // @TODO fix this
                         e.Graphics.DrawImage(countryGif.getReceiveImage(e.Bounds.Width, e.Bounds.Height /*, sideListMaxRecv */), e.Bounds.Left, e.Bounds.Top);
-                    } else {
+                    }
+                    else
+                    {
                         e.Graphics.FillRectangle(new SolidBrush(Color.Red), e.Bounds);
                     }
                 }
@@ -1386,11 +1757,14 @@ namespace PacketMap {
 
         // Draws column headers.
         private void sideListView_DrawColumnHeader(object sender,
-            DrawListViewColumnHeaderEventArgs e) {
-            using (StringFormat sf = new StringFormat()) {
+            DrawListViewColumnHeaderEventArgs e)
+        {
+            using (StringFormat sf = new StringFormat())
+            {
                 // Store the column text alignment, letting it default
                 // to Left if it has not been set to Center or Right.
-                switch (e.Header.TextAlign) {
+                switch (e.Header.TextAlign)
+                {
                     case HorizontalAlignment.Center:
                         sf.Alignment = StringAlignment.Center;
                         break;
@@ -1403,7 +1777,8 @@ namespace PacketMap {
                 e.DrawBackground();
 
                 // Draw the header text.
-                using (Font headerFont = new Font("Tahoma", 8, FontStyle.Regular)) {
+                using (Font headerFont = new Font("Tahoma", 8, FontStyle.Regular))
+                {
                     e.Graphics.DrawString(e.Header.Text, headerFont,
                         Brushes.Black, e.Bounds, sf);
                 }
@@ -1414,102 +1789,141 @@ namespace PacketMap {
         // Forces each row to repaint itself the first time the mouse moves over 
         // it, compensating for an extra DrawItem event sent by the wrapped 
         // Win32 control.
-        private void sideListView_MouseMove(object sender, MouseEventArgs e) {
+        private void sideListView_MouseMove(object sender, MouseEventArgs e)
+        {
             ListViewItem item = sideListView.GetItemAt(e.X, e.Y);
-            if (item != null) {
-                if (item.Tag == null) {
+            if (item != null)
+            {
+                if (item.Tag == null)
+                {
                     sideListView.Invalidate(item.Bounds);
                     item.Tag = "tagged";
                     // Console.WriteLine("now tagged");
-                } else {
+                }
+                else
+                {
                     // Console.WriteLine("was already " + item.Tag);
                 }
             }
         }
 
-        private void cmdCheckUpdatesAtStartup_Click(object sender, EventArgs e) {
+        private void cmdCheckUpdatesAtStartup_Click(object sender, EventArgs e)
+        {
             autoUpdate = !autoUpdate;
             cmdCheckUpdatesAtStartup.Checked = autoUpdate;
-            RegistryKey key = Registry.CurrentUser.OpenSubKey("Software\\Randomnoun\\Packetmap", true);
+            RegistryKey key = Registry.CurrentUser.OpenSubKey(@"Software\Randomnoun\Packetmap", true);
             // If the return value is null, the key doesn't exist
-            if (key == null) {
-                key = Registry.CurrentUser.CreateSubKey("Software\\Randomnoun\\Packetmap");
+            if (key == null)
+            {
+                key = Registry.CurrentUser.CreateSubKey(@"Software\Randomnoun\Packetmap");
             }
             key.SetValue("AutoUpdate", autoUpdate ? 1 : 0);
             key.Close();
-            
+
         }
 
-        private void cmdCheckUpdatesNow_Click(object sender, EventArgs e) {
+        private void cmdCheckUpdatesNow_Click(object sender, EventArgs e)
+        {
             checkForUpdatesNow(false);
         }
 
-        private void checkForUpdatesNow(bool fromSplash) {
+        private void checkForUpdatesNow(bool fromSplash)
+        {
             string text = "";
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create("http://packetmap.sourceforge.net/currentBuild.txt");
-            try {
+            try
+            {
                 HttpWebResponse response = (HttpWebResponse)request.GetResponse();
-                if (response.StatusCode == HttpStatusCode.OK) {
+                if (response.StatusCode == HttpStatusCode.OK)
+                {
                     Stream stream = response.GetResponseStream();
                     StreamReader reader = new StreamReader(stream, Encoding.ASCII);
                     String responseHtml = reader.ReadToEnd();
                     response.Close();
                     string[] lines = responseHtml.Split(new char[] { '\n' });
                     Hashtable responseMap = new Hashtable();
-                    for (int i = 0; i < lines.Length; i++) {
-                        if (lines[i].IndexOf("=") != -1) {
+                    for (int i = 0; i < lines.Length; i++)
+                    {
+                        if (lines[i].IndexOf("=") != -1)
+                        {
                             responseMap[lines[i].Substring(0, lines[i].IndexOf("=")).Trim()] =
                                 lines[i].Substring(lines[i].IndexOf("=") + 1).Trim();
                         }
                     }
-                    if (responseMap.ContainsKey("Version") && responseMap.ContainsKey("DownloadUrl") && !responseMap["Version"].Equals(MainProgram.VERSION)) {
+                    if (responseMap.ContainsKey("Version") && responseMap.ContainsKey("DownloadUrl") && !responseMap["Version"].Equals(MainProgram.VERSION))
+                    {
                         if (MessageBox.Show(
-                          "You are currently running version " + MainProgram.VERSION + " of Packetmap. " +
-                          "There is a new version (" + responseMap["Version"] + ") of PacketMap available. " +
-                          "Would you like to download and install this new version ? ",
-                          "New version available", MessageBoxButtons.YesNo, MessageBoxIcon.Information) == DialogResult.Yes) {
+                          MYourProgramVersionIs + MainProgram.VERSION + ".\n" +
+                          MNewVersionAvailable1 + responseMap["Version"] + MNewVersionAvailable2 +
+                          MWouldYouLikeToUpgrade,
+                          MNewVersionAvailable, MessageBoxButtons.YesNo, MessageBoxIcon.Information) == DialogResult.Yes)
+                        {
                             // go to window and exit
                             bool success = false;
-                            try {
+                            try
+                            {
                                 System.Diagnostics.Process.Start((string)responseMap["DownloadUrl"]);
                                 success = true;
-                            } catch (Win32Exception noBrowser) {
+                            }
+                            catch (Win32Exception noBrowser)
+                            {
                                 if (noBrowser.ErrorCode == -2147467259)
                                     MessageBox.Show(noBrowser.Message);
-                            } catch (System.Exception other) {
+                            }
+                            catch (System.Exception other)
+                            {
                                 MessageBox.Show(other.Message);
                             }
-                            if (success) {
+                            if (success)
+                            {
                                 // only close app if page retrieval was a success
                                 Application.Exit();
                             }
                         }
                     }
-                } else {
-                    
-                    text = "Response not received: " + response.StatusDescription + "(" + response.StatusCode + ")";
                 }
-            } catch (WebException wre) {
-                text = "Error: " + wre.Message + "(" + wre.Response + ")";
+                else
+                {
+
+                    text = MerrResponseNotReceived + response.StatusDescription + "(" + response.StatusCode + ")";
+                }
             }
-            if (fromSplash) {
+            catch (WebException wre)
+            {
+                text = MError + wre.Message + "(" + wre.Response + ")";
+            }
+            if (fromSplash)
+            {
                 Console.WriteLine(text);
-            } else {
-                MessageBox.Show(text, "Update check response", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            else
+            {
+                MessageBox.Show(text, MUpdateCheckResponse, MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
 
-        private void cmdDnsLookup_Click(object sender, EventArgs e) {
+        private void cmdDnsLookup_Click(object sender, EventArgs e)
+        {
             DnsLookup dnsLookup = new DnsLookup();
-            if (dnsLookup.ShowDialog() == DialogResult.OK) {
+            if (dnsLookup.ShowDialog() == DialogResult.OK)
+            {
                 // save DNS setting
 
-                RegistryKey key = Registry.CurrentUser.OpenSubKey("Software\\Randomnoun\\Packetmap", true);
-                if (key == null) {
-                    key = Registry.CurrentUser.CreateSubKey("Software\\Randomnoun\\Packetmap");
+                RegistryKey key = Registry.CurrentUser.OpenSubKey(@"Software\Randomnoun\Packetmap", true);
+                if (key == null)
+                {
+                    key = Registry.CurrentUser.CreateSubKey(@"Software\Randomnoun\Packetmap");
                 }
                 key.SetValue("DnsServer", dnsLookup.getDnsServer());
                 key.Close();
+            }
+        }
+
+        private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            // Saving language setting
+            if (bulm != null) {
+                bulm.SilentSavingSettings();
             }
         }
 
