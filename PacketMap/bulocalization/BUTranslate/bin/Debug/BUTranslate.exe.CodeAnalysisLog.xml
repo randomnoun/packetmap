@@ -1,0 +1,807 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml-stylesheet type="text/xsl" href="http://www.gotdotnet.com/team/fxcop//xsl/1.35/FxCopReport.xsl"?>
+<FxCopReport Version="1.35">
+ <Targets>
+  <Target Name="D:\DOCUMENTS\SharpDevelop Projects\BULocalization Project\Sources\BUTranslate\bin\Debug\BUTranslate.exe">
+   <Modules>
+    <Module Name="butranslate.exe">
+     <Messages>
+      <Message TypeName="AssembliesShouldDeclareMinimumSecurity" Category="Microsoft.Usage" CheckId="CA2209" Status="Active" Created="2007-08-11 11:26:14Z" FixCategory="Breaking">
+       <Issue Certainty="95" Level="CriticalError">No valid permission requests were found for assembly 'BUTranslate'. You should always specify the minimum security permissions using SecurityAction.RequestMinimum.</Issue>
+      </Message>
+      <Message TypeName="AssembliesShouldHaveValidStrongNames" Category="Microsoft.Design" CheckId="CA2210" Status="Active" Created="2007-08-11 11:26:14Z" FixCategory="NonBreaking">
+       <Issue Name="NoStrongName" Certainty="95" Level="CriticalError">Sign 'BUTranslate' with a strong name key.</Issue>
+      </Message>
+      <Message TypeName="MarkAssembliesWithClsCompliant" Category="Microsoft.Design" CheckId="CA1014" Status="Active" Created="2007-08-11 11:26:14Z" FixCategory="NonBreaking">
+       <Issue Name="NoAttr" Certainty="95" Level="Error">'BUTranslate' should be marked with CLSCompliantAttribute and its value should be true.</Issue>
+      </Message>
+     </Messages>
+     <Namespaces>
+      <Namespace Name="BUTranslate">
+       <Types>
+        <Type Name="EmailForm" Kind="Class" Accessibility="Public" ExternallyVisible="True">
+         <Members>
+          <Member Name=".ctor(System.String,System.String)" Kind="Method" Static="False" Accessibility="Public" ExternallyVisible="True">
+           <Messages>
+            <Message Id="System.Windows.Forms.MessageBox.Show(System.String,System.String,System.Windows.Forms.MessageBoxButtons,System.Windows.Forms.MessageBoxIcon)" TypeName="DoNotPassLiteralsAsLocalizedParameters" Category="Microsoft.Globalization" CheckId="CA1303" Status="Active" Created="2007-08-11 11:26:14Z" FixCategory="NonBreaking">
+             <Issue Certainty="95" Level="Error" Path="d:\DOCUMENTS\SharpDevelop Projects\BULocalization Project\Sources\BUTranslate" File="EmailForm.cs" Line="39">EmailForm.EmailForm(String, String) passes a literal as parameter 1 of a call to MessageBox.Show(String, String, MessageBoxButtons, MessageBoxIcon):DialogResult. Retrieve the following string argument from a resource table instead: 'There's no e-mail to whom translation should be send&#xA;&#xA;This translation is corruped!!!'</Issue>
+             <Issue Certainty="95" Level="Error" Path="d:\DOCUMENTS\SharpDevelop Projects\BULocalization Project\Sources\BUTranslate" File="EmailForm.cs" Line="45">EmailForm.EmailForm(String, String) passes a literal as parameter 1 of a call to MessageBox.Show(String, String, MessageBoxButtons, MessageBoxIcon):DialogResult. Retrieve the following string argument from a resource table instead: 'You haven't specified your e-mail&#xA;&#xA;Please specify it'</Issue>
+             <Issue Certainty="95" Level="Error" Path="d:\DOCUMENTS\SharpDevelop Projects\BULocalization Project\Sources\BUTranslate" File="EmailForm.cs" Line="39">EmailForm.EmailForm(String, String) passes a literal as parameter 2 of a call to MessageBox.Show(String, String, MessageBoxButtons, MessageBoxIcon):DialogResult. Retrieve the following string argument from a resource table instead: 'Error'</Issue>
+             <Issue Certainty="95" Level="Error" Path="d:\DOCUMENTS\SharpDevelop Projects\BULocalization Project\Sources\BUTranslate" File="EmailForm.cs" Line="45">EmailForm.EmailForm(String, String) passes a literal as parameter 2 of a call to MessageBox.Show(String, String, MessageBoxButtons, MessageBoxIcon):DialogResult. Retrieve the following string argument from a resource table instead: 'Error'</Issue>
+            </Message>
+            <Message Id="0#" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Status="Active" Created="2007-08-11 11:26:14Z" FixCategory="Breaking">
+             <Issue Name="Parameter" Certainty="95" Level="Error" Path="d:\DOCUMENTS\SharpDevelop Projects\BULocalization Project\Sources\BUTranslate" File="EmailForm.Designer.cs" Line="16">Correct the casing of parameter name 'To'.</Issue>
+            </Message>
+            <Message Id="corruped!!!" TypeName="LiteralsShouldBeSpelledCorrectly" Category="Microsoft.Usage" CheckId="CA2204" Status="Active" Created="2007-08-11 11:26:14Z" FixCategory="NonBreaking">
+             <Issue Certainty="85" Level="Error" Path="d:\DOCUMENTS\SharpDevelop Projects\BULocalization Project\Sources\BUTranslate" File="EmailForm.cs" Line="39">Correct the spelling of the unrecognized token 'corruped!!!' in the literal 'There's no e-mail to whom translation should be send&#xA;&#xA;This translation is corruped!!!'.</Issue>
+            </Message>
+            <Message TypeName="SpecifyMessageBoxOptions" Category="Microsoft.Globalization" CheckId="CA1300" Status="Active" Created="2007-08-11 11:26:14Z" FixCategory="NonBreaking">
+             <Issue Certainty="95" Level="Error" Path="d:\DOCUMENTS\SharpDevelop Projects\BULocalization Project\Sources\BUTranslate" File="EmailForm.cs" Line="39">Change EmailForm.EmailForm(String, String) to call the MessageBox.Show overload that specifies MessageBoxOptions, and make sure to set MessageBoxOptions.RightAlign and MessageBoxOptions.RtlReading if RightToLeft is set to RightToLeft.Yes on the parent control. If it is set to RightTolLeft.Inherit, check its parent until a value indicating Yes or No is found.</Issue>
+             <Issue Certainty="95" Level="Error" Path="d:\DOCUMENTS\SharpDevelop Projects\BULocalization Project\Sources\BUTranslate" File="EmailForm.cs" Line="45">Change EmailForm.EmailForm(String, String) to call the MessageBox.Show overload that specifies MessageBoxOptions, and make sure to set MessageBoxOptions.RightAlign and MessageBoxOptions.RtlReading if RightToLeft is set to RightToLeft.Yes on the parent control. If it is set to RightTolLeft.Inherit, check its parent until a value indicating Yes or No is found.</Issue>
+            </Message>
+            <Message TypeName="ValidateArgumentsOfPublicMethods" Category="Microsoft.Design" CheckId="CA1062" Status="Active" Created="2007-08-11 11:26:14Z" FixCategory="NonBreaking">
+             <Issue Certainty="95" Level="Error" Path="d:\DOCUMENTS\SharpDevelop Projects\BULocalization Project\Sources\BUTranslate" File="EmailForm.cs" Line="37">Validate parameter 'To' passed to externally visible method EmailForm.EmailForm(String, String).</Issue>
+            </Message>
+           </Messages>
+          </Member>
+          <Member Name="EmailFormLoad(System.Object,System.EventArgs):System.Void" Kind="Method" Static="False" Accessibility="Private" ExternallyVisible="False">
+           <Messages>
+            <Message Id="System.Windows.Forms.Control.set_Text(System.String)" TypeName="DoNotPassLiteralsAsLocalizedParameters" Category="Microsoft.Globalization" CheckId="CA1303" Status="Active" Created="2007-08-11 11:26:14Z" FixCategory="NonBreaking">
+             <Issue Certainty="95" Level="Error" Path="d:\DOCUMENTS\SharpDevelop Projects\BULocalization Project\Sources\BUTranslate" File="EmailForm.cs" Line="54">EmailForm.EmailFormLoad(Object, EventArgs):Void passes a literal as parameter 1 of a call to Control.set_Text(String):Void. Retrieve the following string argument from a resource table instead: 'Translation created : __'</Issue>
+            </Message>
+           </Messages>
+          </Member>
+          <Member Name="InitializeComponent():System.Void" Kind="Method" Static="False" Accessibility="Private" ExternallyVisible="False">
+           <Messages>
+            <Message Id="System.Windows.Forms.Control.set_Text(System.String)" TypeName="DoNotPassLiteralsAsLocalizedParameters" Category="Microsoft.Globalization" CheckId="CA1303" Status="Active" Created="2007-08-11 11:26:14Z" FixCategory="NonBreaking">
+             <Issue Certainty="95" Level="Error" Path="d:\DOCUMENTS\SharpDevelop Projects\BULocalization Project\Sources\BUTranslate" File="EmailForm.Designer.cs" Line="203">EmailForm.InitializeComponent():Void passes a literal as parameter 1 of a call to Control.set_Text(String):Void. Retrieve the following string argument from a resource table instead: '127.0.0.1'</Issue>
+             <Issue Certainty="95" Level="Error" Path="d:\DOCUMENTS\SharpDevelop Projects\BULocalization Project\Sources\BUTranslate" File="EmailForm.Designer.cs" Line="195">EmailForm.InitializeComponent():Void passes a literal as parameter 1 of a call to Control.set_Text(String):Void. Retrieve the following string argument from a resource table instead: '25'</Issue>
+             <Issue Certainty="95" Level="Error" Path="d:\DOCUMENTS\SharpDevelop Projects\BULocalization Project\Sources\BUTranslate" File="EmailForm.Designer.cs" Line="103">EmailForm.InitializeComponent():Void passes a literal as parameter 1 of a call to Control.set_Text(String):Void. Retrieve the following string argument from a resource table instead: 'Attachment file:'</Issue>
+             <Issue Certainty="95" Level="Error" Path="d:\DOCUMENTS\SharpDevelop Projects\BULocalization Project\Sources\BUTranslate" File="EmailForm.Designer.cs" Line="95">EmailForm.InitializeComponent():Void passes a literal as parameter 1 of a call to Control.set_Text(String):Void. Retrieve the following string argument from a resource table instead: 'Body:'</Issue>
+             <Issue Certainty="95" Level="Error" Path="d:\DOCUMENTS\SharpDevelop Projects\BULocalization Project\Sources\BUTranslate" File="EmailForm.Designer.cs" Line="173">EmailForm.InitializeComponent():Void passes a literal as parameter 1 of a call to Control.set_Text(String):Void. Retrieve the following string argument from a resource table instead: 'Close'</Issue>
+             <Issue Certainty="95" Level="Error" Path="d:\DOCUMENTS\SharpDevelop Projects\BULocalization Project\Sources\BUTranslate" File="EmailForm.Designer.cs" Line="265">EmailForm.InitializeComponent():Void passes a literal as parameter 1 of a call to Control.set_Text(String):Void. Retrieve the following string argument from a resource table instead: 'Delivering E-mail service'</Issue>
+             <Issue Certainty="95" Level="Error" Path="d:\DOCUMENTS\SharpDevelop Projects\BULocalization Project\Sources\BUTranslate" File="EmailForm.Designer.cs" Line="239">EmailForm.InitializeComponent():Void passes a literal as parameter 1 of a call to Control.set_Text(String):Void. Retrieve the following string argument from a resource table instead: 'E-mail'</Issue>
+             <Issue Certainty="95" Level="Error" Path="d:\DOCUMENTS\SharpDevelop Projects\BULocalization Project\Sources\BUTranslate" File="EmailForm.Designer.cs" Line="71">EmailForm.InitializeComponent():Void passes a literal as parameter 1 of a call to Control.set_Text(String):Void. Retrieve the following string argument from a resource table instead: 'From:'</Issue>
+             <Issue Certainty="95" Level="Error" Path="d:\DOCUMENTS\SharpDevelop Projects\BULocalization Project\Sources\BUTranslate" File="EmailForm.Designer.cs" Line="219">EmailForm.InitializeComponent():Void passes a literal as parameter 1 of a call to Control.set_Text(String):Void. Retrieve the following string argument from a resource table instead: 'Host:'</Issue>
+             <Issue Certainty="95" Level="Error" Path="d:\DOCUMENTS\SharpDevelop Projects\BULocalization Project\Sources\BUTranslate" File="EmailForm.Designer.cs" Line="111">EmailForm.InitializeComponent():Void passes a literal as parameter 1 of a call to Control.set_Text(String):Void. Retrieve the following string argument from a resource table instead: 'Now you can just copy-paste this information to your e-mail client or send it directly through program!!!'</Issue>
+             <Issue Certainty="95" Level="Error" Path="d:\DOCUMENTS\SharpDevelop Projects\BULocalization Project\Sources\BUTranslate" File="EmailForm.Designer.cs" Line="211">EmailForm.InitializeComponent():Void passes a literal as parameter 1 of a call to Control.set_Text(String):Void. Retrieve the following string argument from a resource table instead: 'Port:'</Issue>
+             <Issue Certainty="95" Level="Error" Path="d:\DOCUMENTS\SharpDevelop Projects\BULocalization Project\Sources\BUTranslate" File="EmailForm.Designer.cs" Line="187">EmailForm.InitializeComponent():Void passes a literal as parameter 1 of a call to Control.set_Text(String):Void. Retrieve the following string argument from a resource table instead: 'SMPT options for sending e-mails from program'</Issue>
+             <Issue Certainty="95" Level="Error" Path="d:\DOCUMENTS\SharpDevelop Projects\BULocalization Project\Sources\BUTranslate" File="EmailForm.Designer.cs" Line="162">EmailForm.InitializeComponent():Void passes a literal as parameter 1 of a call to Control.set_Text(String):Void. Retrieve the following string argument from a resource table instead: 'Send'</Issue>
+             <Issue Certainty="95" Level="Error" Path="d:\DOCUMENTS\SharpDevelop Projects\BULocalization Project\Sources\BUTranslate" File="EmailForm.Designer.cs" Line="87">EmailForm.InitializeComponent():Void passes a literal as parameter 1 of a call to Control.set_Text(String):Void. Retrieve the following string argument from a resource table instead: 'Subject'</Issue>
+             <Issue Certainty="95" Level="Error" Path="d:\DOCUMENTS\SharpDevelop Projects\BULocalization Project\Sources\BUTranslate" File="EmailForm.Designer.cs" Line="79">EmailForm.InitializeComponent():Void passes a literal as parameter 1 of a call to Control.set_Text(String):Void. Retrieve the following string argument from a resource table instead: 'To:'</Issue>
+             <Issue Certainty="95" Level="Error" Path="d:\DOCUMENTS\SharpDevelop Projects\BULocalization Project\Sources\BUTranslate" File="EmailForm.Designer.cs" Line="136">EmailForm.InitializeComponent():Void passes a literal as parameter 1 of a call to Control.set_Text(String):Void. Retrieve the following string argument from a resource table instead: 'Translation into &lt;&gt; language'</Issue>
+            </Message>
+           </Messages>
+          </Member>
+          <Member Name="SendbuttonClick(System.Object,System.EventArgs):System.Void" Kind="Method" Static="False" Accessibility="Private" ExternallyVisible="False">
+           <Messages>
+            <Message TypeName="DoNotCatchGeneralExceptionTypes" Category="Microsoft.Design" CheckId="CA1031" Status="Active" Created="2007-08-11 11:26:14Z" FixCategory="NonBreaking">
+             <Issue Certainty="95" Level="CriticalError" Path="d:\DOCUMENTS\SharpDevelop Projects\BULocalization Project\Sources\BUTranslate" File="EmailForm.cs" Line="73">Modify 'EmailForm.SendbuttonClick(Object, EventArgs):Void' to catch a more specific exception than 'System.Exception' or rethrow the exception.</Issue>
+             <Issue Certainty="95" Level="CriticalError" Path="d:\DOCUMENTS\SharpDevelop Projects\BULocalization Project\Sources\BUTranslate" File="EmailForm.cs" Line="102">Modify 'EmailForm.SendbuttonClick(Object, EventArgs):Void' to catch a more specific exception than 'System.Exception' or rethrow the exception.</Issue>
+             <Issue Certainty="95" Level="CriticalError" Path="d:\DOCUMENTS\SharpDevelop Projects\BULocalization Project\Sources\BUTranslate" File="EmailForm.cs" Line="115">Modify 'EmailForm.SendbuttonClick(Object, EventArgs):Void' to catch a more specific exception than 'System.Exception' or rethrow the exception.</Issue>
+            </Message>
+            <Message Id="System.Windows.Forms.MessageBox.Show(System.String,System.String,System.Windows.Forms.MessageBoxButtons,System.Windows.Forms.MessageBoxIcon)" TypeName="DoNotPassLiteralsAsLocalizedParameters" Category="Microsoft.Globalization" CheckId="CA1303" Status="Active" Created="2007-08-11 11:26:14Z" FixCategory="NonBreaking">
+             <Issue Certainty="95" Level="Error" Path="d:\DOCUMENTS\SharpDevelop Projects\BULocalization Project\Sources\BUTranslate" File="EmailForm.cs" Line="75">EmailForm.SendbuttonClick(Object, EventArgs):Void passes a literal as parameter 1 of a call to MessageBox.Show(String, String, MessageBoxButtons, MessageBoxIcon):DialogResult. Retrieve the following string argument from a resource table instead: 'Could not save to your profile SMPT options: &#xA;__'</Issue>
+             <Issue Certainty="95" Level="Error" Path="d:\DOCUMENTS\SharpDevelop Projects\BULocalization Project\Sources\BUTranslate" File="EmailForm.cs" Line="104">EmailForm.SendbuttonClick(Object, EventArgs):Void passes a literal as parameter 1 of a call to MessageBox.Show(String, String, MessageBoxButtons, MessageBoxIcon):DialogResult. Retrieve the following string argument from a resource table instead: 'Error occured: __'</Issue>
+             <Issue Certainty="95" Level="Error" Path="d:\DOCUMENTS\SharpDevelop Projects\BULocalization Project\Sources\BUTranslate" File="EmailForm.cs" Line="117">EmailForm.SendbuttonClick(Object, EventArgs):Void passes a literal as parameter 1 of a call to MessageBox.Show(String, String, MessageBoxButtons, MessageBoxIcon):DialogResult. Retrieve the following string argument from a resource table instead: 'Error occured: __'</Issue>
+             <Issue Certainty="95" Level="Error" Path="d:\DOCUMENTS\SharpDevelop Projects\BULocalization Project\Sources\BUTranslate" File="EmailForm.cs" Line="121">EmailForm.SendbuttonClick(Object, EventArgs):Void passes a literal as parameter 1 of a call to MessageBox.Show(String, String, MessageBoxButtons, MessageBoxIcon):DialogResult. Retrieve the following string argument from a resource table instead: 'Sended succesfully!!!'</Issue>
+             <Issue Certainty="95" Level="Error" Path="d:\DOCUMENTS\SharpDevelop Projects\BULocalization Project\Sources\BUTranslate" File="EmailForm.cs" Line="109">EmailForm.SendbuttonClick(Object, EventArgs):Void passes a literal as parameter 1 of a call to MessageBox.Show(String, String, MessageBoxButtons, MessageBoxIcon):DialogResult. Retrieve the following string argument from a resource table instead: 'Sending an e-mail message:&#xA;To: ____&#xA;SMTP host and port: ____  __'</Issue>
+             <Issue Certainty="95" Level="Error" Path="d:\DOCUMENTS\SharpDevelop Projects\BULocalization Project\Sources\BUTranslate" File="EmailForm.cs" Line="75">EmailForm.SendbuttonClick(Object, EventArgs):Void passes a literal as parameter 2 of a call to MessageBox.Show(String, String, MessageBoxButtons, MessageBoxIcon):DialogResult. Retrieve the following string argument from a resource table instead: 'Error'</Issue>
+             <Issue Certainty="95" Level="Error" Path="d:\DOCUMENTS\SharpDevelop Projects\BULocalization Project\Sources\BUTranslate" File="EmailForm.cs" Line="104">EmailForm.SendbuttonClick(Object, EventArgs):Void passes a literal as parameter 2 of a call to MessageBox.Show(String, String, MessageBoxButtons, MessageBoxIcon):DialogResult. Retrieve the following string argument from a resource table instead: 'Error'</Issue>
+             <Issue Certainty="95" Level="Error" Path="d:\DOCUMENTS\SharpDevelop Projects\BULocalization Project\Sources\BUTranslate" File="EmailForm.cs" Line="117">EmailForm.SendbuttonClick(Object, EventArgs):Void passes a literal as parameter 2 of a call to MessageBox.Show(String, String, MessageBoxButtons, MessageBoxIcon):DialogResult. Retrieve the following string argument from a resource table instead: 'Error'</Issue>
+             <Issue Certainty="95" Level="Error" Path="d:\DOCUMENTS\SharpDevelop Projects\BULocalization Project\Sources\BUTranslate" File="EmailForm.cs" Line="109">EmailForm.SendbuttonClick(Object, EventArgs):Void passes a literal as parameter 2 of a call to MessageBox.Show(String, String, MessageBoxButtons, MessageBoxIcon):DialogResult. Retrieve the following string argument from a resource table instead: 'Information'</Issue>
+             <Issue Certainty="95" Level="Error" Path="d:\DOCUMENTS\SharpDevelop Projects\BULocalization Project\Sources\BUTranslate" File="EmailForm.cs" Line="121">EmailForm.SendbuttonClick(Object, EventArgs):Void passes a literal as parameter 2 of a call to MessageBox.Show(String, String, MessageBoxButtons, MessageBoxIcon):DialogResult. Retrieve the following string argument from a resource table instead: 'Sended'</Issue>
+            </Message>
+            <Message Id="Sended" TypeName="LiteralsShouldBeSpelledCorrectly" Category="Microsoft.Usage" CheckId="CA2204" Status="Active" Created="2007-08-11 11:26:14Z" FixCategory="NonBreaking">
+             <Issue Certainty="85" Level="Error" Path="d:\DOCUMENTS\SharpDevelop Projects\BULocalization Project\Sources\BUTranslate" File="EmailForm.cs" Line="121">Correct the spelling of the unrecognized token 'Sended' in the literal 'Sended'.</Issue>
+             <Issue Certainty="85" Level="Error" Path="d:\DOCUMENTS\SharpDevelop Projects\BULocalization Project\Sources\BUTranslate" File="EmailForm.cs" Line="121">Correct the spelling of the unrecognized token 'Sended' in the literal 'Sended succesfully!!!'.</Issue>
+            </Message>
+            <Message Id="occured" TypeName="LiteralsShouldBeSpelledCorrectly" Category="Microsoft.Usage" CheckId="CA2204" Status="Active" Created="2007-08-11 11:26:14Z" FixCategory="NonBreaking">
+             <Issue Certainty="85" Level="Error" Path="d:\DOCUMENTS\SharpDevelop Projects\BULocalization Project\Sources\BUTranslate" File="EmailForm.cs" Line="104">Correct the spelling of the unrecognized token 'occured' in the literal 'Error occured: __'.</Issue>
+             <Issue Certainty="85" Level="Error" Path="d:\DOCUMENTS\SharpDevelop Projects\BULocalization Project\Sources\BUTranslate" File="EmailForm.cs" Line="117">Correct the spelling of the unrecognized token 'occured' in the literal 'Error occured: __'.</Issue>
+            </Message>
+            <Message Id="succesfully!!!" TypeName="LiteralsShouldBeSpelledCorrectly" Category="Microsoft.Usage" CheckId="CA2204" Status="Active" Created="2007-08-11 11:26:14Z" FixCategory="NonBreaking">
+             <Issue Certainty="85" Level="Error" Path="d:\DOCUMENTS\SharpDevelop Projects\BULocalization Project\Sources\BUTranslate" File="EmailForm.cs" Line="121">Correct the spelling of the unrecognized token 'succesfully!!!' in the literal 'Sended succesfully!!!'.</Issue>
+            </Message>
+            <Message Id="System.Convert.ToInt32(System.String)" TypeName="SpecifyIFormatProvider" Category="Microsoft.Globalization" CheckId="CA1305" Status="Active" Created="2007-08-11 11:26:14Z" FixCategory="NonBreaking">
+             <Issue Certainty="95" Level="Error" Path="d:\DOCUMENTS\SharpDevelop Projects\BULocalization Project\Sources\BUTranslate" File="EmailForm.cs" Line="99">EmailForm.SendbuttonClick(Object, EventArgs):Void makes a call to System.Convert.ToInt32(System.String) that does not explicitly provide an IFormatProvider. This should be replaced with a call to System.Convert.ToInt32(System.String,System.IFormatProvider).</Issue>
+            </Message>
+            <Message Id="System.Int32.ToString" TypeName="SpecifyIFormatProvider" Category="Microsoft.Globalization" CheckId="CA1305" Status="Active" Created="2007-08-11 11:26:14Z" FixCategory="NonBreaking">
+             <Issue Certainty="95" Level="Error" Path="d:\DOCUMENTS\SharpDevelop Projects\BULocalization Project\Sources\BUTranslate" File="EmailForm.cs" Line="109">EmailForm.SendbuttonClick(Object, EventArgs):Void makes a call to System.Int32.ToString that does not explicitly provide an IFormatProvider. This should be replaced with a call to System.Int32.ToString(System.IFormatProvider).</Issue>
+            </Message>
+            <Message TypeName="SpecifyMessageBoxOptions" Category="Microsoft.Globalization" CheckId="CA1300" Status="Active" Created="2007-08-11 11:26:14Z" FixCategory="NonBreaking">
+             <Issue Certainty="95" Level="Error" Path="d:\DOCUMENTS\SharpDevelop Projects\BULocalization Project\Sources\BUTranslate" File="EmailForm.cs" Line="75">Change EmailForm.SendbuttonClick(Object, EventArgs):Void to call the MessageBox.Show overload that specifies MessageBoxOptions, and make sure to set MessageBoxOptions.RightAlign and MessageBoxOptions.RtlReading if RightToLeft is set to RightToLeft.Yes on the parent control. If it is set to RightTolLeft.Inherit, check its parent until a value indicating Yes or No is found.</Issue>
+             <Issue Certainty="95" Level="Error" Path="d:\DOCUMENTS\SharpDevelop Projects\BULocalization Project\Sources\BUTranslate" File="EmailForm.cs" Line="104">Change EmailForm.SendbuttonClick(Object, EventArgs):Void to call the MessageBox.Show overload that specifies MessageBoxOptions, and make sure to set MessageBoxOptions.RightAlign and MessageBoxOptions.RtlReading if RightToLeft is set to RightToLeft.Yes on the parent control. If it is set to RightTolLeft.Inherit, check its parent until a value indicating Yes or No is found.</Issue>
+             <Issue Certainty="95" Level="Error" Path="d:\DOCUMENTS\SharpDevelop Projects\BULocalization Project\Sources\BUTranslate" File="EmailForm.cs" Line="109">Change EmailForm.SendbuttonClick(Object, EventArgs):Void to call the MessageBox.Show overload that specifies MessageBoxOptions, and make sure to set MessageBoxOptions.RightAlign and MessageBoxOptions.RtlReading if RightToLeft is set to RightToLeft.Yes on the parent control. If it is set to RightTolLeft.Inherit, check its parent until a value indicating Yes or No is found.</Issue>
+             <Issue Certainty="95" Level="Error" Path="d:\DOCUMENTS\SharpDevelop Projects\BULocalization Project\Sources\BUTranslate" File="EmailForm.cs" Line="117">Change EmailForm.SendbuttonClick(Object, EventArgs):Void to call the MessageBox.Show overload that specifies MessageBoxOptions, and make sure to set MessageBoxOptions.RightAlign and MessageBoxOptions.RtlReading if RightToLeft is set to RightToLeft.Yes on the parent control. If it is set to RightTolLeft.Inherit, check its parent until a value indicating Yes or No is found.</Issue>
+             <Issue Certainty="95" Level="Error" Path="d:\DOCUMENTS\SharpDevelop Projects\BULocalization Project\Sources\BUTranslate" File="EmailForm.cs" Line="121">Change EmailForm.SendbuttonClick(Object, EventArgs):Void to call the MessageBox.Show overload that specifies MessageBoxOptions, and make sure to set MessageBoxOptions.RightAlign and MessageBoxOptions.RtlReading if RightToLeft is set to RightToLeft.Yes on the parent control. If it is set to RightTolLeft.Inherit, check its parent until a value indicating Yes or No is found.</Issue>
+            </Message>
+           </Messages>
+          </Member>
+         </Members>
+        </Type>
+        <Type Name="MainForm" Kind="Class" Accessibility="Public" ExternallyVisible="True">
+         <Members>
+          <Member Name=".ctor(System.String)" Kind="Method" Static="False" Accessibility="Public" ExternallyVisible="True">
+           <Messages>
+            <Message Id="0#" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Status="Active" Created="2007-08-11 11:26:14Z" FixCategory="Breaking">
+             <Issue Name="Parameter" Certainty="95" Level="Error" Path="d:\DOCUMENTS\SharpDevelop Projects\BULocalization Project\Sources\BUTranslate" File="MainForm.cs" Line="26">Correct the casing of parameter name 'FileName'.</Issue>
+            </Message>
+           </Messages>
+          </Member>
+          <Member Name="AboutToolStripMenuItemClick(System.Object,System.EventArgs):System.Void" Kind="Method" Static="False" Accessibility="Private" ExternallyVisible="False">
+           <Messages>
+            <Message Id="System.Windows.Forms.MessageBox.Show(System.String,System.String,System.Windows.Forms.MessageBoxButtons,System.Windows.Forms.MessageBoxIcon)" TypeName="DoNotPassLiteralsAsLocalizedParameters" Category="Microsoft.Globalization" CheckId="CA1303" Status="Active" Created="2007-08-11 11:26:14Z" FixCategory="NonBreaking">
+             <Issue Certainty="95" Level="Error" Path="d:\DOCUMENTS\SharpDevelop Projects\BULocalization Project\Sources\BUTranslate" File="MainForm.cs" Line="304">MainForm.AboutToolStripMenuItemClick(Object, EventArgs):Void passes a literal as parameter 1 of a call to MessageBox.Show(String, String, MessageBoxButtons, MessageBoxIcon):DialogResult. Retrieve the following string argument from a resource table instead: 'Making programs closer to user&#xA;&#xA;BULocalization Version 1.5&#xA;(c) Cuchuk Sergey Alexandrovich, Cuchuk.Sergey@gmail.com&#xA;For licenses see Licenses.rtf'</Issue>
+             <Issue Certainty="95" Level="Error" Path="d:\DOCUMENTS\SharpDevelop Projects\BULocalization Project\Sources\BUTranslate" File="MainForm.cs" Line="304">MainForm.AboutToolStripMenuItemClick(Object, EventArgs):Void passes a literal as parameter 2 of a call to MessageBox.Show(String, String, MessageBoxButtons, MessageBoxIcon):DialogResult. Retrieve the following string argument from a resource table instead: 'About program'</Issue>
+            </Message>
+            <Message Id="Alexandrovich" TypeName="LiteralsShouldBeSpelledCorrectly" Category="Microsoft.Usage" CheckId="CA2204" Status="Active" Created="2007-08-11 11:26:14Z" FixCategory="NonBreaking">
+             <Issue Certainty="85" Level="Error" Path="d:\DOCUMENTS\SharpDevelop Projects\BULocalization Project\Sources\BUTranslate" File="MainForm.cs" Line="304">Correct the spelling of the unrecognized token 'Alexandrovich' in the literal 'Making programs closer to user&#xA;&#xA;BULocalization Version 1.5&#xA;(c) Cuchuk Sergey Alexandrovich, Cuchuk.Sergey@gmail.com&#xA;For licenses see Licenses.rtf'.</Issue>
+            </Message>
+            <Message Id="Cuchuk" TypeName="LiteralsShouldBeSpelledCorrectly" Category="Microsoft.Usage" CheckId="CA2204" Status="Active" Created="2007-08-11 11:26:14Z" FixCategory="NonBreaking">
+             <Issue Certainty="85" Level="Error" Path="d:\DOCUMENTS\SharpDevelop Projects\BULocalization Project\Sources\BUTranslate" File="MainForm.cs" Line="304">Correct the spelling of the unrecognized token 'Cuchuk' in the literal 'Making programs closer to user&#xA;&#xA;BULocalization Version 1.5&#xA;(c) Cuchuk Sergey Alexandrovich, Cuchuk.Sergey@gmail.com&#xA;For licenses see Licenses.rtf'.</Issue>
+             <Issue Certainty="85" Level="Error" Path="d:\DOCUMENTS\SharpDevelop Projects\BULocalization Project\Sources\BUTranslate" File="MainForm.cs" Line="304">Correct the spelling of the unrecognized token 'Cuchuk' in the literal 'Making programs closer to user&#xA;&#xA;BULocalization Version 1.5&#xA;(c) Cuchuk Sergey Alexandrovich, Cuchuk.Sergey@gmail.com&#xA;For licenses see Licenses.rtf'.</Issue>
+            </Message>
+            <Message Id="gmail" TypeName="LiteralsShouldBeSpelledCorrectly" Category="Microsoft.Usage" CheckId="CA2204" Status="Active" Created="2007-08-11 11:26:14Z" FixCategory="NonBreaking">
+             <Issue Certainty="85" Level="Error" Path="d:\DOCUMENTS\SharpDevelop Projects\BULocalization Project\Sources\BUTranslate" File="MainForm.cs" Line="304">Correct the spelling of the unrecognized token 'gmail' in the literal 'Making programs closer to user&#xA;&#xA;BULocalization Version 1.5&#xA;(c) Cuchuk Sergey Alexandrovich, Cuchuk.Sergey@gmail.com&#xA;For licenses see Licenses.rtf'.</Issue>
+            </Message>
+            <Message TypeName="SpecifyMessageBoxOptions" Category="Microsoft.Globalization" CheckId="CA1300" Status="Active" Created="2007-08-11 11:26:14Z" FixCategory="NonBreaking">
+             <Issue Certainty="95" Level="Error" Path="d:\DOCUMENTS\SharpDevelop Projects\BULocalization Project\Sources\BUTranslate" File="MainForm.cs" Line="304">Change MainForm.AboutToolStripMenuItemClick(Object, EventArgs):Void to call the MessageBox.Show overload that specifies MessageBoxOptions, and make sure to set MessageBoxOptions.RightAlign and MessageBoxOptions.RtlReading if RightToLeft is set to RightToLeft.Yes on the parent control. If it is set to RightTolLeft.Inherit, check its parent until a value indicating Yes or No is found.</Issue>
+            </Message>
+           </Messages>
+          </Member>
+          <Member Name="DocumentationToolStripMenuItemClick(System.Object,System.EventArgs):System.Void" Kind="Method" Static="False" Accessibility="Private" ExternallyVisible="False">
+           <Messages>
+            <Message TypeName="DoNotCatchGeneralExceptionTypes" Category="Microsoft.Design" CheckId="CA1031" Status="Active" Created="2007-08-11 11:26:14Z" FixCategory="NonBreaking">
+             <Issue Certainty="95" Level="CriticalError" Path="d:\DOCUMENTS\SharpDevelop Projects\BULocalization Project\Sources\BUTranslate" File="MainForm.cs" Line="453">Modify 'MainForm.DocumentationToolStripMenuItemClick(Object, EventArgs):Void' to catch a more specific exception than 'System.Exception' or rethrow the exception.</Issue>
+            </Message>
+            <Message Id="System.Windows.Forms.MessageBox.Show(System.String,System.String,System.Windows.Forms.MessageBoxButtons,System.Windows.Forms.MessageBoxIcon)" TypeName="DoNotPassLiteralsAsLocalizedParameters" Category="Microsoft.Globalization" CheckId="CA1303" Status="Active" Created="2007-08-11 11:26:14Z" FixCategory="NonBreaking">
+             <Issue Certainty="95" Level="Error" Path="d:\DOCUMENTS\SharpDevelop Projects\BULocalization Project\Sources\BUTranslate" File="MainForm.cs" Line="455">MainForm.DocumentationToolStripMenuItemClick(Object, EventArgs):Void passes a literal as parameter 1 of a call to MessageBox.Show(String, String, MessageBoxButtons, MessageBoxIcon):DialogResult. Retrieve the following string argument from a resource table instead: 'Cannot open help file:____due to: &#xA;__'</Issue>
+             <Issue Certainty="95" Level="Error" Path="d:\DOCUMENTS\SharpDevelop Projects\BULocalization Project\Sources\BUTranslate" File="MainForm.cs" Line="455">MainForm.DocumentationToolStripMenuItemClick(Object, EventArgs):Void passes a literal as parameter 2 of a call to MessageBox.Show(String, String, MessageBoxButtons, MessageBoxIcon):DialogResult. Retrieve the following string argument from a resource table instead: 'Error'</Issue>
+            </Message>
+            <Message TypeName="SpecifyMessageBoxOptions" Category="Microsoft.Globalization" CheckId="CA1300" Status="Active" Created="2007-08-11 11:26:14Z" FixCategory="NonBreaking">
+             <Issue Certainty="95" Level="Error" Path="d:\DOCUMENTS\SharpDevelop Projects\BULocalization Project\Sources\BUTranslate" File="MainForm.cs" Line="455">Change MainForm.DocumentationToolStripMenuItemClick(Object, EventArgs):Void to call the MessageBox.Show overload that specifies MessageBoxOptions, and make sure to set MessageBoxOptions.RightAlign and MessageBoxOptions.RtlReading if RightToLeft is set to RightToLeft.Yes on the parent control. If it is set to RightTolLeft.Inherit, check its parent until a value indicating Yes or No is found.</Issue>
+            </Message>
+           </Messages>
+          </Member>
+          <Member Name="HelpToolStripMenuItemClick(System.Object,System.EventArgs):System.Void" Kind="Method" Static="False" Accessibility="Private" ExternallyVisible="False">
+           <Messages>
+            <Message Id="System.Windows.Forms.MessageBox.Show(System.String,System.String,System.Windows.Forms.MessageBoxButtons,System.Windows.Forms.MessageBoxIcon)" TypeName="DoNotPassLiteralsAsLocalizedParameters" Category="Microsoft.Globalization" CheckId="CA1303" Status="Active" Created="2007-08-11 11:26:14Z" FixCategory="NonBreaking">
+             <Issue Certainty="95" Level="Error" Path="d:\DOCUMENTS\SharpDevelop Projects\BULocalization Project\Sources\BUTranslate" File="MainForm.cs" Line="315">MainForm.HelpToolStripMenuItemClick(Object, EventArgs):Void passes a literal as parameter 1 of a call to MessageBox.Show(String, String, MessageBoxButtons, MessageBoxIcon):DialogResult. Retrieve the following string argument from a resource table instead: 'Translation mode create translation files with special flags.&#xA;When 'debug' flag setted: you can save your translation and after that&#xA;test it in real program you create translation for&#xA;In this case to every translation string will be added its translation id(so you easily can fix it). And also a new column - id will appear here&#xA;Release mode - is mode in which program shows only translation string without their id's&#xA;&#xA;It is required that you'll test your translation in program'</Issue>
+             <Issue Certainty="95" Level="Error" Path="d:\DOCUMENTS\SharpDevelop Projects\BULocalization Project\Sources\BUTranslate" File="MainForm.cs" Line="315">MainForm.HelpToolStripMenuItemClick(Object, EventArgs):Void passes a literal as parameter 2 of a call to MessageBox.Show(String, String, MessageBoxButtons, MessageBoxIcon):DialogResult. Retrieve the following string argument from a resource table instead: 'Info'</Issue>
+            </Message>
+            <Message Id="setted" TypeName="LiteralsShouldBeSpelledCorrectly" Category="Microsoft.Usage" CheckId="CA2204" Status="Active" Created="2007-08-11 11:26:14Z" FixCategory="NonBreaking">
+             <Issue Certainty="85" Level="Error" Path="d:\DOCUMENTS\SharpDevelop Projects\BULocalization Project\Sources\BUTranslate" File="MainForm.cs" Line="315">Correct the spelling of the unrecognized token 'setted' in the literal 'Translation mode create translation files with special flags.&#xA;When 'debug' flag setted: you can save your translation and after that&#xA;test it in real program you create translation for&#xA;In this case to every translation string will be added its translation id(so you easily can fix it). And also a new column - id will appear here&#xA;Release mode - is mode in which program shows only translation string without their id's&#xA;&#xA;It is required that you'll test your translation in program'.</Issue>
+            </Message>
+            <Message TypeName="SpecifyMessageBoxOptions" Category="Microsoft.Globalization" CheckId="CA1300" Status="Active" Created="2007-08-11 11:26:14Z" FixCategory="NonBreaking">
+             <Issue Certainty="95" Level="Error" Path="d:\DOCUMENTS\SharpDevelop Projects\BULocalization Project\Sources\BUTranslate" File="MainForm.cs" Line="315">Change MainForm.HelpToolStripMenuItemClick(Object, EventArgs):Void to call the MessageBox.Show overload that specifies MessageBoxOptions, and make sure to set MessageBoxOptions.RightAlign and MessageBoxOptions.RtlReading if RightToLeft is set to RightToLeft.Yes on the parent control. If it is set to RightTolLeft.Inherit, check its parent until a value indicating Yes or No is found.</Issue>
+            </Message>
+           </Messages>
+          </Member>
+          <Member Name="InitializeComponent():System.Void" Kind="Method" Static="False" Accessibility="Private" ExternallyVisible="False">
+           <Messages>
+            <Message Id="System.Windows.Forms.Control.set_Text(System.String)" TypeName="DoNotPassLiteralsAsLocalizedParameters" Category="Microsoft.Globalization" CheckId="CA1303" Status="Active" Created="2007-08-11 11:26:14Z" FixCategory="NonBreaking">
+             <Issue Certainty="95" Level="Error" Path="d:\DOCUMENTS\SharpDevelop Projects\BULocalization Project\Sources\BUTranslate" File="MainForm.Designer.cs" Line="426">MainForm.InitializeComponent():Void passes a literal as parameter 1 of a call to Control.set_Text(String):Void. Retrieve the following string argument from a resource table instead: '&lt;Namespace&gt;'</Issue>
+             <Issue Certainty="95" Level="Error" Path="d:\DOCUMENTS\SharpDevelop Projects\BULocalization Project\Sources\BUTranslate" File="MainForm.Designer.cs" Line="478">MainForm.InitializeComponent():Void passes a literal as parameter 1 of a call to Control.set_Text(String):Void. Retrieve the following string argument from a resource table instead: 'BUTranslate'</Issue>
+             <Issue Certainty="95" Level="Error" Path="d:\DOCUMENTS\SharpDevelop Projects\BULocalization Project\Sources\BUTranslate" File="MainForm.Designer.cs" Line="348">MainForm.InitializeComponent():Void passes a literal as parameter 1 of a call to Control.set_Text(String):Void. Retrieve the following string argument from a resource table instead: 'List of items:'</Issue>
+             <Issue Certainty="95" Level="Error" Path="d:\DOCUMENTS\SharpDevelop Projects\BULocalization Project\Sources\BUTranslate" File="MainForm.Designer.cs" Line="415">MainForm.InitializeComponent():Void passes a literal as parameter 1 of a call to Control.set_Text(String):Void. Retrieve the following string argument from a resource table instead: 'Text to translate'</Issue>
+             <Issue Certainty="95" Level="Error" Path="d:\DOCUMENTS\SharpDevelop Projects\BULocalization Project\Sources\BUTranslate" File="MainForm.Designer.cs" Line="376">MainForm.InitializeComponent():Void passes a literal as parameter 1 of a call to Control.set_Text(String):Void. Retrieve the following string argument from a resource table instead: 'Translation'</Issue>
+             <Issue Certainty="95" Level="Error" Path="d:\DOCUMENTS\SharpDevelop Projects\BULocalization Project\Sources\BUTranslate" File="MainForm.Designer.cs" Line="101">MainForm.InitializeComponent():Void passes a literal as parameter 1 of a call to Control.set_Text(String):Void. Retrieve the following string argument from a resource table instead: 'menuStrip1'</Issue>
+            </Message>
+            <Message Id="System.Windows.Forms.ToolStripItem.set_Text(System.String)" TypeName="DoNotPassLiteralsAsLocalizedParameters" Category="Microsoft.Globalization" CheckId="CA1303" Status="Active" Created="2007-08-11 11:26:14Z" FixCategory="NonBreaking">
+             <Issue Certainty="95" Level="Error" Path="d:\DOCUMENTS\SharpDevelop Projects\BULocalization Project\Sources\BUTranslate" File="MainForm.Designer.cs" Line="272">MainForm.InitializeComponent():Void passes a literal as parameter 1 of a call to ToolStripItem.set_Text(String):Void. Retrieve the following string argument from a resource table instead: 'About'</Issue>
+             <Issue Certainty="95" Level="Error" Path="d:\DOCUMENTS\SharpDevelop Projects\BULocalization Project\Sources\BUTranslate" File="MainForm.Designer.cs" Line="294">MainForm.InitializeComponent():Void passes a literal as parameter 1 of a call to ToolStripItem.set_Text(String):Void. Retrieve the following string argument from a resource table instead: 'Documentation'</Issue>
+             <Issue Certainty="95" Level="Error" Path="d:\DOCUMENTS\SharpDevelop Projects\BULocalization Project\Sources\BUTranslate" File="MainForm.Designer.cs" Line="174">MainForm.InitializeComponent():Void passes a literal as parameter 1 of a call to ToolStripItem.set_Text(String):Void. Retrieve the following string argument from a resource table instead: 'Exit'</Issue>
+             <Issue Certainty="95" Level="Error" Path="d:\DOCUMENTS\SharpDevelop Projects\BULocalization Project\Sources\BUTranslate" File="MainForm.Designer.cs" Line="320">MainForm.InitializeComponent():Void passes a literal as parameter 1 of a call to ToolStripItem.set_Text(String):Void. Retrieve the following string argument from a resource table instead: 'Feature request'</Issue>
+             <Issue Certainty="95" Level="Error" Path="d:\DOCUMENTS\SharpDevelop Projects\BULocalization Project\Sources\BUTranslate" File="MainForm.Designer.cs" Line="248">MainForm.InitializeComponent():Void passes a literal as parameter 1 of a call to ToolStripItem.set_Text(String):Void. Retrieve the following string argument from a resource table instead: 'Find references'</Issue>
+             <Issue Certainty="95" Level="Error" Path="d:\DOCUMENTS\SharpDevelop Projects\BULocalization Project\Sources\BUTranslate" File="MainForm.Designer.cs" Line="288">MainForm.InitializeComponent():Void passes a literal as parameter 1 of a call to ToolStripItem.set_Text(String):Void. Retrieve the following string argument from a resource table instead: 'Help'</Issue>
+             <Issue Certainty="95" Level="Error" Path="d:\DOCUMENTS\SharpDevelop Projects\BULocalization Project\Sources\BUTranslate" File="MainForm.Designer.cs" Line="124">MainForm.InitializeComponent():Void passes a literal as parameter 1 of a call to ToolStripItem.set_Text(String):Void. Retrieve the following string argument from a resource table instead: 'Load from file...'</Issue>
+             <Issue Certainty="95" Level="Error" Path="d:\DOCUMENTS\SharpDevelop Projects\BULocalization Project\Sources\BUTranslate" File="MainForm.Designer.cs" Line="339">MainForm.InitializeComponent():Void passes a literal as parameter 1 of a call to ToolStripItem.set_Text(String):Void. Retrieve the following string argument from a resource table instead: 'Make a donation'</Issue>
+             <Issue Certainty="95" Level="Error" Path="d:\DOCUMENTS\SharpDevelop Projects\BULocalization Project\Sources\BUTranslate" File="MainForm.Designer.cs" Line="162">MainForm.InitializeComponent():Void passes a literal as parameter 1 of a call to ToolStripItem.set_Text(String):Void. Retrieve the following string argument from a resource table instead: 'Open translation URL'</Issue>
+             <Issue Certainty="95" Level="Error" Path="d:\DOCUMENTS\SharpDevelop Projects\BULocalization Project\Sources\BUTranslate" File="MainForm.Designer.cs" Line="154">MainForm.InitializeComponent():Void passes a literal as parameter 1 of a call to ToolStripItem.set_Text(String):Void. Retrieve the following string argument from a resource table instead: 'Prepare letter for sending translation'</Issue>
+             <Issue Certainty="95" Level="Error" Path="d:\DOCUMENTS\SharpDevelop Projects\BULocalization Project\Sources\BUTranslate" File="MainForm.Designer.cs" Line="232">MainForm.InitializeComponent():Void passes a literal as parameter 1 of a call to ToolStripItem.set_Text(String):Void. Retrieve the following string argument from a resource table instead: 'Release'</Issue>
+             <Issue Certainty="95" Level="Error" Path="d:\DOCUMENTS\SharpDevelop Projects\BULocalization Project\Sources\BUTranslate" File="MainForm.Designer.cs" Line="327">MainForm.InitializeComponent():Void passes a literal as parameter 1 of a call to ToolStripItem.set_Text(String):Void. Retrieve the following string argument from a resource table instead: 'Report a bug'</Issue>
+             <Issue Certainty="95" Level="Error" Path="d:\DOCUMENTS\SharpDevelop Projects\BULocalization Project\Sources\BUTranslate" File="MainForm.Designer.cs" Line="141">MainForm.InitializeComponent():Void passes a literal as parameter 1 of a call to ToolStripItem.set_Text(String):Void. Retrieve the following string argument from a resource table instead: 'Save'</Issue>
+             <Issue Certainty="95" Level="Error" Path="d:\DOCUMENTS\SharpDevelop Projects\BULocalization Project\Sources\BUTranslate" File="MainForm.Designer.cs" Line="132">MainForm.InitializeComponent():Void passes a literal as parameter 1 of a call to ToolStripItem.set_Text(String):Void. Retrieve the following string argument from a resource table instead: 'Save to file...'</Issue>
+             <Issue Certainty="95" Level="Error" Path="d:\DOCUMENTS\SharpDevelop Projects\BULocalization Project\Sources\BUTranslate" File="MainForm.Designer.cs" Line="241">MainForm.InitializeComponent():Void passes a literal as parameter 1 of a call to ToolStripItem.set_Text(String):Void. Retrieve the following string argument from a resource table instead: 'Search'</Issue>
+             <Issue Certainty="95" Level="Error" Path="d:\DOCUMENTS\SharpDevelop Projects\BULocalization Project\Sources\BUTranslate" File="MainForm.Designer.cs" Line="257">MainForm.InitializeComponent():Void passes a literal as parameter 1 of a call to ToolStripItem.set_Text(String):Void. Retrieve the following string argument from a resource table instead: 'Settings'</Issue>
+             <Issue Certainty="95" Level="Error" Path="d:\DOCUMENTS\SharpDevelop Projects\BULocalization Project\Sources\BUTranslate" File="MainForm.Designer.cs" Line="313">MainForm.InitializeComponent():Void passes a literal as parameter 1 of a call to ToolStripItem.set_Text(String):Void. Retrieve the following string argument from a resource table instead: 'Support request'</Issue>
+             <Issue Certainty="95" Level="Error" Path="d:\DOCUMENTS\SharpDevelop Projects\BULocalization Project\Sources\BUTranslate" File="MainForm.Designer.cs" Line="223">MainForm.InitializeComponent():Void passes a literal as parameter 1 of a call to ToolStripItem.set_Text(String):Void. Retrieve the following string argument from a resource table instead: 'Test'</Issue>
+             <Issue Certainty="95" Level="Error" Path="d:\DOCUMENTS\SharpDevelop Projects\BULocalization Project\Sources\BUTranslate" File="MainForm.Designer.cs" Line="117">MainForm.InitializeComponent():Void passes a literal as parameter 1 of a call to ToolStripItem.set_Text(String):Void. Retrieve the following string argument from a resource table instead: 'Translation'</Issue>
+             <Issue Certainty="95" Level="Error" Path="d:\DOCUMENTS\SharpDevelop Projects\BULocalization Project\Sources\BUTranslate" File="MainForm.Designer.cs" Line="205">MainForm.InitializeComponent():Void passes a literal as parameter 1 of a call to ToolStripItem.set_Text(String):Void. Retrieve the following string argument from a resource table instead: 'Translation mode'</Issue>
+             <Issue Certainty="95" Level="Error" Path="d:\DOCUMENTS\SharpDevelop Projects\BULocalization Project\Sources\BUTranslate" File="MainForm.Designer.cs" Line="264">MainForm.InitializeComponent():Void passes a literal as parameter 1 of a call to ToolStripItem.set_Text(String):Void. Retrieve the following string argument from a resource table instead: 'Translator info'</Issue>
+             <Issue Certainty="95" Level="Error" Path="d:\DOCUMENTS\SharpDevelop Projects\BULocalization Project\Sources\BUTranslate" File="MainForm.Designer.cs" Line="193">MainForm.InitializeComponent():Void passes a literal as parameter 1 of a call to ToolStripItem.set_Text(String):Void. Retrieve the following string argument from a resource table instead: 'Turn on autovalidation'</Issue>
+             <Issue Certainty="95" Level="Error" Path="d:\DOCUMENTS\SharpDevelop Projects\BULocalization Project\Sources\BUTranslate" File="MainForm.Designer.cs" Line="184">MainForm.InitializeComponent():Void passes a literal as parameter 1 of a call to ToolStripItem.set_Text(String):Void. Retrieve the following string argument from a resource table instead: 'Validation'</Issue>
+             <Issue Certainty="95" Level="Error" Path="d:\DOCUMENTS\SharpDevelop Projects\BULocalization Project\Sources\BUTranslate" File="MainForm.Designer.cs" Line="301">MainForm.InitializeComponent():Void passes a literal as parameter 1 of a call to ToolStripItem.set_Text(String):Void. Retrieve the following string argument from a resource table instead: 'Visit homepage'</Issue>
+             <Issue Certainty="95" Level="Error" Path="d:\DOCUMENTS\SharpDevelop Projects\BULocalization Project\Sources\BUTranslate" File="MainForm.Designer.cs" Line="211">MainForm.InitializeComponent():Void passes a literal as parameter 1 of a call to ToolStripItem.set_Text(String):Void. Retrieve the following string argument from a resource table instead: 'What is it?'</Issue>
+            </Message>
+            <Message Id="autovalidation" TypeName="LiteralsShouldBeSpelledCorrectly" Category="Microsoft.Usage" CheckId="CA2204" Status="Active" Created="2007-08-11 11:26:14Z" FixCategory="NonBreaking">
+             <Issue Certainty="85" Level="Error" Path="d:\DOCUMENTS\SharpDevelop Projects\BULocalization Project\Sources\BUTranslate" File="MainForm.Designer.cs" Line="193">Correct the spelling of the unrecognized token 'autovalidation' in the literal 'Turn on autovalidation'.</Issue>
+            </Message>
+           </Messages>
+          </Member>
+          <Member Name="LoadFromFile(System.String):System.Void" Kind="Method" Static="False" Accessibility="Private" ExternallyVisible="False">
+           <Messages>
+            <Message TypeName="DoNotCatchGeneralExceptionTypes" Category="Microsoft.Design" CheckId="CA1031" Status="Active" Created="2007-08-11 11:26:14Z" FixCategory="NonBreaking">
+             <Issue Certainty="95" Level="CriticalError" Path="d:\DOCUMENTS\SharpDevelop Projects\BULocalization Project\Sources\BUTranslate" File="MainForm.cs" Line="101">Modify 'MainForm.LoadFromFile(String):Void' to catch a more specific exception than 'System.Exception' or rethrow the exception.</Issue>
+            </Message>
+            <Message Id="System.Windows.Forms.MessageBox.Show(System.String,System.String,System.Windows.Forms.MessageBoxButtons,System.Windows.Forms.MessageBoxIcon)" TypeName="DoNotPassLiteralsAsLocalizedParameters" Category="Microsoft.Globalization" CheckId="CA1303" Status="Active" Created="2007-08-11 11:26:14Z" FixCategory="NonBreaking">
+             <Issue Certainty="95" Level="Error" Path="d:\DOCUMENTS\SharpDevelop Projects\BULocalization Project\Sources\BUTranslate" File="MainForm.cs" Line="103">MainForm.LoadFromFile(String):Void passes a literal as parameter 2 of a call to MessageBox.Show(String, String, MessageBoxButtons, MessageBoxIcon):DialogResult. Retrieve the following string argument from a resource table instead: 'BUTranslate Error'</Issue>
+            </Message>
+            <Message TypeName="SpecifyMessageBoxOptions" Category="Microsoft.Globalization" CheckId="CA1300" Status="Active" Created="2007-08-11 11:26:14Z" FixCategory="NonBreaking">
+             <Issue Certainty="95" Level="Error" Path="d:\DOCUMENTS\SharpDevelop Projects\BULocalization Project\Sources\BUTranslate" File="MainForm.cs" Line="103">Change MainForm.LoadFromFile(String):Void to call the MessageBox.Show overload that specifies MessageBoxOptions, and make sure to set MessageBoxOptions.RightAlign and MessageBoxOptions.RtlReading if RightToLeft is set to RightToLeft.Yes on the parent control. If it is set to RightTolLeft.Inherit, check its parent until a value indicating Yes or No is found.</Issue>
+            </Message>
+           </Messages>
+          </Member>
+          <Member Name="MainFormFormClosing(System.Object,System.Windows.Forms.FormClosingEventArgs):System.Void" Kind="Method" Static="False" Accessibility="Private" ExternallyVisible="False">
+           <Messages>
+            <Message Id="System.Windows.Forms.MessageBox.Show(System.String,System.String,System.Windows.Forms.MessageBoxButtons,System.Windows.Forms.MessageBoxIcon)" TypeName="DoNotPassLiteralsAsLocalizedParameters" Category="Microsoft.Globalization" CheckId="CA1303" Status="Active" Created="2007-08-11 11:26:14Z" FixCategory="NonBreaking">
+             <Issue Certainty="95" Level="Error" Path="d:\DOCUMENTS\SharpDevelop Projects\BULocalization Project\Sources\BUTranslate" File="MainForm.cs" Line="352">MainForm.MainFormFormClosing(Object, FormClosingEventArgs):Void passes a literal as parameter 1 of a call to MessageBox.Show(String, String, MessageBoxButtons, MessageBoxIcon):DialogResult. Retrieve the following string argument from a resource table instead: 'Would you like to save your translation?'</Issue>
+             <Issue Certainty="95" Level="Error" Path="d:\DOCUMENTS\SharpDevelop Projects\BULocalization Project\Sources\BUTranslate" File="MainForm.cs" Line="352">MainForm.MainFormFormClosing(Object, FormClosingEventArgs):Void passes a literal as parameter 2 of a call to MessageBox.Show(String, String, MessageBoxButtons, MessageBoxIcon):DialogResult. Retrieve the following string argument from a resource table instead: 'Exiting'</Issue>
+            </Message>
+            <Message TypeName="SpecifyMessageBoxOptions" Category="Microsoft.Globalization" CheckId="CA1300" Status="Active" Created="2007-08-11 11:26:14Z" FixCategory="NonBreaking">
+             <Issue Certainty="95" Level="Error" Path="d:\DOCUMENTS\SharpDevelop Projects\BULocalization Project\Sources\BUTranslate" File="MainForm.cs" Line="352">Change MainForm.MainFormFormClosing(Object, FormClosingEventArgs):Void to call the MessageBox.Show overload that specifies MessageBoxOptions, and make sure to set MessageBoxOptions.RightAlign and MessageBoxOptions.RtlReading if RightToLeft is set to RightToLeft.Yes on the parent control. If it is set to RightTolLeft.Inherit, check its parent until a value indicating Yes or No is found.</Issue>
+            </Message>
+           </Messages>
+          </Member>
+          <Member Name="MainFormLoad(System.Object,System.EventArgs):System.Void" Kind="Method" Static="False" Accessibility="Private" ExternallyVisible="False">
+           <Messages>
+            <Message TypeName="DoNotCatchGeneralExceptionTypes" Category="Microsoft.Design" CheckId="CA1031" Status="Active" Created="2007-08-11 11:26:14Z" FixCategory="NonBreaking">
+             <Issue Certainty="95" Level="CriticalError" Path="d:\DOCUMENTS\SharpDevelop Projects\BULocalization Project\Sources\BUTranslate" File="MainForm.cs" Line="271">Modify 'MainForm.MainFormLoad(Object, EventArgs):Void' to catch a more specific exception than 'System.Exception' or rethrow the exception.</Issue>
+            </Message>
+            <Message Id="System.Windows.Forms.MessageBox.Show(System.String,System.String,System.Windows.Forms.MessageBoxButtons,System.Windows.Forms.MessageBoxIcon)" TypeName="DoNotPassLiteralsAsLocalizedParameters" Category="Microsoft.Globalization" CheckId="CA1303" Status="Active" Created="2007-08-11 11:26:14Z" FixCategory="NonBreaking">
+             <Issue Certainty="95" Level="Error" Path="d:\DOCUMENTS\SharpDevelop Projects\BULocalization Project\Sources\BUTranslate" File="MainForm.cs" Line="273">MainForm.MainFormLoad(Object, EventArgs):Void passes a literal as parameter 1 of a call to MessageBox.Show(String, String, MessageBoxButtons, MessageBoxIcon):DialogResult. Retrieve the following string argument from a resource table instead: 'Cannot load profile options from file profile.xml&#xA;____&#xA;&#xA;Please edit your options and save this information to profile'</Issue>
+             <Issue Certainty="95" Level="Error" Path="d:\DOCUMENTS\SharpDevelop Projects\BULocalization Project\Sources\BUTranslate" File="MainForm.cs" Line="273">MainForm.MainFormLoad(Object, EventArgs):Void passes a literal as parameter 2 of a call to MessageBox.Show(String, String, MessageBoxButtons, MessageBoxIcon):DialogResult. Retrieve the following string argument from a resource table instead: 'Error'</Issue>
+            </Message>
+            <Message TypeName="SpecifyMessageBoxOptions" Category="Microsoft.Globalization" CheckId="CA1300" Status="Active" Created="2007-08-11 11:26:14Z" FixCategory="NonBreaking">
+             <Issue Certainty="95" Level="Error" Path="d:\DOCUMENTS\SharpDevelop Projects\BULocalization Project\Sources\BUTranslate" File="MainForm.cs" Line="273">Change MainForm.MainFormLoad(Object, EventArgs):Void to call the MessageBox.Show overload that specifies MessageBoxOptions, and make sure to set MessageBoxOptions.RightAlign and MessageBoxOptions.RtlReading if RightToLeft is set to RightToLeft.Yes on the parent control. If it is set to RightTolLeft.Inherit, check its parent until a value indicating Yes or No is found.</Issue>
+            </Message>
+           </Messages>
+          </Member>
+          <Member Name="MakeViewLine(BUtil.Localization.BUTranslation+Item):System.String" Kind="Method" Static="False" Accessibility="Private" ExternallyVisible="False">
+           <Messages>
+            <Message Id="System.Int32.ToString" TypeName="SpecifyIFormatProvider" Category="Microsoft.Globalization" CheckId="CA1305" Status="Active" Created="2007-08-11 11:26:14Z" FixCategory="NonBreaking">
+             <Issue Certainty="95" Level="Error" Path="d:\DOCUMENTS\SharpDevelop Projects\BULocalization Project\Sources\BUTranslate" File="MainForm.cs" Line="152">MainForm.MakeViewLine(Item):String makes a call to System.Int32.ToString that does not explicitly provide an IFormatProvider. This should be replaced with a call to System.Int32.ToString(System.IFormatProvider).</Issue>
+            </Message>
+           </Messages>
+          </Member>
+          <Member Name="OpenTranslationURLToolStripMenuItemClick(System.Object,System.EventArgs):System.Void" Kind="Method" Static="False" Accessibility="Private" ExternallyVisible="False">
+           <Messages>
+            <Message TypeName="DoNotCatchGeneralExceptionTypes" Category="Microsoft.Design" CheckId="CA1031" Status="Active" Created="2007-08-11 11:26:14Z" FixCategory="NonBreaking">
+             <Issue Certainty="95" Level="CriticalError" Path="d:\DOCUMENTS\SharpDevelop Projects\BULocalization Project\Sources\BUTranslate" File="MainForm.cs" Line="404">Modify 'MainForm.OpenTranslationURLToolStripMenuItemClick(Object, EventArgs):Void' to catch a more specific exception than 'System.Exception' or rethrow the exception.</Issue>
+            </Message>
+            <Message Id="System.Windows.Forms.MessageBox.Show(System.String,System.String,System.Windows.Forms.MessageBoxButtons,System.Windows.Forms.MessageBoxIcon)" TypeName="DoNotPassLiteralsAsLocalizedParameters" Category="Microsoft.Globalization" CheckId="CA1303" Status="Active" Created="2007-08-11 11:26:14Z" FixCategory="NonBreaking">
+             <Issue Certainty="95" Level="Error" Path="d:\DOCUMENTS\SharpDevelop Projects\BULocalization Project\Sources\BUTranslate" File="MainForm.cs" Line="393">MainForm.OpenTranslationURLToolStripMenuItemClick(Object, EventArgs):Void passes a literal as parameter 1 of a call to MessageBox.Show(String, String, MessageBoxButtons, MessageBoxIcon):DialogResult. Retrieve the following string argument from a resource table instead: 'There is no web-link specified in translation&#xA;&#xA;This translation may be corruped'</Issue>
+             <Issue Certainty="95" Level="Error" Path="d:\DOCUMENTS\SharpDevelop Projects\BULocalization Project\Sources\BUTranslate" File="MainForm.cs" Line="406">MainForm.OpenTranslationURLToolStripMenuItemClick(Object, EventArgs):Void passes a literal as parameter 2 of a call to MessageBox.Show(String, String, MessageBoxButtons, MessageBoxIcon):DialogResult. Retrieve the following string argument from a resource table instead: 'Error'</Issue>
+             <Issue Certainty="95" Level="Error" Path="d:\DOCUMENTS\SharpDevelop Projects\BULocalization Project\Sources\BUTranslate" File="MainForm.cs" Line="393">MainForm.OpenTranslationURLToolStripMenuItemClick(Object, EventArgs):Void passes a literal as parameter 2 of a call to MessageBox.Show(String, String, MessageBoxButtons, MessageBoxIcon):DialogResult. Retrieve the following string argument from a resource table instead: 'Error'</Issue>
+            </Message>
+            <Message Id="corruped" TypeName="LiteralsShouldBeSpelledCorrectly" Category="Microsoft.Usage" CheckId="CA2204" Status="Active" Created="2007-08-11 11:26:14Z" FixCategory="NonBreaking">
+             <Issue Certainty="85" Level="Error" Path="d:\DOCUMENTS\SharpDevelop Projects\BULocalization Project\Sources\BUTranslate" File="MainForm.cs" Line="393">Correct the spelling of the unrecognized token 'corruped' in the literal 'There is no web-link specified in translation&#xA;&#xA;This translation may be corruped'.</Issue>
+            </Message>
+            <Message TypeName="SpecifyMessageBoxOptions" Category="Microsoft.Globalization" CheckId="CA1300" Status="Active" Created="2007-08-11 11:26:14Z" FixCategory="NonBreaking">
+             <Issue Certainty="95" Level="Error" Path="d:\DOCUMENTS\SharpDevelop Projects\BULocalization Project\Sources\BUTranslate" File="MainForm.cs" Line="393">Change MainForm.OpenTranslationURLToolStripMenuItemClick(Object, EventArgs):Void to call the MessageBox.Show overload that specifies MessageBoxOptions, and make sure to set MessageBoxOptions.RightAlign and MessageBoxOptions.RtlReading if RightToLeft is set to RightToLeft.Yes on the parent control. If it is set to RightTolLeft.Inherit, check its parent until a value indicating Yes or No is found.</Issue>
+             <Issue Certainty="95" Level="Error" Path="d:\DOCUMENTS\SharpDevelop Projects\BULocalization Project\Sources\BUTranslate" File="MainForm.cs" Line="406">Change MainForm.OpenTranslationURLToolStripMenuItemClick(Object, EventArgs):Void to call the MessageBox.Show overload that specifies MessageBoxOptions, and make sure to set MessageBoxOptions.RightAlign and MessageBoxOptions.RtlReading if RightToLeft is set to RightToLeft.Yes on the parent control. If it is set to RightTolLeft.Inherit, check its parent until a value indicating Yes or No is found.</Issue>
+            </Message>
+           </Messages>
+          </Member>
+          <Member Name="PrepareLetterForSendingToolStripMenuItemClick(System.Object,System.EventArgs):System.Void" Kind="Method" Static="False" Accessibility="Private" ExternallyVisible="False">
+           <Messages>
+            <Message Id="System.Windows.Forms.MessageBox.Show(System.String,System.String,System.Windows.Forms.MessageBoxButtons,System.Windows.Forms.MessageBoxIcon)" TypeName="DoNotPassLiteralsAsLocalizedParameters" Category="Microsoft.Globalization" CheckId="CA1303" Status="Active" Created="2007-08-11 11:26:14Z" FixCategory="NonBreaking">
+             <Issue Certainty="95" Level="Error" Path="d:\DOCUMENTS\SharpDevelop Projects\BULocalization Project\Sources\BUTranslate" File="MainForm.cs" Line="285">MainForm.PrepareLetterForSendingToolStripMenuItemClick(Object, EventArgs):Void passes a literal as parameter 1 of a call to MessageBox.Show(String, String, MessageBoxButtons, MessageBoxIcon):DialogResult. Retrieve the following string argument from a resource table instead: 'Could not prepare letter because translator's fields:&#xA;-Full name&#xA;-E-mail&#xA;&#xA;does not contain information&#xA;&#xA;Please go Menu\Settings\Translator info and set them'</Issue>
+             <Issue Certainty="95" Level="Error" Path="d:\DOCUMENTS\SharpDevelop Projects\BULocalization Project\Sources\BUTranslate" File="MainForm.cs" Line="285">MainForm.PrepareLetterForSendingToolStripMenuItemClick(Object, EventArgs):Void passes a literal as parameter 2 of a call to MessageBox.Show(String, String, MessageBoxButtons, MessageBoxIcon):DialogResult. Retrieve the following string argument from a resource table instead: 'Error'</Issue>
+            </Message>
+            <Message TypeName="SpecifyMessageBoxOptions" Category="Microsoft.Globalization" CheckId="CA1300" Status="Active" Created="2007-08-11 11:26:14Z" FixCategory="NonBreaking">
+             <Issue Certainty="95" Level="Error" Path="d:\DOCUMENTS\SharpDevelop Projects\BULocalization Project\Sources\BUTranslate" File="MainForm.cs" Line="285">Change MainForm.PrepareLetterForSendingToolStripMenuItemClick(Object, EventArgs):Void to call the MessageBox.Show overload that specifies MessageBoxOptions, and make sure to set MessageBoxOptions.RightAlign and MessageBoxOptions.RtlReading if RightToLeft is set to RightToLeft.Yes on the parent control. If it is set to RightTolLeft.Inherit, check its parent until a value indicating Yes or No is found.</Issue>
+            </Message>
+           </Messages>
+          </Member>
+          <Member Name="Save(System.String):System.Boolean" Kind="Method" Static="False" Accessibility="Private" ExternallyVisible="False">
+           <Messages>
+            <Message TypeName="DoNotCatchGeneralExceptionTypes" Category="Microsoft.Design" CheckId="CA1031" Status="Active" Created="2007-08-11 11:26:14Z" FixCategory="NonBreaking">
+             <Issue Certainty="95" Level="CriticalError" Path="d:\DOCUMENTS\SharpDevelop Projects\BULocalization Project\Sources\BUTranslate" File="MainForm.cs" Line="185">Modify 'MainForm.Save(String):Boolean' to catch a more specific exception than 'System.Exception' or rethrow the exception.</Issue>
+            </Message>
+            <Message Id="System.Windows.Forms.MessageBox.Show(System.String,System.String,System.Windows.Forms.MessageBoxButtons,System.Windows.Forms.MessageBoxIcon)" TypeName="DoNotPassLiteralsAsLocalizedParameters" Category="Microsoft.Globalization" CheckId="CA1303" Status="Active" Created="2007-08-11 11:26:14Z" FixCategory="NonBreaking">
+             <Issue Certainty="95" Level="Error" Path="d:\DOCUMENTS\SharpDevelop Projects\BULocalization Project\Sources\BUTranslate" File="MainForm.cs" Line="169">MainForm.Save(String):Boolean passes a literal as parameter 1 of a call to MessageBox.Show(String, String, MessageBoxButtons, MessageBoxIcon):DialogResult. Retrieve the following string argument from a resource table instead: 'Could not save translation because translator's fields:&#xA;-Full name&#xA;-E-mail&#xA;&#xA;does not contain information&#xA;&#xA;Please go Menu\Settings\Translator info and set them'</Issue>
+             <Issue Certainty="95" Level="Error" Path="d:\DOCUMENTS\SharpDevelop Projects\BULocalization Project\Sources\BUTranslate" File="MainForm.cs" Line="190">MainForm.Save(String):Boolean passes a literal as parameter 1 of a call to MessageBox.Show(String, String, MessageBoxButtons, MessageBoxIcon):DialogResult. Retrieve the following string argument from a resource table instead: 'Saved succesfully'</Issue>
+             <Issue Certainty="95" Level="Error" Path="d:\DOCUMENTS\SharpDevelop Projects\BULocalization Project\Sources\BUTranslate" File="MainForm.cs" Line="187">MainForm.Save(String):Boolean passes a literal as parameter 2 of a call to MessageBox.Show(String, String, MessageBoxButtons, MessageBoxIcon):DialogResult. Retrieve the following string argument from a resource table instead: 'Error'</Issue>
+             <Issue Certainty="95" Level="Error" Path="d:\DOCUMENTS\SharpDevelop Projects\BULocalization Project\Sources\BUTranslate" File="MainForm.cs" Line="169">MainForm.Save(String):Boolean passes a literal as parameter 2 of a call to MessageBox.Show(String, String, MessageBoxButtons, MessageBoxIcon):DialogResult. Retrieve the following string argument from a resource table instead: 'Error'</Issue>
+             <Issue Certainty="95" Level="Error" Path="d:\DOCUMENTS\SharpDevelop Projects\BULocalization Project\Sources\BUTranslate" File="MainForm.cs" Line="190">MainForm.Save(String):Boolean passes a literal as parameter 2 of a call to MessageBox.Show(String, String, MessageBoxButtons, MessageBoxIcon):DialogResult. Retrieve the following string argument from a resource table instead: 'Translation'</Issue>
+            </Message>
+            <Message Id="succesfully" TypeName="LiteralsShouldBeSpelledCorrectly" Category="Microsoft.Usage" CheckId="CA2204" Status="Active" Created="2007-08-11 11:26:14Z" FixCategory="NonBreaking">
+             <Issue Certainty="85" Level="Error" Path="d:\DOCUMENTS\SharpDevelop Projects\BULocalization Project\Sources\BUTranslate" File="MainForm.cs" Line="190">Correct the spelling of the unrecognized token 'succesfully' in the literal 'Saved succesfully'.</Issue>
+            </Message>
+            <Message TypeName="SpecifyMessageBoxOptions" Category="Microsoft.Globalization" CheckId="CA1300" Status="Active" Created="2007-08-11 11:26:14Z" FixCategory="NonBreaking">
+             <Issue Certainty="95" Level="Error" Path="d:\DOCUMENTS\SharpDevelop Projects\BULocalization Project\Sources\BUTranslate" File="MainForm.cs" Line="169">Change MainForm.Save(String):Boolean to call the MessageBox.Show overload that specifies MessageBoxOptions, and make sure to set MessageBoxOptions.RightAlign and MessageBoxOptions.RtlReading if RightToLeft is set to RightToLeft.Yes on the parent control. If it is set to RightTolLeft.Inherit, check its parent until a value indicating Yes or No is found.</Issue>
+             <Issue Certainty="95" Level="Error" Path="d:\DOCUMENTS\SharpDevelop Projects\BULocalization Project\Sources\BUTranslate" File="MainForm.cs" Line="187">Change MainForm.Save(String):Boolean to call the MessageBox.Show overload that specifies MessageBoxOptions, and make sure to set MessageBoxOptions.RightAlign and MessageBoxOptions.RtlReading if RightToLeft is set to RightToLeft.Yes on the parent control. If it is set to RightTolLeft.Inherit, check its parent until a value indicating Yes or No is found.</Issue>
+             <Issue Certainty="95" Level="Error" Path="d:\DOCUMENTS\SharpDevelop Projects\BULocalization Project\Sources\BUTranslate" File="MainForm.cs" Line="190">Change MainForm.Save(String):Boolean to call the MessageBox.Show overload that specifies MessageBoxOptions, and make sure to set MessageBoxOptions.RightAlign and MessageBoxOptions.RtlReading if RightToLeft is set to RightToLeft.Yes on the parent control. If it is set to RightTolLeft.Inherit, check its parent until a value indicating Yes or No is found.</Issue>
+            </Message>
+           </Messages>
+          </Member>
+          <Member Name="Search(System.String):System.String" Kind="Method" Static="False" Accessibility="Private" ExternallyVisible="False">
+           <Messages>
+            <Message TypeName="DoNotConcatenateStringsInsideLoops" Category="Microsoft.Performance" CheckId="CA1818" Status="Active" Created="2007-08-11 11:26:14Z" FixCategory="NonBreaking">
+             <Issue Certainty="75" Level="Error" Path="d:\DOCUMENTS\SharpDevelop Projects\BULocalization Project\Sources\BUTranslate" File="MainForm.cs" Line="69">Change MainForm.Search(String):String to use StringBuilder instead of String.Concat or +=</Issue>
+            </Message>
+            <Message Id="System.Int32.ToString" TypeName="SpecifyIFormatProvider" Category="Microsoft.Globalization" CheckId="CA1305" Status="Active" Created="2007-08-11 11:26:14Z" FixCategory="NonBreaking">
+             <Issue Certainty="95" Level="Error" Path="d:\DOCUMENTS\SharpDevelop Projects\BULocalization Project\Sources\BUTranslate" File="MainForm.cs" Line="69">MainForm.Search(String):String makes a call to System.Int32.ToString that does not explicitly provide an IFormatProvider. This should be replaced with a call to System.Int32.ToString(System.IFormatProvider).</Issue>
+            </Message>
+           </Messages>
+          </Member>
+         </Members>
+        </Type>
+        <Type Name="SearchForm" Kind="Class" Accessibility="Public" ExternallyVisible="True">
+         <Members>
+          <Member Name=".cctor()" Kind="Method" Static="True" Accessibility="Private" ExternallyVisible="False">
+           <Messages>
+            <Message TypeName="DoNotInitializeUnnecessarily" Category="Microsoft.Performance" CheckId="CA1805" Status="Active" Created="2007-08-11 11:26:14Z" FixCategory="NonBreaking">
+             <Issue Certainty="90" Level="Warning" Path="d:\DOCUMENTS\SharpDevelop Projects\BULocalization Project\Sources\BUTranslate" File="SearchForm.cs" Line="22">SearchForm.SearchForm() initializes field srchDelegate of type BUTranslate.SearchForm+Search to null. Remove this initialization as it will be done automatically by the runtime.</Issue>
+            </Message>
+           </Messages>
+          </Member>
+          <Member Name=".ctor()" Kind="Method" Static="False" Accessibility="Public" ExternallyVisible="True">
+           <Messages>
+            <Message TypeName="DoNotInitializeUnnecessarily" Category="Microsoft.Performance" CheckId="CA1805" Status="Active" Created="2007-08-11 11:26:14Z" FixCategory="NonBreaking">
+             <Issue Certainty="90" Level="Warning" Path="d:\DOCUMENTS\SharpDevelop Projects\BULocalization Project\Sources\BUTranslate" File="SearchForm.cs" Line="23">SearchForm.SearchForm() initializes field AllowClose of type System.Boolean to false. Remove this initialization as it will be done automatically by the runtime.</Issue>
+            </Message>
+           </Messages>
+          </Member>
+          <Member Name="AllowClose" Kind="Field" Static="False" Accessibility="Public" ExternallyVisible="True">
+           <Messages>
+            <Message TypeName="DoNotDeclareVisibleInstanceFields" Category="Microsoft.Design" CheckId="CA1051" Status="Active" Created="2007-08-11 11:26:14Z" FixCategory="Breaking">
+             <Issue Certainty="90" Level="Error">Make 'AllowClose' private or internal (Friend in VB, public private in C++) and provide a public or protected property to access it.</Issue>
+            </Message>
+           </Messages>
+          </Member>
+          <Member Name="InitializeComponent():System.Void" Kind="Method" Static="False" Accessibility="Private" ExternallyVisible="False">
+           <Messages>
+            <Message Id="System.Windows.Forms.Control.set_Text(System.String)" TypeName="DoNotPassLiteralsAsLocalizedParameters" Category="Microsoft.Globalization" CheckId="CA1303" Status="Active" Created="2007-08-11 11:26:14Z" FixCategory="NonBreaking">
+             <Issue Certainty="95" Level="Error" Path="d:\DOCUMENTS\SharpDevelop Projects\BULocalization Project\Sources\BUTranslate" File="SearchForm.Designer.cs" Line="79">SearchForm.InitializeComponent():Void passes a literal as parameter 1 of a call to Control.set_Text(String):Void. Retrieve the following string argument from a resource table instead: 'Close'</Issue>
+             <Issue Certainty="95" Level="Error" Path="d:\DOCUMENTS\SharpDevelop Projects\BULocalization Project\Sources\BUTranslate" File="SearchForm.Designer.cs" Line="63">SearchForm.InitializeComponent():Void passes a literal as parameter 1 of a call to Control.set_Text(String):Void. Retrieve the following string argument from a resource table instead: 'Enter text fragment you want to search:'</Issue>
+             <Issue Certainty="95" Level="Error" Path="d:\DOCUMENTS\SharpDevelop Projects\BULocalization Project\Sources\BUTranslate" File="SearchForm.Designer.cs" Line="130">SearchForm.InitializeComponent():Void passes a literal as parameter 1 of a call to Control.set_Text(String):Void. Retrieve the following string argument from a resource table instead: 'Search'</Issue>
+             <Issue Certainty="95" Level="Error" Path="d:\DOCUMENTS\SharpDevelop Projects\BULocalization Project\Sources\BUTranslate" File="SearchForm.Designer.cs" Line="89">SearchForm.InitializeComponent():Void passes a literal as parameter 1 of a call to Control.set_Text(String):Void. Retrieve the following string argument from a resource table instead: 'Search results(IDes only):'</Issue>
+             <Issue Certainty="95" Level="Error" Path="d:\DOCUMENTS\SharpDevelop Projects\BULocalization Project\Sources\BUTranslate" File="SearchForm.Designer.cs" Line="53">SearchForm.InitializeComponent():Void passes a literal as parameter 1 of a call to Control.set_Text(String):Void. Retrieve the following string argument from a resource table instead: 'Search...'</Issue>
+             <Issue Certainty="95" Level="Error" Path="d:\DOCUMENTS\SharpDevelop Projects\BULocalization Project\Sources\BUTranslate" File="SearchForm.Designer.cs" Line="108">SearchForm.InitializeComponent():Void passes a literal as parameter 1 of a call to Control.set_Text(String):Void. Retrieve the following string argument from a resource table instead: 'To view id's in the main window please set translation mode to test'</Issue>
+            </Message>
+           </Messages>
+          </Member>
+          <Member Name="SearchbuttonClick(System.Object,System.EventArgs):System.Void" Kind="Method" Static="False" Accessibility="Private" ExternallyVisible="False">
+           <Messages>
+            <Message Id="System.Windows.Forms.Control.set_Text(System.String)" TypeName="DoNotPassLiteralsAsLocalizedParameters" Category="Microsoft.Globalization" CheckId="CA1303" Status="Active" Created="2007-08-11 11:26:14Z" FixCategory="NonBreaking">
+             <Issue Certainty="95" Level="Error" Path="d:\DOCUMENTS\SharpDevelop Projects\BULocalization Project\Sources\BUTranslate" File="SearchForm.cs" Line="39">SearchForm.SearchbuttonClick(Object, EventArgs):Void passes a literal as parameter 1 of a call to Control.set_Text(String):Void. Retrieve the following string argument from a resource table instead: ''</Issue>
+            </Message>
+           </Messages>
+          </Member>
+          <Member Name="srchDelegate" Kind="Field" Static="True" Accessibility="Public" ExternallyVisible="True">
+           <Messages>
+            <Message Id="srch" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Active" Created="2007-08-11 11:26:14Z" FixCategory="Breaking">
+             <Issue Name="Member" Certainty="75" Level="CriticalWarning">Correct the spelling of the unrecognized token 'srch' in member name 'SearchForm.srchDelegate'.</Issue>
+            </Message>
+            <Message TypeName="NonConstantFieldsShouldNotBeVisible" Category="Microsoft.Usage" CheckId="CA2211" Status="Active" Created="2007-08-11 11:26:14Z" FixCategory="Breaking">
+             <Issue Certainty="90" Level="Warning">Consider making 'srchDelegate' non-public or a constant.</Issue>
+            </Message>
+           </Messages>
+          </Member>
+         </Members>
+        </Type>
+        <Type Name="SearchForm+Search" Kind="Delegate" Accessibility="Public" ExternallyVisible="True">
+         <Members>
+          <Member Name="Invoke(System.String):System.String" Kind="Method" Static="False" Accessibility="Public" ExternallyVisible="True">
+           <Messages>
+            <Message Id="0#" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Status="Active" Created="2007-08-11 11:26:14Z" FixCategory="Breaking">
+             <Issue Name="Parameter" Certainty="95" Level="Error">Correct the casing of parameter name 'Pattern'.</Issue>
+            </Message>
+           </Messages>
+          </Member>
+         </Members>
+        </Type>
+        <Type Name="SupportClass" Kind="Class" Accessibility="Public" ExternallyVisible="True">
+         <Members>
+          <Member Name="GUIError" Kind="Field" Static="True" Accessibility="Public" ExternallyVisible="True">
+           <Messages>
+            <Message TypeName="NonConstantFieldsShouldNotBeVisible" Category="Microsoft.Usage" CheckId="CA2211" Status="Active" Created="2007-08-11 11:26:14Z" FixCategory="Breaking">
+             <Issue Certainty="90" Level="Warning">Consider making 'GUIError' non-public or a constant.</Issue>
+            </Message>
+           </Messages>
+          </Member>
+          <Member Name="OpenWebLink(System.String):System.Void" Kind="Method" Static="True" Accessibility="Private" ExternallyVisible="False">
+           <Messages>
+            <Message TypeName="DoNotCatchGeneralExceptionTypes" Category="Microsoft.Design" CheckId="CA1031" Status="Active" Created="2007-08-11 11:26:14Z" FixCategory="NonBreaking">
+             <Issue Certainty="95" Level="CriticalError" Path="d:\DOCUMENTS\SharpDevelop Projects\BULocalization Project\Sources\BUTranslate" File="MainForm.cs" Line="492">Modify 'SupportClass.OpenWebLink(String):Void' to catch a more specific exception than 'System.Exception' or rethrow the exception.</Issue>
+            </Message>
+            <Message TypeName="SpecifyMessageBoxOptions" Category="Microsoft.Globalization" CheckId="CA1300" Status="Active" Created="2007-08-11 11:26:14Z" FixCategory="NonBreaking">
+             <Issue Certainty="95" Level="Error" Path="d:\DOCUMENTS\SharpDevelop Projects\BULocalization Project\Sources\BUTranslate" File="MainForm.cs" Line="494">Change SupportClass.OpenWebLink(String):Void to call the MessageBox.Show overload that specifies MessageBoxOptions, and make sure to set MessageBoxOptions.RightAlign and MessageBoxOptions.RtlReading if RightToLeft is set to RightToLeft.Yes on the parent control. If it is set to RightTolLeft.Inherit, check its parent until a value indicating Yes or No is found.</Issue>
+            </Message>
+           </Messages>
+          </Member>
+          <Member Name="VisitHomePage():System.Void" Kind="Method" Static="True" Accessibility="Public" ExternallyVisible="True">
+           <Messages>
+            <Message Id="HomePage" TypeName="CompoundWordsShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1702" Status="Active" Created="2007-08-11 11:26:14Z" FixCategory="Breaking">
+             <Issue Name="ShouldBeDiscreteTerm" Certainty="80" Level="Error" Path="d:\DOCUMENTS\SharpDevelop Projects\BULocalization Project\Sources\BUTranslate" File="MainForm.cs" Line="515">The compound word 'HomePage' in method 'VisitHomePage' exists as a discrete term. If your usage is intended to be single word, case it as 'Homepage'.</Issue>
+            </Message>
+           </Messages>
+          </Member>
+         </Members>
+        </Type>
+        <Type Name="TranslatorClass" Kind="Class" Accessibility="Public" ExternallyVisible="True">
+         <Members>
+          <Member Name="eMail" Kind="Field" Static="True" Accessibility="Public" ExternallyVisible="True">
+           <Messages>
+            <Message Id="eMail" TypeName="CompoundWordsShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1702" Status="Active" Created="2007-08-11 11:26:14Z" FixCategory="Breaking">
+             <Issue Name="ShouldBeDiscreteTerm" Certainty="80" Level="Error">The compound word 'eMail' in field 'eMail' exists as a discrete term. If your usage is intended to be single word, case it as 'email'.</Issue>
+            </Message>
+            <Message TypeName="NonConstantFieldsShouldNotBeVisible" Category="Microsoft.Usage" CheckId="CA2211" Status="Active" Created="2007-08-11 11:26:14Z" FixCategory="Breaking">
+             <Issue Certainty="90" Level="Warning">Consider making 'eMail' non-public or a constant.</Issue>
+            </Message>
+           </Messages>
+          </Member>
+          <Member Name="FullName" Kind="Field" Static="True" Accessibility="Public" ExternallyVisible="True">
+           <Messages>
+            <Message TypeName="NonConstantFieldsShouldNotBeVisible" Category="Microsoft.Usage" CheckId="CA2211" Status="Active" Created="2007-08-11 11:26:14Z" FixCategory="Breaking">
+             <Issue Certainty="90" Level="Warning">Consider making 'FullName' non-public or a constant.</Issue>
+            </Message>
+           </Messages>
+          </Member>
+          <Member Name="LoadFromFile(System.String):System.Void" Kind="Method" Static="True" Accessibility="Public" ExternallyVisible="True">
+           <Messages>
+            <Message Id="System.Exception.#ctor(System.String)" TypeName="DoNotPassLiteralsAsLocalizedParameters" Category="Microsoft.Globalization" CheckId="CA1303" Status="Active" Created="2007-08-11 11:26:14Z" FixCategory="NonBreaking">
+             <Issue Certainty="95" Level="Error" Path="d:\DOCUMENTS\SharpDevelop Projects\BULocalization Project\Sources\BUTranslate" File="TranslatorClass.cs" Line="101">TranslatorClass.LoadFromFile(String):Void passes a literal as parameter 1 of a call to Exception.Exception(String). Retrieve the following string argument from a resource table instead: 'Empty name'</Issue>
+            </Message>
+            <Message TypeName="DoNotRaiseReservedExceptionTypes" Category="Microsoft.Usage" CheckId="CA2201" Status="Active" Created="2007-08-11 11:26:14Z" FixCategory="Breaking">
+             <Issue Name="TooGeneric" Certainty="95" Level="Error" Path="d:\DOCUMENTS\SharpDevelop Projects\BULocalization Project\Sources\BUTranslate" File="TranslatorClass.cs" Line="101">TranslatorClass.LoadFromFile(String):Void creates an exception of type 'System.Exception', an exception type that is not sufficiently specific and should never be raised by user code. If this exception instance might be thrown, use a different exception type.</Issue>
+             <Issue Name="TooGeneric" Certainty="95" Level="Error" Path="d:\DOCUMENTS\SharpDevelop Projects\BULocalization Project\Sources\BUTranslate" File="TranslatorClass.cs" Line="105">TranslatorClass.LoadFromFile(String):Void creates an exception of type 'System.Exception', an exception type that is not sufficiently specific and should never be raised by user code. If this exception instance might be thrown, use a different exception type.</Issue>
+            </Message>
+            <Message Id="0#onlypath" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Active" Created="2007-08-11 11:26:14Z" FixCategory="Breaking">
+             <Issue Name="Parameter" Certainty="75" Level="CriticalWarning" Path="d:\DOCUMENTS\SharpDevelop Projects\BULocalization Project\Sources\BUTranslate" File="TranslatorClass.cs" Line="94">In method TranslatorClass.LoadFromFile(String):Void, correct the spelling of the unrecognized token 'onlypath' in parameter name 'onlypath' or strip it entirely if it represents any sort of hungarian notation.</Issue>
+            </Message>
+            <Message TypeName="RethrowToPreserveStackDetails" Category="Microsoft.Usage" CheckId="CA2200" Status="Active" Created="2007-08-11 11:26:14Z" FixCategory="NonBreaking">
+             <Issue Certainty="95" Level="Error" Path="d:\DOCUMENTS\SharpDevelop Projects\BULocalization Project\Sources\BUTranslate" File="TranslatorClass.cs" Line="127">TranslatorClass.LoadFromFile(String):Void rethrows a caught exception and specifies it explicitly as an argument. Use 'throw' without an argument instead, in order to preserve the stack location where the exception was initially raised.</Issue>
+            </Message>
+            <Message Id="System.Convert.ToInt32(System.String)" TypeName="SpecifyIFormatProvider" Category="Microsoft.Globalization" CheckId="CA1305" Status="Active" Created="2007-08-11 11:26:14Z" FixCategory="NonBreaking">
+             <Issue Certainty="95" Level="Error" Path="d:\DOCUMENTS\SharpDevelop Projects\BULocalization Project\Sources\BUTranslate" File="TranslatorClass.cs" Line="111">TranslatorClass.LoadFromFile(String):Void makes a call to System.Convert.ToInt32(System.String) that does not explicitly provide an IFormatProvider. This should be replaced with a call to System.Convert.ToInt32(System.String,System.IFormatProvider).</Issue>
+            </Message>
+            <Message Id="System.Int32.ToString" TypeName="SpecifyIFormatProvider" Category="Microsoft.Globalization" CheckId="CA1305" Status="Active" Created="2007-08-11 11:26:14Z" FixCategory="NonBreaking">
+             <Issue Certainty="95" Level="Error" Path="d:\DOCUMENTS\SharpDevelop Projects\BULocalization Project\Sources\BUTranslate" File="TranslatorClass.cs" Line="116">TranslatorClass.LoadFromFile(String):Void makes a call to System.Int32.ToString that does not explicitly provide an IFormatProvider. This should be replaced with a call to System.Int32.ToString(System.IFormatProvider).</Issue>
+            </Message>
+           </Messages>
+          </Member>
+          <Member Name="MakeCopyright():System.String" Kind="Method" Static="True" Accessibility="Public" ExternallyVisible="True">
+           <Messages>
+            <Message Id="System.Exception.#ctor(System.String)" TypeName="DoNotPassLiteralsAsLocalizedParameters" Category="Microsoft.Globalization" CheckId="CA1303" Status="Active" Created="2007-08-11 11:26:14Z" FixCategory="NonBreaking">
+             <Issue Certainty="95" Level="Error" Path="d:\DOCUMENTS\SharpDevelop Projects\BULocalization Project\Sources\BUTranslate" File="TranslatorClass.cs" Line="43">TranslatorClass.MakeCopyright():String passes a literal as parameter 1 of a call to Exception.Exception(String). Retrieve the following string argument from a resource table instead: 'Not enough information to generate copyright'</Issue>
+            </Message>
+            <Message TypeName="DoNotRaiseReservedExceptionTypes" Category="Microsoft.Usage" CheckId="CA2201" Status="Active" Created="2007-08-11 11:26:14Z" FixCategory="Breaking">
+             <Issue Name="TooGeneric" Certainty="95" Level="Error" Path="d:\DOCUMENTS\SharpDevelop Projects\BULocalization Project\Sources\BUTranslate" File="TranslatorClass.cs" Line="43">TranslatorClass.MakeCopyright():String creates an exception of type 'System.Exception', an exception type that is not sufficiently specific and should never be raised by user code. If this exception instance might be thrown, use a different exception type.</Issue>
+            </Message>
+            <Message Id="System.Int32.ToString" TypeName="SpecifyIFormatProvider" Category="Microsoft.Globalization" CheckId="CA1305" Status="Active" Created="2007-08-11 11:26:14Z" FixCategory="NonBreaking">
+             <Issue Certainty="95" Level="Error" Path="d:\DOCUMENTS\SharpDevelop Projects\BULocalization Project\Sources\BUTranslate" File="TranslatorClass.cs" Line="45">TranslatorClass.MakeCopyright():String makes a call to System.Int32.ToString that does not explicitly provide an IFormatProvider. This should be replaced with a call to System.Int32.ToString(System.IFormatProvider).</Issue>
+            </Message>
+           </Messages>
+          </Member>
+          <Member Name="OtherContactInformation" Kind="Field" Static="True" Accessibility="Public" ExternallyVisible="True">
+           <Messages>
+            <Message TypeName="NonConstantFieldsShouldNotBeVisible" Category="Microsoft.Usage" CheckId="CA2211" Status="Active" Created="2007-08-11 11:26:14Z" FixCategory="Breaking">
+             <Issue Certainty="90" Level="Warning">Consider making 'OtherContactInformation' non-public or a constant.</Issue>
+            </Message>
+           </Messages>
+          </Member>
+          <Member Name="ProfileName" Kind="Field" Static="True" Accessibility="Public" ExternallyVisible="True">
+           <Messages>
+            <Message TypeName="NonConstantFieldsShouldNotBeVisible" Category="Microsoft.Usage" CheckId="CA2211" Status="Active" Created="2007-08-11 11:26:14Z" FixCategory="Breaking">
+             <Issue Certainty="90" Level="Warning">Consider making 'ProfileName' non-public or a constant.</Issue>
+            </Message>
+           </Messages>
+          </Member>
+          <Member Name="SaveInformation(System.String):System.Void" Kind="Method" Static="True" Accessibility="Public" ExternallyVisible="True">
+           <Messages>
+            <Message Id="System.Exception.#ctor(System.String)" TypeName="DoNotPassLiteralsAsLocalizedParameters" Category="Microsoft.Globalization" CheckId="CA1303" Status="Active" Created="2007-08-11 11:26:14Z" FixCategory="NonBreaking">
+             <Issue Certainty="95" Level="Error" Path="d:\DOCUMENTS\SharpDevelop Projects\BULocalization Project\Sources\BUTranslate" File="TranslatorClass.cs" Line="57">TranslatorClass.SaveInformation(String):Void passes a literal as parameter 1 of a call to Exception.Exception(String). Retrieve the following string argument from a resource table instead: 'Empty e-mail field'</Issue>
+             <Issue Certainty="95" Level="Error" Path="d:\DOCUMENTS\SharpDevelop Projects\BULocalization Project\Sources\BUTranslate" File="TranslatorClass.cs" Line="56">TranslatorClass.SaveInformation(String):Void passes a literal as parameter 1 of a call to Exception.Exception(String). Retrieve the following string argument from a resource table instead: 'Empty name'</Issue>
+            </Message>
+            <Message TypeName="DoNotRaiseReservedExceptionTypes" Category="Microsoft.Usage" CheckId="CA2201" Status="Active" Created="2007-08-11 11:26:14Z" FixCategory="Breaking">
+             <Issue Name="TooGeneric" Certainty="95" Level="Error" Path="d:\DOCUMENTS\SharpDevelop Projects\BULocalization Project\Sources\BUTranslate" File="TranslatorClass.cs" Line="56">TranslatorClass.SaveInformation(String):Void creates an exception of type 'System.Exception', an exception type that is not sufficiently specific and should never be raised by user code. If this exception instance might be thrown, use a different exception type.</Issue>
+             <Issue Name="TooGeneric" Certainty="95" Level="Error" Path="d:\DOCUMENTS\SharpDevelop Projects\BULocalization Project\Sources\BUTranslate" File="TranslatorClass.cs" Line="57">TranslatorClass.SaveInformation(String):Void creates an exception of type 'System.Exception', an exception type that is not sufficiently specific and should never be raised by user code. If this exception instance might be thrown, use a different exception type.</Issue>
+             <Issue Name="TooGeneric" Certainty="95" Level="Error" Path="d:\DOCUMENTS\SharpDevelop Projects\BULocalization Project\Sources\BUTranslate" File="TranslatorClass.cs" Line="62">TranslatorClass.SaveInformation(String):Void creates an exception of type 'System.Exception', an exception type that is not sufficiently specific and should never be raised by user code. If this exception instance might be thrown, use a different exception type.</Issue>
+            </Message>
+            <Message Id="0#onlypath" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Active" Created="2007-08-11 11:26:14Z" FixCategory="Breaking">
+             <Issue Name="Parameter" Certainty="75" Level="CriticalWarning" Path="d:\DOCUMENTS\SharpDevelop Projects\BULocalization Project\Sources\BUTranslate" File="TranslatorClass.cs" Line="49">In method TranslatorClass.SaveInformation(String):Void, correct the spelling of the unrecognized token 'onlypath' in parameter name 'onlypath' or strip it entirely if it represents any sort of hungarian notation.</Issue>
+            </Message>
+            <Message TypeName="RethrowToPreserveStackDetails" Category="Microsoft.Usage" CheckId="CA2200" Status="Active" Created="2007-08-11 11:26:14Z" FixCategory="NonBreaking">
+             <Issue Certainty="95" Level="Error" Path="d:\DOCUMENTS\SharpDevelop Projects\BULocalization Project\Sources\BUTranslate" File="TranslatorClass.cs" Line="86">TranslatorClass.SaveInformation(String):Void rethrows a caught exception and specifies it explicitly as an argument. Use 'throw' without an argument instead, in order to preserve the stack location where the exception was initially raised.</Issue>
+            </Message>
+            <Message Id="System.Int32.ToString" TypeName="SpecifyIFormatProvider" Category="Microsoft.Globalization" CheckId="CA1305" Status="Active" Created="2007-08-11 11:26:14Z" FixCategory="NonBreaking">
+             <Issue Certainty="95" Level="Error" Path="d:\DOCUMENTS\SharpDevelop Projects\BULocalization Project\Sources\BUTranslate" File="TranslatorClass.cs" Line="68">TranslatorClass.SaveInformation(String):Void makes a call to System.Int32.ToString that does not explicitly provide an IFormatProvider. This should be replaced with a call to System.Int32.ToString(System.IFormatProvider).</Issue>
+             <Issue Certainty="95" Level="Error" Path="d:\DOCUMENTS\SharpDevelop Projects\BULocalization Project\Sources\BUTranslate" File="TranslatorClass.cs" Line="72">TranslatorClass.SaveInformation(String):Void makes a call to System.Int32.ToString that does not explicitly provide an IFormatProvider. This should be replaced with a call to System.Int32.ToString(System.IFormatProvider).</Issue>
+            </Message>
+           </Messages>
+          </Member>
+          <Member Name="SMPTHost" Kind="Field" Static="True" Accessibility="Public" ExternallyVisible="True">
+           <Messages>
+            <Message TypeName="NonConstantFieldsShouldNotBeVisible" Category="Microsoft.Usage" CheckId="CA2211" Status="Active" Created="2007-08-11 11:26:14Z" FixCategory="Breaking">
+             <Issue Certainty="90" Level="Warning">Consider making 'SMPTHost' non-public or a constant.</Issue>
+            </Message>
+           </Messages>
+          </Member>
+          <Member Name="SMPTPort" Kind="Field" Static="True" Accessibility="Public" ExternallyVisible="True">
+           <Messages>
+            <Message TypeName="NonConstantFieldsShouldNotBeVisible" Category="Microsoft.Usage" CheckId="CA2211" Status="Active" Created="2007-08-11 11:26:14Z" FixCategory="Breaking">
+             <Issue Certainty="90" Level="Warning">Consider making 'SMPTPort' non-public or a constant.</Issue>
+            </Message>
+           </Messages>
+          </Member>
+          <Member Name="WebSite" Kind="Field" Static="True" Accessibility="Public" ExternallyVisible="True">
+           <Messages>
+            <Message Id="WebSite" TypeName="CompoundWordsShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1702" Status="Active" Created="2007-08-11 11:26:14Z" FixCategory="Breaking">
+             <Issue Name="ShouldBeDiscreteTerm" Certainty="80" Level="Error">The compound word 'WebSite' in field 'WebSite' exists as a discrete term. If your usage is intended to be single word, case it as 'Website'.</Issue>
+            </Message>
+            <Message TypeName="NonConstantFieldsShouldNotBeVisible" Category="Microsoft.Usage" CheckId="CA2211" Status="Active" Created="2007-08-11 11:26:14Z" FixCategory="Breaking">
+             <Issue Certainty="90" Level="Warning">Consider making 'WebSite' non-public or a constant.</Issue>
+            </Message>
+           </Messages>
+          </Member>
+         </Members>
+        </Type>
+        <Type Name="TranslatorForm" Kind="Class" Accessibility="Public" ExternallyVisible="True">
+         <Members>
+          <Member Name="InitializeComponent():System.Void" Kind="Method" Static="False" Accessibility="Private" ExternallyVisible="False">
+           <Messages>
+            <Message Id="System.Windows.Forms.Control.set_Text(System.String)" TypeName="DoNotPassLiteralsAsLocalizedParameters" Category="Microsoft.Globalization" CheckId="CA1303" Status="Active" Created="2007-08-11 11:26:14Z" FixCategory="NonBreaking">
+             <Issue Certainty="95" Level="Error" Path="d:\DOCUMENTS\SharpDevelop Projects\BULocalization Project\Sources\BUTranslate" File="TranslatorForm.Designer.cs" Line="165">TranslatorForm.InitializeComponent():Void passes a literal as parameter 1 of a call to Control.set_Text(String):Void. Retrieve the following string argument from a resource table instead: '(Required)'</Issue>
+             <Issue Certainty="95" Level="Error" Path="d:\DOCUMENTS\SharpDevelop Projects\BULocalization Project\Sources\BUTranslate" File="TranslatorForm.Designer.cs" Line="157">TranslatorForm.InitializeComponent():Void passes a literal as parameter 1 of a call to Control.set_Text(String):Void. Retrieve the following string argument from a resource table instead: '(Required)'</Issue>
+             <Issue Certainty="95" Level="Error" Path="d:\DOCUMENTS\SharpDevelop Projects\BULocalization Project\Sources\BUTranslate" File="TranslatorForm.Designer.cs" Line="61">TranslatorForm.InitializeComponent():Void passes a literal as parameter 1 of a call to Control.set_Text(String):Void. Retrieve the following string argument from a resource table instead: 'Full name:'</Issue>
+             <Issue Certainty="95" Level="Error" Path="d:\DOCUMENTS\SharpDevelop Projects\BULocalization Project\Sources\BUTranslate" File="TranslatorForm.Designer.cs" Line="135">TranslatorForm.InitializeComponent():Void passes a literal as parameter 1 of a call to Control.set_Text(String):Void. Retrieve the following string argument from a resource table instead: 'OK'</Issue>
+             <Issue Certainty="95" Level="Error" Path="d:\DOCUMENTS\SharpDevelop Projects\BULocalization Project\Sources\BUTranslate" File="TranslatorForm.Designer.cs" Line="85">TranslatorForm.InitializeComponent():Void passes a literal as parameter 1 of a call to Control.set_Text(String):Void. Retrieve the following string argument from a resource table instead: 'Other information:'</Issue>
+             <Issue Certainty="95" Level="Error" Path="d:\DOCUMENTS\SharpDevelop Projects\BULocalization Project\Sources\BUTranslate" File="TranslatorForm.Designer.cs" Line="189">TranslatorForm.InitializeComponent():Void passes a literal as parameter 1 of a call to Control.set_Text(String):Void. Retrieve the following string argument from a resource table instead: 'Translator information'</Issue>
+             <Issue Certainty="95" Level="Error" Path="d:\DOCUMENTS\SharpDevelop Projects\BULocalization Project\Sources\BUTranslate" File="TranslatorForm.Designer.cs" Line="77">TranslatorForm.InitializeComponent():Void passes a literal as parameter 1 of a call to Control.set_Text(String):Void. Retrieve the following string argument from a resource table instead: 'Web-site:'</Issue>
+             <Issue Certainty="95" Level="Error" Path="d:\DOCUMENTS\SharpDevelop Projects\BULocalization Project\Sources\BUTranslate" File="TranslatorForm.Designer.cs" Line="148">TranslatorForm.InitializeComponent():Void passes a literal as parameter 1 of a call to Control.set_Text(String):Void. Retrieve the following string argument from a resource table instead: '__________________________________________________________________________________________________________________'</Issue>
+             <Issue Certainty="95" Level="Error" Path="d:\DOCUMENTS\SharpDevelop Projects\BULocalization Project\Sources\BUTranslate" File="TranslatorForm.Designer.cs" Line="69">TranslatorForm.InitializeComponent():Void passes a literal as parameter 1 of a call to Control.set_Text(String):Void. Retrieve the following string argument from a resource table instead: 'e-Mail:'</Issue>
+            </Message>
+           </Messages>
+          </Member>
+          <Member Name="OKbuttonClick(System.Object,System.EventArgs):System.Void" Kind="Method" Static="False" Accessibility="Private" ExternallyVisible="False">
+           <Messages>
+            <Message TypeName="DoNotCatchGeneralExceptionTypes" Category="Microsoft.Design" CheckId="CA1031" Status="Active" Created="2007-08-11 11:26:14Z" FixCategory="NonBreaking">
+             <Issue Certainty="95" Level="CriticalError" Path="d:\DOCUMENTS\SharpDevelop Projects\BULocalization Project\Sources\BUTranslate" File="TranslatorForm.cs" Line="58">Modify 'TranslatorForm.OKbuttonClick(Object, EventArgs):Void' to catch a more specific exception than 'System.Exception' or rethrow the exception.</Issue>
+            </Message>
+            <Message Id="System.Windows.Forms.MessageBox.Show(System.String,System.String,System.Windows.Forms.MessageBoxButtons,System.Windows.Forms.MessageBoxIcon)" TypeName="DoNotPassLiteralsAsLocalizedParameters" Category="Microsoft.Globalization" CheckId="CA1303" Status="Active" Created="2007-08-11 11:26:14Z" FixCategory="NonBreaking">
+             <Issue Certainty="95" Level="Error" Path="d:\DOCUMENTS\SharpDevelop Projects\BULocalization Project\Sources\BUTranslate" File="TranslatorForm.cs" Line="60">TranslatorForm.OKbuttonClick(Object, EventArgs):Void passes a literal as parameter 2 of a call to MessageBox.Show(String, String, MessageBoxButtons, MessageBoxIcon):DialogResult. Retrieve the following string argument from a resource table instead: 'Error'</Issue>
+            </Message>
+            <Message TypeName="SpecifyMessageBoxOptions" Category="Microsoft.Globalization" CheckId="CA1300" Status="Active" Created="2007-08-11 11:26:14Z" FixCategory="NonBreaking">
+             <Issue Certainty="95" Level="Error" Path="d:\DOCUMENTS\SharpDevelop Projects\BULocalization Project\Sources\BUTranslate" File="TranslatorForm.cs" Line="60">Change TranslatorForm.OKbuttonClick(Object, EventArgs):Void to call the MessageBox.Show overload that specifies MessageBoxOptions, and make sure to set MessageBoxOptions.RightAlign and MessageBoxOptions.RtlReading if RightToLeft is set to RightToLeft.Yes on the parent control. If it is set to RightTolLeft.Inherit, check its parent until a value indicating Yes or No is found.</Issue>
+            </Message>
+           </Messages>
+          </Member>
+         </Members>
+        </Type>
+       </Types>
+      </Namespace>
+     </Namespaces>
+     <Resources>
+      <Resource Name="BUTranslate.TranslatorForm.resources">
+       <Messages>
+        <Message Id="Ulocalization" TypeName="ResourceStringsShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1703" Status="Active" Created="2007-08-11 11:26:14Z" FixCategory="NonBreaking">
+         <Issue Certainty="50" Level="CriticalWarning">Correct the spelling of 'Ulocalization' in 'Info2label.Text' == 'Some parts of this iinformation will be public available. Also this information is used by e-mail generator, stored in localization file as copyright, used by BUlocalization in automated e-mail sendings' contained in resource stream 'BUTranslate.TranslatorForm.resources'.</Issue>
+        </Message>
+        <Message Id="iinformation" TypeName="ResourceStringsShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1703" Status="Active" Created="2007-08-11 11:26:14Z" FixCategory="NonBreaking">
+         <Issue Certainty="50" Level="CriticalWarning">Correct the spelling of 'iinformation' in 'Info2label.Text' == 'Some parts of this iinformation will be public available. Also this information is used by e-mail generator, stored in localization file as copyright, used by BUlocalization in automated e-mail sendings' contained in resource stream 'BUTranslate.TranslatorForm.resources'.</Issue>
+        </Message>
+        <Message Id="sendings" TypeName="ResourceStringsShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1703" Status="Active" Created="2007-08-11 11:26:14Z" FixCategory="NonBreaking">
+         <Issue Certainty="50" Level="CriticalWarning">Correct the spelling of 'sendings' in 'Info2label.Text' == 'Some parts of this iinformation will be public available. Also this information is used by e-mail generator, stored in localization file as copyright, used by BUlocalization in automated e-mail sendings' contained in resource stream 'BUTranslate.TranslatorForm.resources'.</Issue>
+        </Message>
+       </Messages>
+      </Resource>
+     </Resources>
+    </Module>
+   </Modules>
+  </Target>
+ </Targets>
+ <Rules>
+  <Rule TypeName="AssembliesShouldDeclareMinimumSecurity" Category="Microsoft.Usage" CheckId="CA2209">
+   <Name>Assemblies should declare minimum security</Name>
+   <Description>Permission requests prevent security exceptions from being thrown after code in an assembly has already begun executing. If permission requests are specified on an assembly, the assembly will not load at runtime if it has insufficient permissions. To resolve violations of this rule, add attributes that specify what permissions the assembly will demand or might demand, and what permissions it does not want granted.  To specify required permissions, use SecurityAction.Minimum. To specify permissions that the assembly might demand, use SecurityAction.RequestOptional. To specify permissions that the assembly must not be granted, use SecurityAction.RequestRefuse.</Description>
+   <Resolution Name="Default">No valid permission requests were found for assembly '{0}'. You should always specify the minimum security permissions using SecurityAction.RequestMinimum.</Resolution>
+   <Owner />
+   <Url>http://www.gotdotnet.com/team/fxcop/docs/rules.aspx?version=1.35&amp;url=/Usage/AssembliesShouldDeclareMinimumSecurity.html</Url>
+   <Email>[none]</Email>
+   <MessageLevel Certainty="95">CriticalError</MessageLevel>
+   <File Name="UsageRules.dll" Version="1.35.0.0" />
+  </Rule>
+  <Rule TypeName="AssembliesShouldHaveValidStrongNames" Category="Microsoft.Design" CheckId="CA2210">
+   <Name>Assemblies should have valid strong names</Name>
+   <Description>Either the assembly has no strong name, an invalid one, or the strong name is valid only because of the computer configuration. The assembly should not be deployed in this state. The most common causes of this are: 1) The assembly's contents were modified after it was signed. 2) The signing process failed. 3) The assembly was delay-signed. 4) A registry key existed that allowed the check to pass (where it would not have otherwise).</Description>
+   <Resolution Name="NoStrongName">Sign '{0}' with a strong name key.</Resolution>
+   <Owner />
+   <Url>http://www.gotdotnet.com/team/fxcop/docs/rules.aspx?version=1.35&amp;url=/Design/AssembliesShouldHaveValidStrongNames.html</Url>
+   <Email>[none]</Email>
+   <MessageLevel Certainty="95">CriticalError</MessageLevel>
+   <File Name="DesignRules.dll" Version="1.35.0.0" />
+  </Rule>
+  <Rule TypeName="CompoundWordsShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1702">
+   <Name>Compound words should be cased correctly</Name>
+   <Description>Avoid creating compound words from terms which exist in the dictionary as discrete terms. Do not create a compound word such as 'StopWatch' or 'PopUp'. These terms are recognized in the dictionary and should be cased as 'Stopwatch' and 'Popup'.</Description>
+   <Resolution Name="ShouldBeDiscreteTerm">The compound word '{0}' in {1} '{2}' exists as a discrete term. If your usage is intended to be single word, case it as '{3}'.</Resolution>
+   <Owner />
+   <Url>http://www.gotdotnet.com/team/fxcop/docs/rules.aspx?version=1.35&amp;url=/Naming/CompoundWordsShouldBeCasedCorrectly.html</Url>
+   <Email>[none]</Email>
+   <MessageLevel Certainty="80">Error</MessageLevel>
+   <File Name="NamingRules.dll" Version="1.35.0.0" />
+  </Rule>
+  <Rule TypeName="DoNotCatchGeneralExceptionTypes" Category="Microsoft.Design" CheckId="CA1031">
+   <Name>Do not catch general exception types</Name>
+   <Description>You should not catch Exception or SystemException. Catching generic exception types can hide run-time problems from the library user, and can complicate debugging. You should catch only those exceptions that you can handle gracefully.</Description>
+   <Resolution Name="Default">Modify '{0}' to catch a more specific exception than '{1}' or rethrow the exception.</Resolution>
+   <Owner />
+   <Url>http://www.gotdotnet.com/team/fxcop/docs/rules.aspx?version=1.35&amp;url=/Design/DoNotCatchGeneralExceptionTypes.html</Url>
+   <Email>[none]</Email>
+   <MessageLevel Certainty="95">CriticalError</MessageLevel>
+   <File Name="DesignRules.dll" Version="1.35.0.0" />
+  </Rule>
+  <Rule TypeName="DoNotConcatenateStringsInsideLoops" Category="Microsoft.Performance" CheckId="CA1818">
+   <Name>Do not concatenate strings inside loops</Name>
+   <Description>Use StringBuilder instead.</Description>
+   <Resolution Name="Default">Change {0} to use StringBuilder instead of String.Concat or +=</Resolution>
+   <Owner />
+   <Url>http://www.gotdotnet.com/team/fxcop/docs/rules.aspx?version=1.35&amp;url=/Performance/DoNotConcatenateStringsInsideLoops.html</Url>
+   <Email>[none]</Email>
+   <MessageLevel Certainty="75">Error</MessageLevel>
+   <File Name="PerformanceRules.dll" Version="1.35.0.0" />
+  </Rule>
+  <Rule TypeName="DoNotDeclareVisibleInstanceFields" Category="Microsoft.Design" CheckId="CA1051">
+   <Name>Do not declare visible instance fields</Name>
+   <Description>Public or protected instance fields limit your ability to change the implementation details for those data items. Use properties instead. They do not compromise usability or performance and they do provide flexibility in that they conceal the  implementation details of the underlying data.</Description>
+   <Resolution Name="Default">Make '{0}' private or internal (Friend in VB, public private in C++) and provide a public or protected property to access it.</Resolution>
+   <Owner />
+   <Url>http://www.gotdotnet.com/team/fxcop/docs/rules.aspx?version=1.35&amp;url=/Design/DoNotDeclareVisibleInstanceFields.html</Url>
+   <Email>[none]</Email>
+   <MessageLevel Certainty="90">Error</MessageLevel>
+   <File Name="DesignRules.dll" Version="1.35.0.0" />
+  </Rule>
+  <Rule TypeName="DoNotInitializeUnnecessarily" Category="Microsoft.Performance" CheckId="CA1805">
+   <Name>Do not initialize unnecessarily</Name>
+   <Description>Do not make initializations that have already been done by the runtime.</Description>
+   <Resolution Name="Default">{0} initializes field {1} of type {2} to {3}. Remove this initialization as it will be done automatically by the runtime.</Resolution>
+   <Owner />
+   <Url>http://www.gotdotnet.com/team/fxcop/docs/rules.aspx?version=1.35&amp;url=/Performance/DoNotInitializeUnnecessarily.html</Url>
+   <Email>[none]</Email>
+   <MessageLevel Certainty="90">Warning</MessageLevel>
+   <File Name="PerformanceRules.dll" Version="1.35.0.0" />
+  </Rule>
+  <Rule TypeName="DoNotPassLiteralsAsLocalizedParameters" Category="Microsoft.Globalization" CheckId="CA1303">
+   <Name>Do not pass literals as localized parameters</Name>
+   <Description>String literals that are embedded in source code are difficult to localize. Avoid passing string literals as arguments in circumstances where a localized string is generally expected. Most localized applications, for example, should localize string arguments that are passed to exception constructors. When creating an Exception instance, therefore, a string argument retrieved from a string table is more appropriate than a string literal.</Description>
+   <Resolution Name="Default">{0} passes a literal as parameter {1} of a call to {2}. Retrieve the following string argument from a resource table instead: '{3}'</Resolution>
+   <Owner />
+   <Url>http://www.gotdotnet.com/team/fxcop/docs/rules.aspx?version=1.35&amp;url=/Globalization/DoNotPassLiteralsAsLocalizedParameters.html</Url>
+   <Email>[none]</Email>
+   <MessageLevel Certainty="95">Error</MessageLevel>
+   <File Name="GlobalizationRules.dll" Version="1.35.0.0" />
+  </Rule>
+  <Rule TypeName="DoNotRaiseReservedExceptionTypes" Category="Microsoft.Usage" CheckId="CA2201">
+   <Name>Do not raise reserved exception types</Name>
+   <Description>User code should not create and raise exceptions of certain types that are reserved by the runtime or which are of a too general exception type. Exception types that are too general include Exception, SystemException, and ApplicationException. Exception types that are reserved by the runtime include ThreadAbortException, OutOfMemoryException, ExecutionEngineException, and IndexOutOfRangeException.</Description>
+   <Resolution Name="TooGeneric">{0} creates an exception of type '{1}', an exception type that is not sufficiently specific and should never be raised by user code. If this exception instance might be thrown, use a different exception type.</Resolution>
+   <Owner />
+   <Url>http://www.gotdotnet.com/team/fxcop/docs/rules.aspx?version=1.35&amp;url=/Usage/DoNotRaiseReservedExceptionTypes.html</Url>
+   <Email>[none]</Email>
+   <MessageLevel Certainty="95">Error</MessageLevel>
+   <File Name="UsageRules.dll" Version="1.35.0.0" />
+  </Rule>
+  <Rule TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709">
+   <Name>Identifiers should be cased correctly</Name>
+   <Description>Type, namespace, and member identifiers are pascal-cased. Parameter identifiers are camel-cased. The pascal-casing convention capitalizes the first letter of each word, as in BackColor. The camel-casing convention formats the first letter of the first word in lowercase and capitalizes the first letter of all subsequent words, as in backgroundColor.</Description>
+   <Resolution Name="Parameter">Correct the casing of parameter name '{0}'.</Resolution>
+   <Owner />
+   <Url>http://www.gotdotnet.com/team/fxcop/docs/rules.aspx?version=1.35&amp;url=/Naming/IdentifiersShouldBeCasedCorrectly.html</Url>
+   <Email>[none]</Email>
+   <MessageLevel Certainty="95">Error</MessageLevel>
+   <File Name="NamingRules.dll" Version="1.35.0.0" />
+  </Rule>
+  <Rule TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704">
+   <Name>Identifiers should be spelled correctly</Name>
+   <Description>The individual words that make up an identifier should not be abbreviated and should be spelled correctly. If this rule generates a false positive on a term that should be recognized, add the word to the FxCop custom dictionary.</Description>
+   <Resolution Name="Member">Correct the spelling of the unrecognized token '{0}' in member name '{1}'.</Resolution>
+   <Resolution Name="Parameter">In method {0}, correct the spelling of the unrecognized token '{1}' in parameter name '{2}' or strip it entirely if it represents any sort of hungarian notation.</Resolution>
+   <Owner />
+   <Url>http://www.gotdotnet.com/team/fxcop/docs/rules.aspx?version=1.35&amp;url=/Naming/IdentifiersShouldBeSpelledCorrectly.html</Url>
+   <Email>[none]</Email>
+   <MessageLevel Certainty="75">CriticalWarning</MessageLevel>
+   <File Name="NamingRules.dll" Version="1.35.0.0" />
+  </Rule>
+  <Rule TypeName="LiteralsShouldBeSpelledCorrectly" Category="Microsoft.Usage" CheckId="CA2204">
+   <Name>Literals should be spelled correctly</Name>
+   <Description>Literals should consist of correctly spelled words.</Description>
+   <Resolution Name="Default">Correct the spelling of the unrecognized token '{0}' in the literal '{1}'.</Resolution>
+   <Owner />
+   <Url>http://www.gotdotnet.com/team/fxcop/docs/rules.aspx?version=1.35&amp;url=/Usage/LiteralsShouldBeSpelledCorrectly.html</Url>
+   <Email>[none]</Email>
+   <MessageLevel Certainty="85">Error</MessageLevel>
+   <File Name="UsageRules.dll" Version="1.35.0.0" />
+  </Rule>
+  <Rule TypeName="MarkAssembliesWithClsCompliant" Category="Microsoft.Design" CheckId="CA1014">
+   <Name>Mark assemblies with CLSCompliant</Name>
+   <Description>Assemblies should explicitly state their Cls compliance using the CLSCompliant attribute. An assembly without this attribute is not CLS-compliant. Assemblies, modules, and types can be CLS-compliant even if some parts of the assembly, module, or type are not CLS-compliant. The following rules apply: 1) If the element is marked CLSCompliant, any noncompliant members must have the CLSCompliant attribute present with its argument set to false. 2) A comparable CLS-compliant alternative member must be supplied for each member that is not CLS-compliant.</Description>
+   <Resolution Name="NoAttr">'{0}' should be marked with CLSCompliantAttribute and its value should be true.</Resolution>
+   <Owner />
+   <Url>http://www.gotdotnet.com/team/fxcop/docs/rules.aspx?version=1.35&amp;url=/Design/MarkAssembliesWithClsCompliant.html</Url>
+   <Email>[none]</Email>
+   <MessageLevel Certainty="95">Error</MessageLevel>
+   <File Name="DesignRules.dll" Version="1.35.0.0" />
+  </Rule>
+  <Rule TypeName="NonConstantFieldsShouldNotBeVisible" Category="Microsoft.Usage" CheckId="CA2211">
+   <Name>Non-constant fields should not be visible</Name>
+   <Description>Static fields should be constant unless you carefully manage access to the field using locks. Using static variables without making them thread safe can compromise execution state. This rule applies to managed code libraries. If the analyzed assembly is an application, it is usually safe to exclude violations of this rule.</Description>
+   <Resolution Name="Default">Consider making '{0}' non-public or a constant.</Resolution>
+   <Owner />
+   <Url>http://www.gotdotnet.com/team/fxcop/docs/rules.aspx?version=1.35&amp;url=/Usage/NonConstantFieldsShouldNotBeVisible.html</Url>
+   <Email>[none]</Email>
+   <MessageLevel Certainty="90">Warning</MessageLevel>
+   <File Name="UsageRules.dll" Version="1.35.0.0" />
+  </Rule>
+  <Rule TypeName="ResourceStringsShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1703">
+   <Name>Resource strings should be spelled correctly</Name>
+   <Description>The individual words that make up a resource string should not be abbreviated and should be spelled correctly. If this rule generates a false positive on a term that should be recognized, add the word to the FxCop custom dictionary.</Description>
+   <Resolution Name="Default">Correct the spelling of '{0}' in '{1}' == '{2}' contained in resource stream '{3}'.</Resolution>
+   <Owner />
+   <Url>http://www.gotdotnet.com/team/fxcop/docs/rules.aspx?version=1.35&amp;url=/Naming/ResourceStringsShouldBeSpelledCorrectly.html</Url>
+   <Email>[none]</Email>
+   <MessageLevel Certainty="50">CriticalWarning</MessageLevel>
+   <File Name="NamingRules.dll" Version="1.35.0.0" />
+  </Rule>
+  <Rule TypeName="RethrowToPreserveStackDetails" Category="Microsoft.Usage" CheckId="CA2200">
+   <Name>Rethrow to preserve stack details</Name>
+   <Description>Use the IL rethrow instruction to preserve original stack details when re-raising a caught exception.</Description>
+   <Resolution Name="Default">{0} rethrows a caught exception and specifies it explicitly as an argument. Use 'throw' without an argument instead, in order to preserve the stack location where the exception was initially raised.</Resolution>
+   <Owner />
+   <Url>http://www.gotdotnet.com/team/fxcop/docs/rules.aspx?version=1.35&amp;url=/Usage/RethrowToPreserveStackDetails.html</Url>
+   <Email>[none]</Email>
+   <MessageLevel Certainty="95">Error</MessageLevel>
+   <File Name="UsageRules.dll" Version="1.35.0.0" />
+  </Rule>
+  <Rule TypeName="SpecifyIFormatProvider" Category="Microsoft.Globalization" CheckId="CA1305">
+   <Name>Specify IFormatProvider</Name>
+   <Description>If an overload exists that takes an IFormatProvider argument, it should always be called in favor of an overload that does not. Some methods in the common language runtime convert a value to or from a string representation and take a string parameter that contains one or more characters, called format specifiers, which indicate how the value is to be converted. If the meaning of the format specifier varies by culture, a formatting object supplies the actual characters used in the string representation. In scenarios where sorting and comparison behavior should never change between cultures, specify CultureInfo.InvariantCulture.</Description>
+   <Resolution Name="Default">{0} makes a call to {1} that does not explicitly provide an IFormatProvider. This should be replaced with a call to {2}.</Resolution>
+   <Owner />
+   <Url>http://www.gotdotnet.com/team/fxcop/docs/rules.aspx?version=1.35&amp;url=/Globalization/SpecifyIFormatProvider.html</Url>
+   <Email>[none]</Email>
+   <MessageLevel Certainty="95">Error</MessageLevel>
+   <File Name="GlobalizationRules.dll" Version="1.35.0.0" />
+  </Rule>
+  <Rule TypeName="SpecifyMessageBoxOptions" Category="Microsoft.Globalization" CheckId="CA1300">
+   <Name>Specify MessageBoxOptions</Name>
+   <Description>In order to run correctly on right-to-left systems, all calls to MessageBox.Show should use the overload that specifies MessageBoxOptions as an argument. Programs should detect whether they are running on a right-to-left system at run-time and pass the appropriate MessageBoxOptions value in order to display correctly.</Description>
+   <Resolution Name="Default">Change {0} to call the MessageBox.Show overload that specifies MessageBoxOptions, and make sure to set MessageBoxOptions.RightAlign and MessageBoxOptions.RtlReading if RightToLeft is set to RightToLeft.Yes on the parent control. If it is set to RightTolLeft.Inherit, check its parent until a value indicating Yes or No is found.</Resolution>
+   <Owner />
+   <Url>http://www.gotdotnet.com/team/fxcop/docs/rules.aspx?version=1.35&amp;url=/Globalization/SpecifyMessageBoxOptions.html</Url>
+   <Email>[none]</Email>
+   <MessageLevel Certainty="95">Error</MessageLevel>
+   <File Name="GlobalizationRules.dll" Version="1.35.0.0" />
+  </Rule>
+  <Rule TypeName="ValidateArgumentsOfPublicMethods" Category="Microsoft.Design" CheckId="CA1062">
+   <Name>Validate arguments of public methods</Name>
+   <Description>All reference arguments passed to public methods should be tested against null (Nothing in VB), as they can be provided by arbitrary callers.</Description>
+   <Resolution Name="Default">Validate parameter {0} passed to externally visible method {1}.</Resolution>
+   <Owner />
+   <Url>http://www.gotdotnet.com/team/fxcop/docs/rules.aspx?version=1.35&amp;url=/Design/ValidateArgumentsOfPublicMethods.html</Url>
+   <Email>[none]</Email>
+   <MessageLevel Certainty="95">Error</MessageLevel>
+   <File Name="DesignRules.dll" Version="1.35.0.0" />
+  </Rule>
+ </Rules>
+ <Localized>
+  <String Key="Category">Category</String>
+  <String Key="CollapseAll">Collapse All</String>
+  <String Key="CheckId">Check Id</String>
+  <String Key="Error">Error</String>
+  <String Key="Errors">error(s)</String>
+  <String Key="Line">Line</String>
+  <String Key="LocationNotStoredInPdb">[Location not stored in Pdb]</String>
+  <String Key="Project">Project</String>
+  <String Key="Rule">Rule</String>
+  <String Key="RuleDescription">Rule Description</String>
+  <String Key="Source">Source</String>
+  <String Key="Target">Target</String>
+  <String Key="Warning">Warning</String>
+  <String Key="Warnings">warning(s)</String>
+  <String Key="ReportTitle">Code Analysis Report</String>
+ </Localized>
+</FxCopReport>

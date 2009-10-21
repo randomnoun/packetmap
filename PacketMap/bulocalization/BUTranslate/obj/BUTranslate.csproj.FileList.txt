@@ -1,0 +1,12 @@
+bin\Debug\BUTranslate.exe
+bin\Debug\BUTranslate.pdb
+obj\Debug\ResolveAssemblyReference.cache
+obj\Debug\BUTranslate.MainForm.resources
+obj\Debug\BUTranslate.csproj.GenerateResource.Cache
+obj\Debug\BUTranslate.exe
+obj\Debug\BUTranslate.pdb
+obj\Debug\BUTranslate.TranslatorForm.resources
+obj\Debug\BUTranslate.EmailForm.resources
+bin\Debug\CSharpBULocalization.dll
+bin\Debug\CSharpBULocalization.pdb
+obj\Debug\BUTranslate.SearchForm.resources

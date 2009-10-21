@@ -1,0 +1,95 @@
+﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <ProjectGuid>{A0BCB0C3-EF0D-4AA1-9081-F74D01BC025F}</ProjectGuid>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <OutputType>WinExe</OutputType>
+    <RootNamespace>BULocalization</RootNamespace>
+    <AssemblyName>BULocalization</AssemblyName>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <OutputPath>bin\Debug\</OutputPath>
+    <DebugSymbols>True</DebugSymbols>
+    <DebugType>Full</DebugType>
+    <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <OutputPath>bin\Release\</OutputPath>
+    <DebugSymbols>False</DebugSymbols>
+    <DebugType>None</DebugType>
+    <CheckForOverflowUnderflow>False</CheckForOverflowUnderflow>
+    <DefineConstants>TRACE</DefineConstants>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.Targets" />
+  <ItemGroup>
+    <Reference Include="CSharpBULocalization">
+      <HintPath>..\CSharpBULocalization\bin\Debug\CSharpBULocalization.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
+    </Reference>
+    <Reference Include="CSharpBULocalization">
+      <HintPath>..\CSharpBULocalization\bin\Debug\CSharpBULocalization.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
+    </Reference>
+    <Reference Include="EnvDTE" />
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AddModifyLanguage.cs" />
+    <Compile Include="AddModifyLanguage.Designer.cs">
+      <DependentUpon>AddModifyLanguage.cs</DependentUpon>
+    </Compile>
+    <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="ChangeDefaultLanguage.cs" />
+    <Compile Include="ChangeDefaultLanguage.Designer.cs">
+      <DependentUpon>ChangeDefaultLanguage.cs</DependentUpon>
+    </Compile>
+    <Compile Include="EmailClass.cs" />
+    <Compile Include="EmailOptionsForm.cs" />
+    <Compile Include="EmailOptionsForm.Designer.cs">
+      <DependentUpon>EmailOptionsForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="HelpClass.cs" />
+    <Compile Include="MainForm.cs" />
+    <Compile Include="MainForm.Designer.cs">
+      <DependentUpon>MainForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="SearchForm.cs" />
+    <Compile Include="SearchForm.Designer.cs">
+      <DependentUpon>SearchForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="SenderForm.cs" />
+    <Compile Include="SenderForm.Designer.cs">
+      <DependentUpon>SenderForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="WizardForm.cs" />
+    <Compile Include="WizardForm.Designer.cs">
+      <DependentUpon>WizardForm.cs</DependentUpon>
+    </Compile>
+    <EmbeddedResource Include="AddModifyLanguage.resx">
+      <DependentUpon>AddModifyLanguage.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ChangeDefaultLanguage.resx">
+      <DependentUpon>ChangeDefaultLanguage.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="EmailOptionsForm.resx">
+      <DependentUpon>EmailOptionsForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MainForm.resx">
+      <DependentUpon>MainForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SearchForm.resx">
+      <DependentUpon>SearchForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SenderForm.resx">
+      <DependentUpon>SenderForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="WizardForm.resx">
+      <DependentUpon>WizardForm.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+</Project>

@@ -119,7 +119,7 @@
     <Compile Include="Util.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\sf\bulocalization\CSharpBULocalization\CSharpBULocalization.csproj">
+    <ProjectReference Include="bulocalization\CSharpBULocalization\CSharpBULocalization.csproj">
       <Project>{F86CA6F9-823C-46CB-B352-CCECCDF662A9}</Project>
       <Name>CSharpBULocalization</Name>
     </ProjectReference>

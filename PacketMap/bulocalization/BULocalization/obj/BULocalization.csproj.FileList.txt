@@ -1,0 +1,15 @@
+obj\Debug\ResolveAssemblyReference.cache
+obj\Debug\BULocalization.MainForm.resources
+obj\Debug\BULocalization.csproj.GenerateResource.Cache
+bin\Debug\BULocalization.exe
+bin\Debug\BULocalization.pdb
+obj\Debug\BULocalization.exe
+obj\Debug\BULocalization.pdb
+obj\Debug\BULocalization.AddModifyLanguage.resources
+obj\Debug\BULocalization.ChangeDefaultLanguage.resources
+obj\Debug\BULocalization.EmailOptionsForm.resources
+obj\Debug\BULocalization.SenderForm.resources
+bin\Debug\CSharpBULocalization.dll
+bin\Debug\CSharpBULocalization.pdb
+obj\Debug\BULocalization.WizardForm.resources
+obj\Debug\BULocalization.SearchForm.resources

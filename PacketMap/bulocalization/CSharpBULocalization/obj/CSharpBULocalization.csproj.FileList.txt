@@ -1,0 +1,12 @@
+bin\Debug\CSharpBULocalization.dll
+bin\Debug\CSharpBULocalization.pdb
+obj\Debug\ResolveAssemblyReference.cache
+obj\Debug\CSharpBULocalization.dll
+obj\Debug\CSharpBULocalization.pdb
+obj\Debug\CSharpBULocalization.csproj.GenerateResource.Cache
+obj\Debug\BUtil.Localization.ChooseLanguages.resources
+bin\Release\CSharpBULocalization.dll
+obj\Release\ResolveAssemblyReference.cache
+obj\Release\BUtil.Localization.ChooseLanguages.resources
+obj\Release\CSharpBULocalization.csproj.GenerateResource.Cache
+obj\Release\CSharpBULocalization.dll
